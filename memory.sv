@@ -32,4 +32,21 @@ end
 endgenerate
 endmodule
 
+/* M9K example
+module ram9k (clk,we,addr,w_data,r_data);
+input wire clk,we;
+input wire [7:0] addr;
+input wire [15:0] w_data;
+output reg [15:0] r_data;
+
+(* ramstyle = "M9K" *) reg [15:0] ram [255:0];
+
+always @(posedge clk) begin
+	if(we) ram [addr] <= w_data;
+	r_data <= ram [addr];
+end
+
+endmodule
+*/
+
 `endif

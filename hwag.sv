@@ -1,4 +1,17 @@
 
+module ram9k_block #(parameter WIDTH=1) (d,clk,we,q);
+input wire clk,we;
+input wire [WIDTH-1:0] d;
+output wire [WIDTH-1:0] q;
+(* ramstyle = "M9K" *) reg [WIDTH-1:0] ram;
+assign q = ram;
+
+always @(posedge clk) begin
+	if(we) ram <= d;
+end
+
+endmodule
+
 module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data);
 input wire clk,rst;
 

@@ -1,5 +1,5 @@
 Analysis & Synthesis report for hwag
-Sun Jan 26 21:49:32 2020
+Sun Jan 26 23:53:55 2020
 Quartus Prime Version 16.1.0 Build 196 10/24/2016 SJ Lite Edition
 
 
@@ -237,7 +237,7 @@ agreement for further details.
 +----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                     ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Sun Jan 26 21:49:32 2020       ;
+; Analysis & Synthesis Status        ; Successful - Sun Jan 26 23:53:55 2020       ;
 ; Quartus Prime Version              ; 16.1.0 Build 196 10/24/2016 SJ Lite Edition ;
 ; Revision Name                      ; hwag                                        ;
 ; Top-level Entity Name              ; hwag                                        ;
@@ -2542,11 +2542,12 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 16.1.0 Build 196 10/24/2016 SJ Lite Edition
-    Info: Processing started: Sun Jan 26 21:49:17 2020
+    Info: Processing started: Sun Jan 26 23:53:41 2020
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off hwag -c hwag
 Info (20030): Parallel compilation is enabled and will use 8 of the 8 processors detected
-Info (12021): Found 1 design units, including 1 entities, in source file hwag.sv
-    Info (12023): Found entity 1: hwag File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/hwag.sv Line: 2
+Info (12021): Found 2 design units, including 2 entities, in source file hwag.sv
+    Info (12023): Found entity 1: ram9k_block File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/hwag.sv Line: 2
+    Info (12023): Found entity 2: hwag File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/hwag.sv Line: 15
 Info (12021): Found 2 design units, including 2 entities, in source file memory.sv
     Info (12023): Found entity 1: ssram_register File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/memory.sv Line: 5
     Info (12023): Found entity 2: ssram_256 File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/memory.sv Line: 13
@@ -2561,10 +2562,10 @@ Info (12021): Found 1 design units, including 1 entities, in source file mult_de
 Info (12021): Found 1 design units, including 1 entities, in source file buffer.sv
     Info (12023): Found entity 1: buffer_z File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/buffer.sv Line: 5
 Info (12127): Elaborating entity "hwag" for the top level hierarchy
-Warning (10036): Verilog HDL or VHDL warning at hwag.sv(11): object "ssram_out" assigned a value but never read File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/hwag.sv Line: 11
-Info (12128): Elaborating entity "decoder_8_row_column" for hierarchy "decoder_8_row_column:ssram_decoder" File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/hwag.sv Line: 13
+Warning (10036): Verilog HDL or VHDL warning at hwag.sv(24): object "ssram_out" assigned a value but never read File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/hwag.sv Line: 24
+Info (12128): Elaborating entity "decoder_8_row_column" for hierarchy "decoder_8_row_column:ssram_decoder" File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/hwag.sv Line: 26
 Info (12128): Elaborating entity "decoder_4_16" for hierarchy "decoder_8_row_column:ssram_decoder|decoder_4_16:row_decoder" File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/decoder.sv Line: 35
-Info (12128): Elaborating entity "ssram_256" for hierarchy "ssram_256:ssram" File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/hwag.sv Line: 22
+Info (12128): Elaborating entity "ssram_256" for hierarchy "ssram_256:ssram" File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/hwag.sv Line: 36
 Info (12128): Elaborating entity "ssram_register" for hierarchy "ssram_256:ssram|ssram_register:gen_ssram_block[0].ssram_block" File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/memory.sv Line: 30
 Info (12128): Elaborating entity "d_ff_wide" for hierarchy "ssram_256:ssram|ssram_register:gen_ssram_block[0].ssram_block|d_ff_wide:ssram_ff" File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/memory.sv Line: 9
 Info (12128): Elaborating entity "buffer_z" for hierarchy "ssram_256:ssram|ssram_register:gen_ssram_block[0].ssram_block|buffer_z:ssram_buffer" File: /home/ruslan/Desktop/ECU/FPGA/hwag/fpga_hwag_0,01/memory.sv Line: 10
@@ -2578,9 +2579,9 @@ Info (21057): Implemented 1888 device resources after synthesis - the final reso
     Info (21060): Implemented 16 bidirectional pins
     Info (21061): Implemented 1860 logic cells
 Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 2 warnings
-    Info: Peak virtual memory: 954 megabytes
-    Info: Processing ended: Sun Jan 26 21:49:32 2020
-    Info: Elapsed time: 00:00:15
-    Info: Total CPU time (on all processors): 00:00:32
+    Info: Peak virtual memory: 949 megabytes
+    Info: Processing ended: Sun Jan 26 23:53:55 2020
+    Info: Elapsed time: 00:00:14
+    Info: Total CPU time (on all processors): 00:00:30
 
 
