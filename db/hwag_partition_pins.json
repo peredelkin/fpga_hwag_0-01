@@ -1,0 +1,121 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "ssram_data[0]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[1]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[2]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[3]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[4]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[5]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[6]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[7]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[8]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[9]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[10]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[11]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[12]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[13]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[14]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_data[15]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_re",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_addr[5]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_addr[4]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_addr[6]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_addr[7]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_addr[0]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_addr[1]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_addr[2]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_addr[3]",
+					"strict" : false
+				},
+				{
+					"name" : "clk",
+					"strict" : false
+				},
+				{
+					"name" : "rst",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_we",
+					"strict" : false
+				}
+			]
+		}
+	]
+}
