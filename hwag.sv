@@ -1,3 +1,12 @@
+`ifndef HWAG_SV
+`define HWAG_SV
+
+`include "buffer.sv"
+`include "capture.sv"
+`include "decoder.sv"
+`include "flip_flop.sv"
+`include "memory.sv"
+`include "mult_demult.sv"
 
 module ram9k_block #(parameter WIDTH=1) (d,clk,we,q);
 input wire clk,we;
@@ -21,7 +30,7 @@ input wire [7:0] ssram_addr;
 inout wire [15:0] ssram_data;
 wire [15:0] ssram_row;
 wire [15:0] ssram_column;
-wire [15:0] ssram_out [255:0];
+wire [15:0] ssram_out [63:0];
 
 decoder_8_row_column ssram_decoder (.in(ssram_addr),.row(ssram_row),.column(ssram_column));
 
@@ -33,8 +42,11 @@ ssram_256 #(16,64) ssram (	.clk(clk),
 							.row(ssram_row),
 							.column(ssram_column),
 							.data(ssram_data),
-							.out(ssram_out[63:0]));
+							.out(ssram_out));
 // ssram end
 // ssram interface end
 
 endmodule
+
+`endif
+

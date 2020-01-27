@@ -1,0 +1,57 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Mon Jan 27 06:09:28 2020
+[*]
+[dumpfile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01-master/test.vcd"
+[dumpfile_mtime] "Mon Jan 27 06:09:13 2020"
+[dumpfile_size] 79789
+[savefile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01-master/test.gtkw"
+[timestart] 0
+[size] 1366 703
+[pos] -1 -1
+*-7.891694 360 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] test.
+[treeopen] test.hwag0.
+[treeopen] test.hwag0.ssram.gen_ssram_block[0].
+[treeopen] test.hwag0.ssram.gen_ssram_block[1].
+[treeopen] test.hwag0.ssram.gen_ssram_block[2].
+[treeopen] test.hwag0.ssram.gen_ssram_block[3].
+[treeopen] test.hwag0.ssram.gen_ssram_block[4].
+[treeopen] test.hwag0.ssram.gen_ssram_block[5].
+[treeopen] test.hwag0.ssram.gen_ssram_block[6].
+[treeopen] test.hwag0.ssram.gen_ssram_block[6].ssram_block.
+[treeopen] test.hwag0.ssram.gen_ssram_block[7].
+[treeopen] test.hwag0.ssram.gen_ssram_block[7].ssram_block.
+[sst_width] 283
+[signals_width] 186
+[sst_expanded] 1
+[sst_vpaned_height] 342
+@28
+test.clk
+test.rst
+test.we
+test.re
+@24
+test.addr[7:0]
+test.data[15:0]
+test.w_data[15:0]
+test.hwag0.ssram.gen_ssram_block[0].ssram_block.q[15:0]
+test.hwag0.ssram.gen_ssram_block[1].ssram_block.q[15:0]
+test.hwag0.ssram.gen_ssram_block[2].ssram_block.q[15:0]
+test.hwag0.ssram.gen_ssram_block[3].ssram_block.q[15:0]
+test.hwag0.ssram.gen_ssram_block[4].ssram_block.q[15:0]
+test.hwag0.ssram.gen_ssram_block[5].ssram_block.q[15:0]
+test.hwag0.ssram.gen_ssram_block[6].ssram_block.q[15:0]
+test.hwag0.ssram.gen_ssram_block[7].ssram_block.q[15:0]
+test.hwag0.ssram.gen_ssram_block[0].ssram_block.ssram_buffer.q[15:0]
+test.hwag0.ssram.gen_ssram_block[1].ssram_block.ssram_buffer.q[15:0]
+test.hwag0.ssram.gen_ssram_block[2].ssram_block.ssram_buffer.q[15:0]
+test.hwag0.ssram.gen_ssram_block[3].ssram_block.ssram_buffer.q[15:0]
+test.hwag0.ssram.gen_ssram_block[4].ssram_block.ssram_buffer.q[15:0]
+test.hwag0.ssram.gen_ssram_block[5].ssram_block.ssram_buffer.q[15:0]
+test.hwag0.ssram.gen_ssram_block[6].ssram_block.ssram_buffer.q[15:0]
+test.hwag0.ssram.gen_ssram_block[7].ssram_block.ssram_buffer.q[15:0]
+@29
+test.hwag0.ssram.re_delay
+[pattern_trace] 1
+[pattern_trace] 0
