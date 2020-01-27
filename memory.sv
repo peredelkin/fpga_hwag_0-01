@@ -22,8 +22,8 @@ input wire [15:0] column;
 inout wire [WIDTH-1:0] data;
 output wire [WIDTH-1:0] out [DEPTH-1:0];
 
-wire re_delay;
-d_ff_wide #(1) read_delay (.d(re),.clk(clk),.rst(we),.ena(!we),.q(re_delay));
+//wire re_delay;
+//d_ff_wide #(1) read_delay (.d(re),.clk(clk),.rst(we),.ena(!we),.q(re_delay));
 
 genvar i;
 generate
@@ -33,7 +33,7 @@ generate
 														.rst(rst),
 														.ena(row[i/16] & column[i%16]),
 														.we(we),
-														.re(re & !we & re_delay),
+														.re(re & !we /*& re_delay*/),
 														.q(out[i]));
 end
 endgenerate

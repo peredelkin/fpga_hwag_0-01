@@ -1,12 +1,12 @@
-Analysis & Synthesis Status : Successful - Sun Jan 26 23:53:55 2020
+Analysis & Synthesis Status : Successful - Mon Jan 27 23:10:31 2020
 Quartus Prime Version : 16.1.0 Build 196 10/24/2016 SJ Lite Edition
 Revision Name : hwag
 Top-level Entity Name : hwag
 Family : Cyclone IV E
-Total logic elements : 1,860
-    Total combinational functions : 836
-    Dedicated logic registers : 1,024
-Total registers : 1024
+Total logic elements : 2,010
+    Total combinational functions : 922
+    Dedicated logic registers : 1,089
+Total registers : 1089
 Total pins : 28
 Total virtual pins : 0
 Total memory bits : 0

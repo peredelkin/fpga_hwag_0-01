@@ -1,0 +1,10 @@
+I/O Assignment Analysis Status : Successful - Mon Jan 27 23:07:58 2020
+Quartus Prime Version : 16.1.0 Build 196 10/24/2016 SJ Lite Edition
+Revision Name : hwag
+Top-level Entity Name : hwag
+Family : Cyclone IV E
+Device : EP4CE6E22C8
+Timing Models : Final
+Total pins : 28 / 92 ( 30 % )
+Total virtual pins : 0
+Total PLLs : 0 / 2 ( 0 % )
