@@ -1,0 +1,6 @@
+# Ignore all
+/*
+# Except
+!Makefile
+!*.v
+!*.sv
