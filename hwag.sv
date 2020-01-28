@@ -1,5 +1,5 @@
-`ifndef HWAG_SV
-`define HWAG_SV
+//`ifndef HWAG_SV
+//`define HWAG_SV
 
 `include "buffer.sv"
 `include "capture.sv"
@@ -24,8 +24,8 @@ decoder_8_row_column ssram_decoder (.in(ssram_addr),.row(ssram_row),.column(ssra
 // ssram
 ssram_256 #(16,64) ssram (	.clk(clk),
 							.rst(rst),
-							.we(ssram_we),
-							.re(ssram_re),
+							.we(ssram_we & !ssram_re),
+							.re(ssram_re & !ssram_we),
 							.row(ssram_row),
 							.column(ssram_column),
 							.data(ssram_data),
@@ -35,5 +35,5 @@ ssram_256 #(16,64) ssram (	.clk(clk),
 
 endmodule
 
-`endif
+//`endif
 
