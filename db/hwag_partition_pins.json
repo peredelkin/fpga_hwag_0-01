@@ -88,10 +88,6 @@
 					"strict" : false
 				},
 				{
-					"name" : "ssram_we",
-					"strict" : false
-				},
-				{
 					"name" : "ssram_addr[0]",
 					"strict" : false
 				},
@@ -105,6 +101,10 @@
 				},
 				{
 					"name" : "ssram_addr[3]",
+					"strict" : false
+				},
+				{
+					"name" : "ssram_we",
 					"strict" : false
 				},
 				{

@@ -1,16 +1,16 @@
 |hwag
-clk => ssram_256:ssram.clk
-rst => ssram_256:ssram.rst
+clk => clk.IN1
+rst => rst.IN1
 ssram_we => ssram_256:ssram.we
-ssram_re => ssram_256:ssram.re
-ssram_addr[0] => ssram_addr[0].IN1
-ssram_addr[1] => ssram_addr[1].IN1
-ssram_addr[2] => ssram_addr[2].IN1
-ssram_addr[3] => ssram_addr[3].IN1
-ssram_addr[4] => ssram_addr[4].IN1
-ssram_addr[5] => ssram_addr[5].IN1
-ssram_addr[6] => ssram_addr[6].IN1
-ssram_addr[7] => ssram_addr[7].IN1
+ssram_re => comb.IN1
+ssram_addr[0] => ssram_addr[0].IN3
+ssram_addr[1] => ssram_addr[1].IN3
+ssram_addr[2] => ssram_addr[2].IN3
+ssram_addr[3] => ssram_addr[3].IN3
+ssram_addr[4] => ssram_addr[4].IN3
+ssram_addr[5] => ssram_addr[5].IN3
+ssram_addr[6] => ssram_addr[6].IN3
+ssram_addr[7] => ssram_addr[7].IN3
 ssram_data[0] <> ssram_256:ssram.data[0]
 ssram_data[1] <> ssram_256:ssram.data[1]
 ssram_data[2] <> ssram_256:ssram.data[2]
@@ -118,11 +118,174 @@ out[14] <= Decoder0.DB_MAX_OUTPUT_PORT_TYPE
 out[15] <= Decoder0.DB_MAX_OUTPUT_PORT_TYPE
 
 
+|hwag|d_ff_wide:ssram_re_addr_ff
+d[0] => q[0]~reg0.DATAIN
+d[1] => q[1]~reg0.DATAIN
+d[2] => q[2]~reg0.DATAIN
+d[3] => q[3]~reg0.DATAIN
+d[4] => q[4]~reg0.DATAIN
+d[5] => q[5]~reg0.DATAIN
+d[6] => q[6]~reg0.DATAIN
+d[7] => q[7]~reg0.DATAIN
+clk => q[0]~reg0.CLK
+clk => q[1]~reg0.CLK
+clk => q[2]~reg0.CLK
+clk => q[3]~reg0.CLK
+clk => q[4]~reg0.CLK
+clk => q[5]~reg0.CLK
+clk => q[6]~reg0.CLK
+clk => q[7]~reg0.CLK
+rst => q[0]~reg0.ACLR
+rst => q[1]~reg0.ACLR
+rst => q[2]~reg0.ACLR
+rst => q[3]~reg0.ACLR
+rst => q[4]~reg0.ACLR
+rst => q[5]~reg0.ACLR
+rst => q[6]~reg0.ACLR
+rst => q[7]~reg0.ACLR
+ena => q[7]~reg0.ENA
+ena => q[6]~reg0.ENA
+ena => q[5]~reg0.ENA
+ena => q[4]~reg0.ENA
+ena => q[3]~reg0.ENA
+ena => q[2]~reg0.ENA
+ena => q[1]~reg0.ENA
+ena => q[0]~reg0.ENA
+q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+q[1] <= q[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+q[2] <= q[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+q[3] <= q[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+q[4] <= q[4]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+q[5] <= q[5]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+q[6] <= q[6]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+q[7] <= q[7]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|hwag|compare:ssram_re_addr_comp
+dataa[0] => Equal0.IN7
+dataa[0] => LessThan0.IN8
+dataa[0] => LessThan1.IN8
+dataa[1] => Equal0.IN6
+dataa[1] => LessThan0.IN7
+dataa[1] => LessThan1.IN7
+dataa[2] => Equal0.IN5
+dataa[2] => LessThan0.IN6
+dataa[2] => LessThan1.IN6
+dataa[3] => Equal0.IN4
+dataa[3] => LessThan0.IN5
+dataa[3] => LessThan1.IN5
+dataa[4] => Equal0.IN3
+dataa[4] => LessThan0.IN4
+dataa[4] => LessThan1.IN4
+dataa[5] => Equal0.IN2
+dataa[5] => LessThan0.IN3
+dataa[5] => LessThan1.IN3
+dataa[6] => Equal0.IN1
+dataa[6] => LessThan0.IN2
+dataa[6] => LessThan1.IN2
+dataa[7] => Equal0.IN0
+dataa[7] => LessThan0.IN1
+dataa[7] => LessThan1.IN1
+datab[0] => Equal0.IN15
+datab[0] => LessThan0.IN16
+datab[0] => LessThan1.IN16
+datab[1] => Equal0.IN14
+datab[1] => LessThan0.IN15
+datab[1] => LessThan1.IN15
+datab[2] => Equal0.IN13
+datab[2] => LessThan0.IN14
+datab[2] => LessThan1.IN14
+datab[3] => Equal0.IN12
+datab[3] => LessThan0.IN13
+datab[3] => LessThan1.IN13
+datab[4] => Equal0.IN11
+datab[4] => LessThan0.IN12
+datab[4] => LessThan1.IN12
+datab[5] => Equal0.IN10
+datab[5] => LessThan0.IN11
+datab[5] => LessThan1.IN11
+datab[6] => Equal0.IN9
+datab[6] => LessThan0.IN10
+datab[6] => LessThan1.IN10
+datab[7] => Equal0.IN8
+datab[7] => LessThan0.IN9
+datab[7] => LessThan1.IN9
+aeb <= Equal0.DB_MAX_OUTPUT_PORT_TYPE
+agb <= LessThan0.DB_MAX_OUTPUT_PORT_TYPE
+alb <= LessThan1.DB_MAX_OUTPUT_PORT_TYPE
+aneb <= Equal0.DB_MAX_OUTPUT_PORT_TYPE
+ageb <= LessThan1.DB_MAX_OUTPUT_PORT_TYPE
+aleb <= LessThan0.DB_MAX_OUTPUT_PORT_TYPE
+
+
 |hwag|ssram_256:ssram
-clk => clk.IN65
+clk => clk.IN64
 rst => rst.IN64
-we => we.IN65
-re => re.IN1
+we => we.IN64
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
+re => comb.IN0
 row[0] => comb.IN0
 row[0] => comb.IN0
 row[0] => comb.IN0
@@ -2313,14 +2476,6 @@ out[63][14] <= ssram_register:gen_ssram_block[63].ssram_block.q
 out[63][15] <= ssram_register:gen_ssram_block[63].ssram_block.q
 
 
-|hwag|ssram_256:ssram|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
-
-
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[0].ssram_block
 d[0] <> d_ff_wide:ssram_ff.d
 d[0] <> buffer_z:ssram_buffer.q
@@ -2354,11 +2509,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -2375,14 +2531,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[0].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[0].ssram_block|d_ff_wide:ssram_ff
@@ -2552,11 +2700,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -2573,14 +2722,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[1].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[1].ssram_block|d_ff_wide:ssram_ff
@@ -2750,11 +2891,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -2771,14 +2913,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[2].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[2].ssram_block|d_ff_wide:ssram_ff
@@ -2948,11 +3082,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -2969,14 +3104,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[3].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[3].ssram_block|d_ff_wide:ssram_ff
@@ -3146,11 +3273,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -3167,14 +3295,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[4].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[4].ssram_block|d_ff_wide:ssram_ff
@@ -3344,11 +3464,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -3365,14 +3486,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[5].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[5].ssram_block|d_ff_wide:ssram_ff
@@ -3542,11 +3655,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -3563,14 +3677,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[6].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[6].ssram_block|d_ff_wide:ssram_ff
@@ -3740,11 +3846,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -3761,14 +3868,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[7].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[7].ssram_block|d_ff_wide:ssram_ff
@@ -3938,11 +4037,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -3959,14 +4059,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[8].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[8].ssram_block|d_ff_wide:ssram_ff
@@ -4136,11 +4228,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -4157,14 +4250,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[9].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[9].ssram_block|d_ff_wide:ssram_ff
@@ -4334,11 +4419,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -4355,14 +4441,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[10].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[10].ssram_block|d_ff_wide:ssram_ff
@@ -4532,11 +4610,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -4553,14 +4632,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[11].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[11].ssram_block|d_ff_wide:ssram_ff
@@ -4730,11 +4801,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -4751,14 +4823,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[12].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[12].ssram_block|d_ff_wide:ssram_ff
@@ -4928,11 +4992,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -4949,14 +5014,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[13].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[13].ssram_block|d_ff_wide:ssram_ff
@@ -5126,11 +5183,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -5147,14 +5205,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[14].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[14].ssram_block|d_ff_wide:ssram_ff
@@ -5324,11 +5374,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -5345,14 +5396,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[15].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[15].ssram_block|d_ff_wide:ssram_ff
@@ -5522,11 +5565,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -5543,14 +5587,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[16].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[16].ssram_block|d_ff_wide:ssram_ff
@@ -5720,11 +5756,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -5741,14 +5778,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[17].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[17].ssram_block|d_ff_wide:ssram_ff
@@ -5918,11 +5947,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -5939,14 +5969,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[18].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[18].ssram_block|d_ff_wide:ssram_ff
@@ -6116,11 +6138,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -6137,14 +6160,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[19].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[19].ssram_block|d_ff_wide:ssram_ff
@@ -6314,11 +6329,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -6335,14 +6351,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[20].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[20].ssram_block|d_ff_wide:ssram_ff
@@ -6512,11 +6520,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -6533,14 +6542,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[21].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[21].ssram_block|d_ff_wide:ssram_ff
@@ -6710,11 +6711,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -6731,14 +6733,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[22].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[22].ssram_block|d_ff_wide:ssram_ff
@@ -6908,11 +6902,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -6929,14 +6924,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[23].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[23].ssram_block|d_ff_wide:ssram_ff
@@ -7106,11 +7093,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -7127,14 +7115,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[24].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[24].ssram_block|d_ff_wide:ssram_ff
@@ -7304,11 +7284,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -7325,14 +7306,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[25].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[25].ssram_block|d_ff_wide:ssram_ff
@@ -7502,11 +7475,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -7523,14 +7497,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[26].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[26].ssram_block|d_ff_wide:ssram_ff
@@ -7700,11 +7666,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -7721,14 +7688,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[27].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[27].ssram_block|d_ff_wide:ssram_ff
@@ -7898,11 +7857,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -7919,14 +7879,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[28].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[28].ssram_block|d_ff_wide:ssram_ff
@@ -8096,11 +8048,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -8117,14 +8070,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[29].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[29].ssram_block|d_ff_wide:ssram_ff
@@ -8294,11 +8239,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -8315,14 +8261,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[30].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[30].ssram_block|d_ff_wide:ssram_ff
@@ -8492,11 +8430,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -8513,14 +8452,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[31].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[31].ssram_block|d_ff_wide:ssram_ff
@@ -8690,11 +8621,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -8711,14 +8643,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[32].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[32].ssram_block|d_ff_wide:ssram_ff
@@ -8888,11 +8812,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -8909,14 +8834,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[33].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[33].ssram_block|d_ff_wide:ssram_ff
@@ -9086,11 +9003,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -9107,14 +9025,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[34].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[34].ssram_block|d_ff_wide:ssram_ff
@@ -9284,11 +9194,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -9305,14 +9216,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[35].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[35].ssram_block|d_ff_wide:ssram_ff
@@ -9482,11 +9385,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -9503,14 +9407,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[36].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[36].ssram_block|d_ff_wide:ssram_ff
@@ -9680,11 +9576,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -9701,14 +9598,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[37].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[37].ssram_block|d_ff_wide:ssram_ff
@@ -9878,11 +9767,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -9899,14 +9789,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[38].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[38].ssram_block|d_ff_wide:ssram_ff
@@ -10076,11 +9958,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -10097,14 +9980,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[39].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[39].ssram_block|d_ff_wide:ssram_ff
@@ -10274,11 +10149,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -10295,14 +10171,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[40].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[40].ssram_block|d_ff_wide:ssram_ff
@@ -10472,11 +10340,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -10493,14 +10362,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[41].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[41].ssram_block|d_ff_wide:ssram_ff
@@ -10670,11 +10531,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -10691,14 +10553,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[42].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[42].ssram_block|d_ff_wide:ssram_ff
@@ -10868,11 +10722,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -10889,14 +10744,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[43].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[43].ssram_block|d_ff_wide:ssram_ff
@@ -11066,11 +10913,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -11087,14 +10935,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[44].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[44].ssram_block|d_ff_wide:ssram_ff
@@ -11264,11 +11104,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -11285,14 +11126,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[45].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[45].ssram_block|d_ff_wide:ssram_ff
@@ -11462,11 +11295,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -11483,14 +11317,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[46].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[46].ssram_block|d_ff_wide:ssram_ff
@@ -11660,11 +11486,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -11681,14 +11508,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[47].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[47].ssram_block|d_ff_wide:ssram_ff
@@ -11858,11 +11677,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -11879,14 +11699,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[48].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[48].ssram_block|d_ff_wide:ssram_ff
@@ -12056,11 +11868,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -12077,14 +11890,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[49].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[49].ssram_block|d_ff_wide:ssram_ff
@@ -12254,11 +12059,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -12275,14 +12081,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[50].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[50].ssram_block|d_ff_wide:ssram_ff
@@ -12452,11 +12250,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -12473,14 +12272,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[51].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[51].ssram_block|d_ff_wide:ssram_ff
@@ -12650,11 +12441,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -12671,14 +12463,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[52].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[52].ssram_block|d_ff_wide:ssram_ff
@@ -12848,11 +12632,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -12869,14 +12654,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[53].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[53].ssram_block|d_ff_wide:ssram_ff
@@ -13046,11 +12823,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -13067,14 +12845,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[54].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[54].ssram_block|d_ff_wide:ssram_ff
@@ -13244,11 +13014,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -13265,14 +13036,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[55].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[55].ssram_block|d_ff_wide:ssram_ff
@@ -13442,11 +13205,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -13463,14 +13227,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[56].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[56].ssram_block|d_ff_wide:ssram_ff
@@ -13640,11 +13396,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -13661,14 +13418,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[57].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[57].ssram_block|d_ff_wide:ssram_ff
@@ -13838,11 +13587,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -13859,14 +13609,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[58].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[58].ssram_block|d_ff_wide:ssram_ff
@@ -14036,11 +13778,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -14057,14 +13800,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[59].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[59].ssram_block|d_ff_wide:ssram_ff
@@ -14234,11 +13969,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -14255,14 +13991,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[60].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[60].ssram_block|d_ff_wide:ssram_ff
@@ -14432,11 +14160,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -14453,14 +14182,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[61].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[61].ssram_block|d_ff_wide:ssram_ff
@@ -14630,11 +14351,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -14651,14 +14373,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[62].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[62].ssram_block|d_ff_wide:ssram_ff
@@ -14828,11 +14542,12 @@ d[14] <> d_ff_wide:ssram_ff.d
 d[14] <> buffer_z:ssram_buffer.q
 d[15] <> d_ff_wide:ssram_ff.d
 d[15] <> buffer_z:ssram_buffer.q
-clk => clk.IN2
+clk => clk.IN1
 rst => rst.IN1
-ena => ena.IN1
-we => comb.IN0
-re => re.IN1
+ena => comb.IN0
+ena => comb.IN0
+we => comb.IN1
+re => comb.IN1
 q[0] <= q[0].DB_MAX_OUTPUT_PORT_TYPE
 q[1] <= q[1].DB_MAX_OUTPUT_PORT_TYPE
 q[2] <= q[2].DB_MAX_OUTPUT_PORT_TYPE
@@ -14849,14 +14564,6 @@ q[12] <= q[12].DB_MAX_OUTPUT_PORT_TYPE
 q[13] <= q[13].DB_MAX_OUTPUT_PORT_TYPE
 q[14] <= q[14].DB_MAX_OUTPUT_PORT_TYPE
 q[15] <= q[15].DB_MAX_OUTPUT_PORT_TYPE
-
-
-|hwag|ssram_256:ssram|ssram_register:gen_ssram_block[63].ssram_block|d_ff_wide:read_delay
-d[0] => q[0]~reg0.DATAIN
-clk => q[0]~reg0.CLK
-rst => q[0]~reg0.ACLR
-ena => q[0]~reg0.ENA
-q[0] <= q[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
 |hwag|ssram_256:ssram|ssram_register:gen_ssram_block[63].ssram_block|d_ff_wide:ssram_ff

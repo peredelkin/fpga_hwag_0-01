@@ -1,10 +1,16 @@
-I/O Assignment Analysis Status : Successful - Mon Jan 27 23:07:58 2020
-Quartus Prime Version : 16.1.0 Build 196 10/24/2016 SJ Lite Edition
+Fitter Status : Successful - Tue Jan 28 14:22:27 2020
+Quartus Prime Version : 19.1.0 Build 670 09/22/2019 SJ Lite Edition
 Revision Name : hwag
 Top-level Entity Name : hwag
 Family : Cyclone IV E
 Device : EP4CE6E22C8
 Timing Models : Final
+Total logic elements : 1,359 / 6,272 ( 22 % )
+    Total combinational functions : 866 / 6,272 ( 14 % )
+    Dedicated logic registers : 1,032 / 6,272 ( 16 % )
+Total registers : 1032
 Total pins : 28 / 92 ( 30 % )
 Total virtual pins : 0
+Total memory bits : 0 / 276,480 ( 0 % )
+Embedded Multiplier 9-bit elements : 0 / 30 ( 0 % )
 Total PLLs : 0 / 2 ( 0 % )
