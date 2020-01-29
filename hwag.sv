@@ -10,7 +10,7 @@
 `include "comparsion.sv"
 `include "counting.sv"
 
-module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out);
+module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out,vr_edge_0,vr_edge_1);
 input wire clk,rst;
 
 // ssram interface
@@ -47,7 +47,7 @@ wire [15:0] hwacr0 = ssram_out [1];
 
 // vr input
 input wire vr_in;
-output wire vr_out;
+output wire vr_out,vr_edge_0,vr_edge_1;
 capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 															.clk(clk),
 															.rst(rst),

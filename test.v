@@ -9,7 +9,16 @@ inout [15:0] data;
 reg [15:0] w_data;
 assign data = w_data;
 
-hwag hwag0 (.clk(clk),.rst(rst),.ssram_we(we),.ssram_re(re),.ssram_addr(addr),.ssram_data(data),.vr_in(vr),.vr_out(vr_out));
+hwag hwag0 (    .clk(clk),
+                .rst(rst),
+                .ssram_we(we),
+                .ssram_re(re),
+                .ssram_addr(addr),
+                .ssram_data(data),
+                .vr_in(vr),
+                .vr_out(vr_out),
+                .vr_edge_0(vr_edge_0),
+                .vr_edge_1(vr_edge_1));
 
 always @(posedge ram_clk) begin
     if(addr < 63) begin 

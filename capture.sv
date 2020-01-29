@@ -25,10 +25,10 @@ input wire d,clk,rst,ena;
 output wire rise0,rise1,fall0,fall1;
 wire q0,q1;
 
-and(drise0,d,~q0);
-and(drise1,q0,~q1);
-and(dfall0,~d,q0);
-and(dfall1,~q0,q1);
+and(rise0,d,~q0);
+and(rise1,q0,~q1);
+and(fall0,~d,q0);
+and(fall1,~q0,q1);
 
 d_ff_wide #(1) d_ff0(	.d(d),
 								.clk(clk),
@@ -41,13 +41,8 @@ d_ff_wide #(1) d_ff1(	.d(q0),
 								.rst(rst),
 								.ena(ena),
 								.q(q1));
-								
-d_ff_wide #(4) edge_ff(	.d({drise0,drise1,dfall0,dfall1}),
-								.clk(clk),
-								.rst(rst),
-								.ena(ena),
-								.q({ rise0, rise1, fall0, fall1}));
 endmodule
+
 
 module capture_flt_edge_det_sel #(parameter WIDTH=1)
                   (d,clk,rst,ena,sel,flt_val,filtered,edge0,edge1);
