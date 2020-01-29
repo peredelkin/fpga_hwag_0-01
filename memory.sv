@@ -7,8 +7,11 @@ inout wire [WIDTH-1:0] d;
 input wire clk,rst,ena,we,re;
 output wire[WIDTH-1:0] q;
 
-d_ff_wide #(WIDTH) ssram_ff (.d(d),.clk(clk),.rst(rst),.ena(ena & we),.q(q));
-buffer_z #(WIDTH) ssram_buffer (.ena(ena & re),.d(q),.q(d));
+wire ena_delay;
+d_ff_wide #(1) ena_delay_ff(.d(ena),.clk(clk),.rst(!ena),.ena(ena),.q(ena_delay));
+
+d_ff_wide #(WIDTH) ssram_ff (.d(d),.clk(clk),.rst(rst),.ena(ena_delay & we),.q(q));
+buffer_z #(WIDTH) ssram_buffer (.ena(ena_delay & re),.d(q),.q(d));
 endmodule
 
 module ssram_256 #(parameter WIDTH=1,DEPTH=1) (clk,rst,we,re,row,column,data,out);
