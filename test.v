@@ -33,7 +33,7 @@ initial begin
     $dumpfile("test.vcd");
     $dumpvars(0, test);
 
-    for(ssram_i = 0; ssram_i < 63; ssram_i = ssram_i + 1) begin
+    for(ssram_i = 0; ssram_i < 64; ssram_i = ssram_i + 1) begin
         $dumpvars(1, hwag0.ssram_out[ssram_i]);
     end
     
