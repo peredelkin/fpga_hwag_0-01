@@ -29,7 +29,7 @@ always @(posedge ram_clk) begin
 end
 
 always #10 clk <= ~clk;
-always #30 ram_clk <= ~ram_clk;
+always #31 ram_clk <= ~ram_clk;
 always #100 vr <= ~vr;
 always #10 rst <= 1'b0;
 
@@ -51,7 +51,7 @@ initial begin
     we <= 1'b1;
     re <= 1'b0;
     addr <= 8'd0;
-    w_data <= 16'b1;
+    w_data <= 16'd2;
     
     #10000 $finish();
 end
