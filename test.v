@@ -30,8 +30,8 @@ end
 
 always #10 clk <= ~clk;
 always #50 ram_clk <= ~ram_clk;
-always #100 vr <= ~vr;
-always #10 rst <= 1'b0;
+always #200 vr <= ~vr;
+always #1 rst <= 1'b0;
 
 integer ssram_i;
 
