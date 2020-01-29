@@ -29,7 +29,7 @@ always @(posedge ram_clk) begin
 end
 
 always #10 clk <= ~clk;
-always #31 ram_clk <= ~ram_clk;
+always #50 ram_clk <= ~ram_clk;
 always #100 vr <= ~vr;
 always #10 rst <= 1'b0;
 
