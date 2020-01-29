@@ -25,20 +25,20 @@ decoder_8_row_column ssram_decoder (.in(ssram_addr),.row(ssram_row),.column(ssra
 
 // ssram
 ssram_256 #(16,64) ssram (	.clk(clk),
-							.rst(rst),
-							.we(ssram_we & !ssram_re),
-							.re(ssram_re & !ssram_we),
-							.row(ssram_row),
-							.column(ssram_column),
-							.data(ssram_data),
-							.out(ssram_out));
+									.rst(rst),
+									.we(ssram_we & !ssram_re),
+									.re(ssram_re & !ssram_we),
+									.row(ssram_row),
+									.column(ssram_column),
+									.data(ssram_data),
+									.out(ssram_out));
 // ssram end
 // ssram interface end
 
 //vr input
 input wire vr_in;
 wire [16:0] vr_filter_value = ssram_out [0];
-// [15 enable input][14 edge select][13:0 filter value]
+// addr 0: [15 enable input][14 edge select][13:0 filter value]
 capture_flt_edge_det_sel #(14) vr_filter (	.d(vr_in),
 															.clk(clk),
 															.rst(rst),
