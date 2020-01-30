@@ -10,7 +10,7 @@
 `include "comparsion.sv"
 `include "counting.sv"
 
-module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out,vr_edge_0,vr_edge_1);
+module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out);
 input wire clk,rst;
 
 // ssram interface
@@ -38,20 +38,30 @@ ssram_256 #(16,64) ssram (	.clk(clk),
 // hwag registers
 
 wire [15:0] vr_filter_value = ssram_out [0];
-// ssram_out[0]:[15:0 значение фильтра захвата]
+// vr_filter_value read/write addr 0: [15:0 значение фильтра захвата]
 
-wire [15:0] hwacr0 = ssram_out [1];
-// ssram_out[1]:[15:2][1 выбор пары фронтов][0 включение захвата]
+wire [15:0] hwacr0;
+ssram_bsrr #(16) hwacr0_bsrr (.bsrr(ssram_data),
+										.clk(clk),
+										.rst(rst),
+										.bsr_ena(ssram_row[4] & ssram_column[0]),
+										.brr_ena(ssram_row[4] & ssram_column[1]),
+										.we(ssram_we & !ssram_re),
+										.re(ssram_re & !ssram_we),
+										.bsr_q(hwacr0));
+// hwacr0 set/read addr 64: [15:3][2 включение фильтра][1 задний фронт][0 включение захвата]
+// hwacr0 reset addr 65: [15:3][2 выключение фильтра][1 передний фронт][0 выключение захвата]
 
 // hwag registers end
 
 // vr input
 input wire vr_in;
-output wire vr_out,vr_edge_0,vr_edge_1;
+output wire vr_out;
 capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 															.clk(clk),
 															.rst(rst),
-															.ena(hwacr0[0]), /*.ena(~hwag_start || cap_run_ena)*/
+															.filt_ena(hwacr0[2]),
+															.out_ena(hwacr0[0]), /*.ena(~hwag_start || cap_run_ena)*/
 															.sel(hwacr0[1]),
 															.flt_val(vr_filter_value),
 															.filtered(vr_out),

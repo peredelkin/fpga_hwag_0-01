@@ -3,20 +3,20 @@
 `define CAPTURE_SV
 
 module pin_cnt_filter #(parameter WIDTH=1)
-                        (d,clk,rst,ena,flt_val,q);
+                        (d,clk,rst,filt_ena,out_ena,flt_val,q);
 								
-input wire d,clk,rst,ena;
+input wire d,clk,rst,filt_ena,out_ena;
 input wire [WIDTH-1:0] flt_val;
 output wire q;
 xnor(dqxnor,d,q); //d not equal q
 counter_compare #(WIDTH) cnt_comp(  .clk(clk),
-                                    .ena(cnt_ne_flt),
+                                    .ena(filt_ena & cnt_ne_flt),
                                     .rst(rst | dqxnor),
                                     .dtop(flt_val),
                                     .out_ne_top(cnt_ne_flt),
                                     .out_e_top(cnt_e_flt));
                                     
-d_ff_wide #(1) d_ff(.d(d),.clk(clk),.rst(rst),.ena(ena & cnt_e_flt),.q(q));
+d_ff_wide #(1) d_ff(.d(d),.clk(clk),.rst(rst),.ena(out_ena & cnt_e_flt),.q(q));
 endmodule
 
 module pin_edge_gen(d,clk,rst,ena,rise0,rise1,fall0,fall1);
@@ -45,22 +45,23 @@ endmodule
 
 
 module capture_flt_edge_det_sel #(parameter WIDTH=1)
-                  (d,clk,rst,ena,sel,flt_val,filtered,edge0,edge1);
+                  (d,clk,rst,filt_ena,out_ena,sel,flt_val,filtered,edge0,edge1);
 						
-input wire d,clk,rst,ena,sel;
+input wire d,clk,rst,filt_ena,out_ena,sel;
 input wire [WIDTH-1:0] flt_val;
 output wire filtered,edge0,edge1;
 
 pin_cnt_filter #(WIDTH) pin_filter (	.d(d),
 													.clk(clk),
 													.rst(rst),
-													.ena(ena),
+													.filt_ena(filt_ena),
+													.out_ena(out_ena),
 													.flt_val(flt_val),
 													.q(filtered));
 pin_edge_gen pin_edge (	.d(filtered),
 								.clk(clk),
 								.rst(rst),
-								.ena(ena),
+								.ena(out_ena),
 								.rise0(rise0),
 								.rise1(rise1),
 								.fall0(fall0),
