@@ -22,7 +22,7 @@ always @(posedge ram_clk) begin
     if(addr < 65) begin 
         if(we) begin
             case(addr)
-                63: w_data <= 16'b1; //addr 64; HWACR0
+                63: w_data <= 16'b111; //addr 64; HWACR0
                 default: w_data <= 16'd0;
             endcase
         end
@@ -58,7 +58,7 @@ initial begin
     we <= 1'b1;
     re <= 1'b0;
     addr <= 8'd0;
-    w_data <= 16'd0; // addr 0: значение фильтра
+    w_data <= 16'd3; // addr 0: значение фильтра
     
     #20000 $finish();
 end
