@@ -8,11 +8,11 @@ input wire clk,rst,bsr_ena,brr_ena,we,re;
 output wire [WIDTH-1:0] bsr_q;
 wire [WIDTH-1:0] brr_q;
 
-wire bsr_ena_delay;
-d_ff_wide #(1) bsr_ena_delay_ff(.d(bsr_ena),.clk(clk),.rst(rst),.ena(1'b1),.q(bsr_ena_delay));
+wire bsr_ena_delay = 1'b1;
+//d_ff_wide #(1) bsr_ena_delay_ff(.d(bsr_ena),.clk(clk),.rst(rst),.ena(1'b1),.q(bsr_ena_delay));
 
-wire brr_ena_delay;
-d_ff_wide #(1) brr_ena_delay_ff(.d(brr_ena),.clk(clk),.rst(rst),.ena(1'b1),.q(brr_ena_delay));
+wire brr_ena_delay = 1'b1;
+//d_ff_wide #(1) brr_ena_delay_ff(.d(brr_ena),.clk(clk),.rst(rst),.ena(1'b1),.q(brr_ena_delay));
 
 genvar i;
 generate
@@ -45,8 +45,8 @@ inout wire [WIDTH-1:0] d;
 input wire clk,rst,ena,we,re;
 output wire[WIDTH-1:0] q;
 
-wire ena_delay;
-d_ff_wide #(1) ena_delay_ff(.d(ena),.clk(clk),.rst(rst),.ena(1'b1),.q(ena_delay));
+wire ena_delay = 1'b1;
+//d_ff_wide #(1) ena_delay_ff(.d(ena),.clk(clk),.rst(rst),.ena(1'b1),.q(ena_delay));
 
 d_ff_wide #(WIDTH) ssram_ff (.d(d),.clk(clk),.rst(rst),.ena(ena_delay & ena & we),.q(q));
 buffer_z #(WIDTH) ssram_buffer (.ena(ena_delay & ena & re),.d(q),.q(d));
