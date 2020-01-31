@@ -7,6 +7,7 @@ module pin_cnt_filter #(parameter WIDTH=1)
 								
 input wire d,clk,rst,filt_ena,out_ena;
 input wire [WIDTH-1:0] flt_val;
+wire dqxnor,cnt_ne_flt,cnt_e_flt;
 output wire q;
 xnor(dqxnor,d,q); //d not equal q
 counter_compare #(WIDTH) cnt_comp(  .clk(clk),
@@ -50,6 +51,7 @@ module capture_flt_edge_det_sel #(parameter WIDTH=1)
 input wire d,clk,rst,filt_ena,out_ena,sel;
 input wire [WIDTH-1:0] flt_val;
 output wire filtered,edge0,edge1;
+wire rise0,rise1,fall0,fall1;
 
 pin_cnt_filter #(WIDTH) pin_filter (	.d(d),
 													.clk(clk),

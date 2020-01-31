@@ -57,6 +57,7 @@ ssram_bsrr #(16) hwacr0_bsrr (.bsrr(ssram_data),
 // vr input
 input wire vr_in;
 output wire vr_out;
+wire vr_edge_0,vr_edge_1;
 capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 															.clk(clk),
 															.rst(rst),
