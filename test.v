@@ -26,18 +26,24 @@ always @(posedge ram_clk) begin
                 default: w_data <= 16'd0;
             endcase
         end
-        addr <= addr + 1'b1;
+        if(we | re) addr <= addr + 1'b1;
     end else begin
-        addr <= 8'd0;
-        w_data <= 16'bZ;
-        we <= 1'b0;
-        re <= 1'b1;
+        if(re) begin
+            re <= 1'b0;
+        end else begin
+            if (we) begin
+                w_data <= 16'bZ;
+                we <= 1'b0;
+                re <= 1'b1;
+                addr <= 8'd0;
+            end
+        end
     end
 end
 
-always #10 clk <= ~clk;
-always #50 ram_clk <= ~ram_clk;
-always #200 vr <= ~vr;
+always #1 clk <= ~clk;
+always #2 ram_clk <= ~ram_clk;
+always #512 vr <= ~vr;
 always #1 rst <= 1'b0;
 
 integer ssram_i;
@@ -60,7 +66,7 @@ initial begin
     addr <= 8'd0;
     w_data <= 16'd3; // addr 0: значение фильтра
     
-    #20000 $finish();
+    #100000 $finish();
 end
 
 endmodule
