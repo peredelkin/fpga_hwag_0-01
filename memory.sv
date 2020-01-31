@@ -31,7 +31,13 @@ generate
 end
 endgenerate
 
-	buffer_z #(WIDTH) ssram_buffer (.ena(bsr_ena & bsr_ena_delay & re),.d(bsr_q),.q(bsrr));
+	buffer_z #(WIDTH) bsr_buffer (	.ena(bsr_ena & bsr_ena_delay & re),
+												.d(bsr_q),
+												.q(bsrr));
+												
+	buffer_z #(WIDTH) brr_buffer (	.ena(brr_ena & brr_ena_delay & re),
+												.d(bsr_q),
+												.q(bsrr));
 endmodule
 
 module ssram_register #(parameter WIDTH=1) (d,clk,rst,ena,we,re,q);

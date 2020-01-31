@@ -37,10 +37,10 @@ ssram_256 #(16,64) ssram (	.clk(clk),
 
 // hwag registers
 
-wire [15:0] vr_filter_value = ssram_out [0];
-// vr_filter_value read/write addr 0: [15:0 значение фильтра захвата]
+wire [15:0] HWASFCR = ssram_out [0];
+// HWASFCR [15:0 значение фильтра захвата]
 
-wire [15:0] hwacr0;
+wire [15:0] HWAGCSRR0;
 ssram_bsrr #(16) hwacr0_bsrr (.bsrr(ssram_data),
 										.clk(clk),
 										.rst(rst),
@@ -48,9 +48,9 @@ ssram_bsrr #(16) hwacr0_bsrr (.bsrr(ssram_data),
 										.brr_ena(ssram_row[4] & ssram_column[1]),
 										.we(ssram_we & !ssram_re),
 										.re(ssram_re & !ssram_we),
-										.bsr_q(hwacr0));
-// hwacr0 set/read addr 64: [15:3][2 включение фильтра][1 задний фронт][0 включение захвата]
-// hwacr0 reset addr 65: [15:3][2 выключение фильтра][1 передний фронт][0 выключение захвата]
+										.bsr_q(HWAGCSRR0));
+// HWAGCSR0 [15:3][2 включение фильтра][1 задний фронт][0 включение захвата]
+// HWAGCRR0 [15:3][2 выключение фильтра][1 передний фронт][0 выключение захвата]
 
 // hwag registers end
 
@@ -60,10 +60,10 @@ output wire vr_out;
 capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 															.clk(clk),
 															.rst(rst),
-															.filt_ena(hwacr0[2]),
-															.out_ena(hwacr0[0]), /*.ena(~hwag_start || cap_run_ena)*/
-															.sel(hwacr0[1]),
-															.flt_val(vr_filter_value),
+															.filt_ena(HWAGCSRR0[2]),
+															.out_ena(HWAGCSRR0[0]), /*.ena(~hwag_start || cap_run_ena)*/
+															.sel(HWAGCSRR0[1]),
+															.flt_val(HWASFCR),
 															.filtered(vr_out),
 															.edge0(vr_edge_0),
 															.edge1(vr_edge_1));
