@@ -40,7 +40,7 @@ ssram_256 #(16,64) ssram (	.clk(clk),
 wire [15:0] HWASFCR = ssram_out [0];
 // HWASFCR [15:0 значение фильтра захвата]
 
-wire [15:0] HWAGCSRR0;
+wire [15:0] HWAGCSCR0;
 ssram_bsrr #(16) hwacr0_bsrr (.bsrr(ssram_data),
 										.clk(clk),
 										.rst(rst),
@@ -48,7 +48,7 @@ ssram_bsrr #(16) hwacr0_bsrr (.bsrr(ssram_data),
 										.brr_ena(ssram_row[4] & ssram_column[1]),
 										.we(ssram_we & !ssram_re),
 										.re(ssram_re & !ssram_we),
-										.bsr_q(HWAGCSRR0));
+										.bsr_q(HWAGCSCR0));
 // HWAGCSR0 [15:3][2 включение фильтра][1 задний фронт][0 включение захвата]
 // HWAGCRR0 [15:3][2 выключение фильтра][1 передний фронт][0 выключение захвата]
 
@@ -60,9 +60,9 @@ output wire vr_out;
 capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 															.clk(clk),
 															.rst(rst),
-															.filt_ena(HWAGCSRR0[2]),
-															.out_ena(HWAGCSRR0[0]), /*.ena(~hwag_start || cap_run_ena)*/
-															.sel(HWAGCSRR0[1]),
+															.filt_ena(HWAGCSCR0[2]),
+															.out_ena(HWAGCSCR0[0]), /*.ena(~hwag_start || cap_run_ena)*/
+															.sel(HWAGCSCR0[1]),
 															.flt_val(HWASFCR),
 															.filtered(vr_out),
 															.edge0(vr_edge_0),
