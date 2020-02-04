@@ -66,6 +66,7 @@ ssram_bsrr #(16) HWAIER_bsrr (.data(ssram_data),
 wire [15:0] HWAIFR;
 wire [15:0] HWAIF;
 assign HWAIF[0] = vr_edge_0;
+assign HWAIF[1] = pcnt_ovf;
 ssram_ifr #(16) HWAIFR_ifr (	.flag(HWAIF & HWAIESCR),
 										.data(ssram_data),
 										.clk(clk),
@@ -75,10 +76,13 @@ ssram_ifr #(16) HWAIFR_ifr (	.flag(HWAIF & HWAIESCR),
 										.re(ssram_re & !ssram_we),
 										.fsr_q(HWAIFR));
 output wire hwagif;
-or(hwagif,HWAIFR);
+assign hwagif = 	HWAIFR[15] | HWAIFR[14] | HWAIFR[13] | HWAIFR[12] |
+						HWAIFR[11] | HWAIFR[10] | HWAIFR[9]  | HWAIFR[8]  |
+						HWAIFR[7]  | HWAIFR[6]  | HWAIFR[5]  | HWAIFR[4]  |
+						HWAIFR[3]  | HWAIFR[2]  | HWAIFR[1]  | HWAIFR[0];
 // hwag registers end
 
-// vr input
+// Variable Reluctance Sensor input
 input wire vr_in;
 output wire vr_out;
 wire vr_edge_0,vr_edge_1;
@@ -93,12 +97,25 @@ capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 															.edge0(vr_edge_0),
 															.edge1(vr_edge_1));
 
-// vr input end
+// Variable Reluctance Sensor input end
 
-// pcnt enable
-//wire pcnt_ena;
-//srs_ff srs_ff_pcnt_enable(.clk(clk),.rst(rst),.sset(),.srst(),.q(pcnt_ena));
-// pcnt enable end
+// Period counter
+wire pcnt_e_top;
+wire pcnt_ovf;
+wire [23:0] pcnt_out;
+d_ff_wide #(1) pcnt_ovf_ff (	.d(pcnt_e_top),
+										.clk(clk),
+										.rst(rst),
+										.ena(HWAGCSCR0[0]),
+										.q(pcnt_ovf));
+
+counter_compare #(24) pcnt (	.clk(clk),
+										.ena(HWAGCSCR0[0] & ~HWAIFR[1]),
+										.rst(rst | pcnt_ovf | vr_edge_1),
+										.dout(pcnt_out),
+										.dtop(24'hFFFFFF),
+										.out_e_top(pcnt_e_top));
+// Period counter end
 
 endmodule
 

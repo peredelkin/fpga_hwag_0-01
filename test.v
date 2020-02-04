@@ -24,7 +24,7 @@ always @(posedge ram_clk) begin
         if(we) begin
             case(addr)
                 63: w_data <= 16'b111; //addr 64; HWACR0
-                65: w_data <= 16'b1; //vr ie
+                65: w_data <= 16'b10; //pcnt ovf ie
                 default: w_data <= 16'd0;
             endcase
         end
