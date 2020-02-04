@@ -87,10 +87,10 @@ initial begin
         $dumpvars(1, hwag0.ssram_out[ssram_i]);
     end
     
-    scnt <= 8'b0;
-    tckc <= 8'b0;
+    scnt <= 8'd0;
+    tckc <= 8'd0;
     tckc_top <= 8'd63;
-    tcnt <= 8'b0;
+    tcnt <= 8'd45;
     
     clk <= 1'b0;
     ram_clk <= 1'b0;
