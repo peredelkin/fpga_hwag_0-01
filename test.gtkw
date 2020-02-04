@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Tue Feb  4 09:54:50 2020
+[*] Tue Feb  4 11:36:29 2020
 [*]
 [dumpfile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.vcd"
-[dumpfile_mtime] "Tue Feb  4 09:54:29 2020"
-[dumpfile_size] 1381476
+[dumpfile_mtime] "Tue Feb  4 11:13:08 2020"
+[dumpfile_size] 28895755
 [savefile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.gtkw"
-[timestart] 1831
+[timestart] 0
 [size] 1366 703
 [pos] -1 -1
-*-7.000000 262 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-10.000000 2264 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.hwag0.
 [treeopen] test.hwag0.vr_filter.pin_filter.
@@ -24,7 +24,6 @@ test.clk
 test.ram_clk
 @24
 test.addr[7:0]
-@28
 test.data[15:0]
 @22
 test.hwag0.HWASFCR[15:0]
@@ -37,9 +36,11 @@ test.hwag0.vr_filter.pin_filter.cnt_comp.dout[15:0]
 test.hwag0.vr_filter.edge0
 test.hwag0.vr_filter.edge1
 test.hwagif
-@29
 test.hwag0.HWAIFR[15:0]
 @24
 test.hwag0.pcnt_out[23:0]
+test.hwag0.pcap0[23:0]
+test.hwag0.pcap1[23:0]
+test.hwag0.pcap2[23:0]
 [pattern_trace] 1
 [pattern_trace] 0

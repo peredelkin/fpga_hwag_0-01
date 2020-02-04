@@ -102,20 +102,45 @@ capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 // Period counter
 wire pcnt_e_top;
 wire pcnt_ovf;
+wire pcnt_rst;
 wire [23:0] pcnt_out;
 d_ff_wide #(1) pcnt_ovf_ff (	.d(pcnt_e_top),
 										.clk(clk),
 										.rst(rst),
 										.ena(HWAGCSCR0[0]),
 										.q(pcnt_ovf));
+										
+d_ff_wide #(1) pcnt_rst_ff (	.d(vr_edge_1),
+										.clk(clk),
+										.rst(rst),
+										.ena(HWAGCSCR0[0]),
+										.q(pcnt_rst));
 
 counter_compare #(24) pcnt (	.clk(clk),
 										.ena(HWAGCSCR0[0] & ~HWAIFR[1]),
-										.rst(rst | pcnt_ovf | vr_edge_1),
+										.rst(rst | pcnt_ovf | pcnt_rst),
 										.dout(pcnt_out),
 										.dtop(24'hFFFFFF),
 										.out_e_top(pcnt_e_top));
 // Period counter end
+
+// Last three periods
+wire [23:0] pcap0,pcap1,pcap2;
+period_capture_3 #(24) pcap (	.d(pcnt_out),
+										.clk(clk),
+										.rst(rst | HWAIFR[1]),
+										.ena(HWAGCSCR0[0] & vr_edge_0),
+										.q0(pcap0),
+										.q1(pcap1),
+										.q2(pcap2));
+
+buffer_z #(16) pcap0_read_l (	.ena(ssram_row[4] & ssram_column[5]),
+										.d(pcap0[15:0]),
+										.q(ssram_data));
+buffer_z #(16) pcap0_read_h (	.ena(ssram_row[4] & ssram_column[6]),
+										.d({8'b0,pcap0[23:16]}),
+										.q(ssram_data));
+// Last three periods end
 
 endmodule
 

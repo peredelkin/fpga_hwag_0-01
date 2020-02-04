@@ -75,4 +75,15 @@ simple_multiplexer #(2) edge_select(.dataa({rise0,rise1}),
 												.out({edge0,edge1}));
 endmodule
 
+module period_capture_3 #(parameter WIDTH = 1) (d,clk,rst,ena,q0,q1,q2);
+input wire clk,rst,ena;
+input wire [WIDTH-1:0] d;
+output wire [WIDTH-1:0] q0;
+output wire [WIDTH-1:0] q1;
+output wire [WIDTH-1:0] q2;
+d_ff_wide #(WIDTH) cap0(.d(d),.clk(clk),.rst(rst),.ena(ena),.q(q0));
+d_ff_wide #(WIDTH) cap1(.d(q0),.clk(clk),.rst(rst),.ena(ena),.q(q1));
+d_ff_wide #(WIDTH) cap2(.d(q1),.clk(clk),.rst(rst),.ena(ena),.q(q2));
+endmodule
+
 `endif

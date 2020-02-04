@@ -20,7 +20,7 @@ hwag hwag0 (    .clk(clk),
                 .hwagif(hwagif));
 
 always @(posedge ram_clk) begin
-    if(addr < 68) begin 
+    if(addr < 70) begin 
         if(we) begin
             case(addr)
                 63: w_data <= 16'b111; //addr 64; HWACR0
@@ -31,7 +31,7 @@ always @(posedge ram_clk) begin
         if(we | re) addr <= addr + 1'b1;
     end else begin
         if(re) begin
-            re <= 1'b0;
+            //re <= 1'b0;
             addr <= 8'd0;
         end else begin
             if (we) begin
