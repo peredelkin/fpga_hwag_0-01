@@ -32,6 +32,7 @@ always @(posedge ram_clk) begin
     end else begin
         if(re) begin
             re <= 1'b0;
+            addr <= 8'd0;
         end else begin
             if (we) begin
                 w_data <= 16'bZ;
