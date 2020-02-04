@@ -16,13 +16,15 @@ hwag hwag0 (    .clk(clk),
                 .ssram_addr(addr),
                 .ssram_data(data),
                 .vr_in(vr),
-                .vr_out(vr_out));
+                .vr_out(vr_out),
+                .hwagif(hwagif));
 
 always @(posedge ram_clk) begin
-    if(addr < 65) begin 
+    if(addr < 68) begin 
         if(we) begin
             case(addr)
                 63: w_data <= 16'b111; //addr 64; HWACR0
+                65: w_data <= 16'b1; //vr ie
                 default: w_data <= 16'd0;
             endcase
         end

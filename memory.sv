@@ -2,42 +2,67 @@
 `ifndef MEMORY_SV
 `define MEMORY_SV
 
-module ssram_bsrr #(parameter WIDTH=1) (bsrr,clk,rst,bsr_ena,brr_ena,we,re,bsr_q);
-inout wire [WIDTH-1:0] bsrr;
+//bit set/reset register
+module ssram_bsrr #(parameter WIDTH=1) (data,clk,rst,bsr_ena,brr_ena,we,re,bsr_q);
+inout wire [WIDTH-1:0] data;
 input wire clk,rst,bsr_ena,brr_ena,we,re;
 output wire [WIDTH-1:0] bsr_q;
 wire [WIDTH-1:0] brr_q;
 
-wire bsr_ena_delay = 1'b1;
-//d_ff_wide #(1) bsr_ena_delay_ff(.d(bsr_ena),.clk(clk),.rst(rst),.ena(1'b1),.q(bsr_ena_delay));
-
-wire brr_ena_delay = 1'b1;
-//d_ff_wide #(1) brr_ena_delay_ff(.d(brr_ena),.clk(clk),.rst(rst),.ena(1'b1),.q(brr_ena_delay));
-
 genvar i;
 generate
 	for (i=0; i<=WIDTH-1; i=i+1) begin : gen_bsrr_block
-	d_ff_wide #(1) bsr_bit (.d(bsrr[i]),
+	d_ff_wide #(1) bsr_bit (.d(data[i]),
 									.clk(clk),
 									.rst(rst | brr_q[i]),
-									.ena(bsr_ena & bsr_ena_delay & we),
+									.ena(bsr_ena & we),
 									.q(bsr_q[i]));
 
-	d_ff_wide #(1) brr_bit (.d(bsrr[i]),
+	d_ff_wide #(1) brr_bit (.d(data[i]),
 									.clk(clk),
 									.rst(rst | ~bsr_q[i]),
-									.ena(brr_ena & brr_ena_delay & we),
+									.ena(brr_ena & we),
 									.q(brr_q[i]));
 end
 endgenerate
 
-	buffer_z #(WIDTH) bsr_buffer (	.ena(bsr_ena & bsr_ena_delay & re),
+	buffer_z #(WIDTH) bsr_buffer (	.ena(bsr_ena & re),
 												.d(bsr_q),
-												.q(bsrr));
+												.q(data));
 												
-	buffer_z #(WIDTH) brr_buffer (	.ena(brr_ena & brr_ena_delay & re),
+	buffer_z #(WIDTH) brr_buffer (	.ena(brr_ena & re),
 												.d(bsr_q),
-												.q(bsrr));
+												.q(data));
+endmodule
+
+//interrupt flag register
+module ssram_ifr #(parameter WIDTH=1) (flag,data,clk,rst,frr_ena,we,re,fsr_q);
+input wire [WIDTH-1:0] flag;
+inout wire [WIDTH-1:0] data;
+input wire clk,rst,frr_ena,we,re;
+output wire [WIDTH-1:0] fsr_q;
+wire [WIDTH-1:0] frr_q;
+
+genvar i;
+generate
+	for (i=0; i<=WIDTH-1; i=i+1) begin : gen_bsrr_block
+	d_ff_wide #(1) fsr_bit (.d(flag[i] | fsr_q[i]),
+									.clk(clk),
+									.rst(rst | frr_q[i]),
+									.ena(1'b1),/*(!)*/
+									.q(fsr_q[i]));
+
+	d_ff_wide #(1) frr_bit (.d(data[i]),
+									.clk(clk),
+									.rst(rst | ~fsr_q[i]),
+									.ena(frr_ena & we),
+									.q(frr_q[i]));
+end
+endgenerate
+												
+	buffer_z #(WIDTH) brr_buffer (	.ena(frr_ena & re),
+												.d(fsr_q),
+												.q(data));
 endmodule
 
 module ssram_register #(parameter WIDTH=1) (d,clk,rst,ena,we,re,q);

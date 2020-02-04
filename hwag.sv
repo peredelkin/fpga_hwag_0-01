@@ -10,7 +10,7 @@
 `include "comparsion.sv"
 `include "counting.sv"
 
-module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out);
+module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out,hwagif);
 input wire clk,rst;
 
 // ssram interface
@@ -40,8 +40,10 @@ ssram_256 #(16,64) ssram (	.clk(clk),
 wire [15:0] HWASFCR = ssram_out [0];
 // HWASFCR [15:0 значение фильтра захвата]
 
+
+// Hwag Global Control Set/Clear Register
 wire [15:0] HWAGCSCR0;
-ssram_bsrr #(16) hwacr0_bsrr (.bsrr(ssram_data),
+ssram_bsrr #(16) HWAGCSCR0_bsrr (.data(ssram_data),
 										.clk(clk),
 										.rst(rst),
 										.bsr_ena(ssram_row[4] & ssram_column[0]),
@@ -49,9 +51,31 @@ ssram_bsrr #(16) hwacr0_bsrr (.bsrr(ssram_data),
 										.we(ssram_we & !ssram_re),
 										.re(ssram_re & !ssram_we),
 										.bsr_q(HWAGCSCR0));
-// HWAGCSR0 [15:3][2 включение фильтра][1 задний фронт][0 включение захвата]
-// HWAGCRR0 [15:3][2 выключение фильтра][1 передний фронт][0 выключение захвата]
 
+// Hwag Interrupt Enable Set/Clear Register
+wire [15:0] HWAIESCR;
+ssram_bsrr #(16) HWAIER_bsrr (.data(ssram_data),
+										.clk(clk),
+										.rst(rst),
+										.bsr_ena(ssram_row[4] & ssram_column[2]),
+										.brr_ena(ssram_row[4] & ssram_column[3]),
+										.we(ssram_we & !ssram_re),
+										.re(ssram_re & !ssram_we),
+										.bsr_q(HWAIESCR));
+// Hwag Interrupt Flag Register
+wire [15:0] HWAIFR;
+wire [15:0] HWAIF;
+assign HWAIF[0] = vr_edge_0;
+ssram_ifr #(16) HWAIFR_ifr (	.flag(HWAIF & HWAIESCR),
+										.data(ssram_data),
+										.clk(clk),
+										.rst(rst),
+										.frr_ena(ssram_row[4] & ssram_column[4]),
+										.we(ssram_we & !ssram_re),
+										.re(ssram_re & !ssram_we),
+										.fsr_q(HWAIFR));
+output wire hwagif;
+or(hwagif,HWAIFR);
 // hwag registers end
 
 // vr input
@@ -70,6 +94,11 @@ capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 															.edge1(vr_edge_1));
 
 // vr input end
+
+// pcnt enable
+//wire pcnt_ena;
+//srs_ff srs_ff_pcnt_enable(.clk(clk),.rst(rst),.sset(),.srst(),.q(pcnt_ena));
+// pcnt enable end
 
 endmodule
 
