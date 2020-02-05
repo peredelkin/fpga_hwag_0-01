@@ -139,14 +139,14 @@ buffer_z #(16) pcap0_read_h (	.ena(ssram_row[4] & ssram_column[6]),
 // Last three periods end
 
 // Period check
-wire [31:0] HWAPMINR;
-assign HWAPMINR[15:0] = ssram_out[1];
-assign HWAPMINR[31:16] = ssram_out[2];
-wire [31:0] HWAPMAXR;
-assign HWAPMAXR[15:0] = ssram_out[3];
-assign HWAPMAXR[31:16] = ssram_out[4];
-period_normal #(24) pnormal (	.min(HWAPMINR[23:0]),
-										.max(HWAPMAXR[23:0]),
+wire [31:0] HWAMINCPR;
+assign HWAMINCPR[15:0] = ssram_out[1];
+assign HWAMINCPR[31:16] = ssram_out[2];
+wire [31:0] HWAMAXCPR;
+assign HWAMAXCPR[15:0] = ssram_out[3];
+assign HWAMAXCPR[31:16] = ssram_out[4];
+period_normal #(24) pnormal (	.min(HWAMINCPR[23:0]),
+										.max(HWAMAXCPR[23:0]),
 										.cap0(pcap0),
 										.cap1(pcap1),
 										.cap2(pcap2),
