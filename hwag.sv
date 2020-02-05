@@ -99,7 +99,7 @@ capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 wire pcnt_e_top;
 wire [23:0] pcnt_out;
 counter_compare #(24) pcnt (	.clk(clk),
-										.ena(HWAGCSCR0[0] & ~HWAIFR[1]),
+										.ena(HWAGCSCR0[0]),
 										.rst(rst),
 										.srst(vr_edge_0),
 										.dout(pcnt_out),
@@ -111,7 +111,7 @@ counter_compare #(24) pcnt (	.clk(clk),
 wire [23:0] HWAPCNT1,pcap1,pcap2;
 period_capture_3 #(24) pcap (	.d(pcnt_out),
 										.clk(clk),
-										.rst(rst),
+										.rst(rst | pcnt_e_top),
 										.ena(HWAGCSCR0[0] & vr_edge_0),
 										.q0(HWAPCNT1),
 										.q1(pcap1),
