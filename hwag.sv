@@ -145,6 +145,7 @@ assign HWAMINCPR[31:16] = ssram_out[2];
 wire [31:0] HWAMAXCPR;
 assign HWAMAXCPR[15:0] = ssram_out[3];
 assign HWAMAXCPR[31:16] = ssram_out[4];
+wire pcap_l_max,pcap_g_min;
 period_normal #(24) pnormal (	.min(HWAMINCPR[23:0]),
 										.max(HWAMAXCPR[23:0]),
 										.cap0(pcap0),
@@ -154,6 +155,27 @@ period_normal #(24) pnormal (	.min(HWAMINCPR[23:0]),
 										.more_min(pcap_g_min));
 
 // Period check end
+
+// Gap search
+wire gap_search_gap;
+gap_search #(24) gap_srch (.cap0(pcap0),
+									.cap1(pcap1),
+									.cap2(pcap2),
+									.gap(gap_search_gap));
+// Gap search end
+
+// HWAG start/stop trigger
+wire hwag_start;
+d_ff_wide #(1) hwag_start_ff (.d((~hwag_start &
+										pcap_g_min &
+										pcap_l_max &
+										gap_search_gap &
+										vr_edge_0) | hwag_start),
+										.clk(clk),
+										.rst(rst | HWAIFR[1]),
+										.ena(HWAGCSCR0[0]),
+										.q(hwag_start));
+// HWAG start/stop trigger
 
 endmodule
 

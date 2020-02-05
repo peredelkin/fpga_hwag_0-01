@@ -50,4 +50,15 @@ or(less_max,cap0_less_max,cap1_less_max); //0 если два захвата п�
 and(more_min,cap0_more_min,cap1_more_min,cap2_more_min); //1 если период захвата больше минимального
 endmodule
 
+module gap_search #(parameter WIDTH=1) (cap0,cap1,cap2,gap);
+input wire [WIDTH-1:0] cap0;
+input wire [WIDTH-1:0] cap1;
+input wire [WIDTH-1:0] cap2;
+wire [WIDTH-1:0] half_cap1 = {1'b0,cap1[WIDTH-1:1]};
+output wire gap;
+and(gap,cap0_less_half_cap1,cap2_less_half_cap1);
+compare #(WIDTH) cap0_less_half_cap1_comp (.dataa(cap0),.datab(half_cap1),.alb(cap0_less_half_cap1));
+compare #(WIDTH) cap2_less_half_cap1_comp (.dataa(cap2),.datab(half_cap1),.alb(cap2_less_half_cap1));
+endmodule
+
 `endif
