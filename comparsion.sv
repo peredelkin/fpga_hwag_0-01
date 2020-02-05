@@ -31,6 +31,23 @@ not(aleb,agb);
 			alb <= 1'b0;
 		end
 	end
-endmodule 
+endmodule
+
+module period_normal #(parameter WIDTH=1) (min,max,cap0,cap1,cap2,less_max,more_min);
+output wire less_max,more_min;
+input wire [WIDTH-1:0] min;
+input wire [WIDTH-1:0] max;
+input wire [WIDTH-1:0] cap0;
+input wire [WIDTH-1:0] cap1;
+input wire [WIDTH-1:0] cap2;
+compare #(WIDTH) cap0_less_max_comp(.dataa(cap0),.datab(max),.alb(cap0_less_max));
+compare #(WIDTH) cap1_less_max_comp(.dataa(cap1),.datab(max),.alb(cap1_less_max));
+
+compare #(WIDTH) cap0_more_min_comp(.dataa(cap0),.datab(min),.agb(cap0_more_min));
+compare #(WIDTH) cap1_more_min_comp(.dataa(cap1),.datab(min),.agb(cap1_more_min));
+compare #(WIDTH) cap2_more_min_comp(.dataa(cap2),.datab(min),.agb(cap2_more_min));
+or(less_max,cap0_less_max,cap1_less_max); //0 если два захвата подряд больше максимального
+and(more_min,cap0_more_min,cap1_more_min,cap2_more_min); //1 если период захвата больше минимального
+endmodule
 
 `endif

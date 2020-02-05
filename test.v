@@ -28,6 +28,11 @@ always @(posedge ram_clk) begin
     if(addr < 70) begin 
         if(we) begin
             case(addr)
+                0: w_data <= 16'd128;
+                1: w_data <= 16'd0;
+                2: w_data <= 16'd1024;
+                3: w_data <= 16'd0;
+                
                 63: w_data <= 16'b111; //addr 64; HWACR0
                 65: w_data <= 16'b10; //pcnt ovf ie
                 default: w_data <= 16'd0;

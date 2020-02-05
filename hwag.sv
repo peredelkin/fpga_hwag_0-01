@@ -23,6 +23,7 @@ wire [15:0] ssram_out [63:0];
 
 decoder_8_row_column ssram_decoder (.in(ssram_addr),.row(ssram_row),.column(ssram_column));
 
+// hwag registers
 // ssram
 ssram_256 #(16,64) ssram (	.clk(clk),
 									.rst(rst),
@@ -33,13 +34,6 @@ ssram_256 #(16,64) ssram (	.clk(clk),
 									.data(ssram_data),
 									.out(ssram_out));
 // ssram end
-// ssram interface end
-
-// hwag registers
-
-wire [15:0] HWASFCR = ssram_out [0];
-// HWASFCR [15:0 значение фильтра захвата]
-
 
 // Hwag Global Control Set/Clear Register
 wire [15:0] HWAGCSCR0;
@@ -81,11 +75,13 @@ assign hwagif = 	HWAIFR[15] | HWAIFR[14] | HWAIFR[13] | HWAIFR[12] |
 						HWAIFR[7]  | HWAIFR[6]  | HWAIFR[5]  | HWAIFR[4]  |
 						HWAIFR[3]  | HWAIFR[2]  | HWAIFR[1]  | HWAIFR[0];
 // hwag registers end
+// ssram interface end
 
 // Variable Reluctance Sensor input
 input wire vr_in;
 output wire vr_out;
 wire vr_edge_0,vr_edge_1;
+wire [15:0] HWASFCR = ssram_out [0];
 capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 															.clk(clk),
 															.rst(rst),
@@ -110,7 +106,7 @@ d_ff_wide #(1) pcnt_ovf_ff (	.d(pcnt_e_top),
 										.ena(HWAGCSCR0[0]),
 										.q(pcnt_ovf));
 										
-d_ff_wide #(1) pcnt_rst_ff (	.d(vr_edge_1),
+d_ff_wide #(1) pcnt_rst_ff (	.d(vr_edge_0),
 										.clk(clk),
 										.rst(rst),
 										.ena(HWAGCSCR0[0]),
@@ -141,6 +137,23 @@ buffer_z #(16) pcap0_read_h (	.ena(ssram_row[4] & ssram_column[6]),
 										.d({8'b0,pcap0[23:16]}),
 										.q(ssram_data));
 // Last three periods end
+
+// Period check
+wire [31:0] HWAPMINR;
+assign HWAPMINR[15:0] = ssram_out[1];
+assign HWAPMINR[31:16] = ssram_out[2];
+wire [31:0] HWAPMAXR;
+assign HWAPMAXR[15:0] = ssram_out[3];
+assign HWAPMAXR[31:16] = ssram_out[4];
+period_normal #(24) pnormal (	.min(HWAPMINR[23:0]),
+										.max(HWAPMAXR[23:0]),
+										.cap0(pcap0),
+										.cap1(pcap1),
+										.cap2(pcap2),
+										.less_max(pcap_l_max),
+										.more_min(pcap_g_min));
+
+// Period check end
 
 endmodule
 

@@ -1,15 +1,15 @@
 [*]
-[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Tue Feb  4 20:09:45 2020
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Wed Feb  5 05:06:34 2020
 [*]
-[dumpfile] "/home/ruslan/intelFPGA_lite/fpga_hwag_0-01/test.vcd"
-[dumpfile_mtime] "Tue Feb  4 20:09:02 2020"
-[dumpfile_size] 30492409
-[savefile] "/home/ruslan/intelFPGA_lite/fpga_hwag_0-01/test.gtkw"
-[timestart] 20340
-[size] 2307 1011
+[dumpfile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.vcd"
+[dumpfile_mtime] "Wed Feb  5 05:05:59 2020"
+[dumpfile_size] 29842489
+[savefile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.gtkw"
+[timestart] 0
+[size] 1366 703
 [pos] -1 -1
-*-11.000000 2264 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-12.000000 3 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.hwag0.
 [treeopen] test.hwag0.vr_filter.pin_filter.
@@ -25,28 +25,15 @@ test.ram_clk
 @24
 test.addr[7:0]
 test.data[15:0]
-@22
-test.hwag0.HWASFCR[15:0]
+test.tcnt[7:0]
 @28
 test.vr
 test.vr_out
-@24
-test.hwag0.vr_filter.pin_filter.cnt_comp.dout[15:0]
-@28
-test.hwag0.vr_filter.edge0
-test.hwag0.vr_filter.edge1
-test.hwagif
-test.hwag0.HWAIFR[15:0]
-@24
+@8024
 test.hwag0.pcnt_out[23:0]
+@24
 test.hwag0.pcap0[23:0]
 test.hwag0.pcap1[23:0]
 test.hwag0.pcap2[23:0]
-@22
-test.scnt[7:0]
-@24
-test.tckc[7:0]
-@25
-test.tcnt[7:0]
 [pattern_trace] 1
 [pattern_trace] 0
