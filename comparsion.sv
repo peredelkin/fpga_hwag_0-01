@@ -61,4 +61,24 @@ compare #(WIDTH) cap0_less_half_cap1_comp (.dataa(cap0),.datab(half_cap1),.alb(c
 compare #(WIDTH) cap2_less_half_cap1_comp (.dataa(cap2),.datab(half_cap1),.alb(cap2_less_half_cap1));
 endmodule
 
+module tcnt_sload(clk,rst,ena,load_data,tcnt_data,load);
+parameter WIDTH = 8;
+input wire clk,rst,ena;
+input wire [WIDTH-1:0] load_data;
+input wire [WIDTH-1:0] tcnt_data;
+output reg load;
+wire comp_out;
+initial load <= 1'b0;
+compare #(WIDTH) tcnt_load(.dataa(tcnt_data),.datab(load_data),.aneb(comp_out));
+always @(posedge clk,posedge rst) begin
+    if(rst) begin
+        load <= 1'b0;
+    end else begin
+        if(ena) begin
+            load <= comp_out;
+        end
+    end
+end
+endmodule
+
 `endif

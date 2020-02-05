@@ -25,16 +25,18 @@ hwag hwag0 (    .clk(clk),
                 .hwagif(hwagif));
 
 always @(posedge ram_clk) begin
-    if(addr < 70) begin 
+    if(addr < 71) begin 
         if(we) begin
             case(addr)
                 0: w_data <= 16'd128;
                 1: w_data <= 16'd0;
                 2: w_data <= 16'd1024;
                 3: w_data <= 16'd0;
+                4: w_data <= 16'd57; //HWATHNB
                 
                 63: w_data <= 16'b111; //addr 64; HWACR0
                 65: w_data <= 16'b10; //pcnt ovf ie
+                70: w_data <= 16'd2; //HWATHVL
                 default: w_data <= 16'd0;
             endcase
         end
@@ -62,10 +64,12 @@ always @(posedge clk) begin
             vr <= 1'b0;
             if(tcnt == 57) begin
                 tcnt <= 8'd0;
-                tckc_top <= 8'd191;
-            end else begin
-                tcnt <= tcnt + 8'd1;
                 tckc_top <= 8'd63;
+            end else begin
+                if(tcnt == 56) begin
+                    tckc_top <= 8'd191;
+                end
+                tcnt <= tcnt + 8'd1;
             end
         end else begin
             if(tckc == (tckc_top/2)) begin

@@ -10,7 +10,7 @@
 `include "comparsion.sv"
 `include "counting.sv"
 
-module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out,hwagif);
+module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out,hwagif,hwag_start);
 input wire clk,rst;
 
 // ssram interface
@@ -27,8 +27,8 @@ decoder_8_row_column ssram_decoder (.in(ssram_addr),.row(ssram_row),.column(ssra
 // ssram
 ssram_256 #(16,64) ssram (	.clk(clk),
 									.rst(rst),
-									.we(ssram_we & !ssram_re),
-									.re(ssram_re & !ssram_we),
+									.we(ssram_we),
+									.re(ssram_re),
 									.row(ssram_row),
 									.column(ssram_column),
 									.data(ssram_data),
@@ -42,8 +42,8 @@ ssram_bsrr #(16) HWAGCSCR0_bsrr (.data(ssram_data),
 										.rst(rst),
 										.bsr_ena(ssram_row[4] & ssram_column[0]),
 										.brr_ena(ssram_row[4] & ssram_column[1]),
-										.we(ssram_we & !ssram_re),
-										.re(ssram_re & !ssram_we),
+										.we(ssram_we),
+										.re(ssram_re),
 										.bsr_q(HWAGCSCR0));
 
 // Hwag Interrupt Enable Set/Clear Register
@@ -53,21 +53,21 @@ ssram_bsrr #(16) HWAIER_bsrr (.data(ssram_data),
 										.rst(rst),
 										.bsr_ena(ssram_row[4] & ssram_column[2]),
 										.brr_ena(ssram_row[4] & ssram_column[3]),
-										.we(ssram_we & !ssram_re),
-										.re(ssram_re & !ssram_we),
+										.we(ssram_we),
+										.re(ssram_re),
 										.bsr_q(HWAIESCR));
 // Hwag Interrupt Flag Register
 wire [15:0] HWAIFR;
 wire [15:0] HWAIF;
 assign HWAIF[0] = vr_edge_0;
-assign HWAIF[1] = pcnt_ovf;
+assign HWAIF[1] = pcnt_e_top;
 ssram_ifr #(16) HWAIFR_ifr (	.flag(HWAIF & HWAIESCR),
 										.data(ssram_data),
 										.clk(clk),
 										.rst(rst),
 										.frr_ena(ssram_row[4] & ssram_column[4]),
-										.we(ssram_we & !ssram_re),
-										.re(ssram_re & !ssram_we),
+										.we(ssram_we),
+										.re(ssram_re),
 										.fsr_q(HWAIFR));
 output wire hwagif;
 assign hwagif = 	HWAIFR[15] | HWAIFR[14] | HWAIFR[13] | HWAIFR[12] |
@@ -97,44 +97,31 @@ capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 
 // Period counter
 wire pcnt_e_top;
-wire pcnt_ovf;
-wire pcnt_rst;
 wire [23:0] pcnt_out;
-d_ff_wide #(1) pcnt_ovf_ff (	.d(pcnt_e_top),
-										.clk(clk),
-										.rst(rst),
-										.ena(HWAGCSCR0[0]),
-										.q(pcnt_ovf));
-										
-d_ff_wide #(1) pcnt_rst_ff (	.d(vr_edge_0),
-										.clk(clk),
-										.rst(rst),
-										.ena(HWAGCSCR0[0]),
-										.q(pcnt_rst));
-
 counter_compare #(24) pcnt (	.clk(clk),
 										.ena(HWAGCSCR0[0] & ~HWAIFR[1]),
-										.rst(rst | pcnt_ovf | pcnt_rst),
+										.rst(rst),
+										.srst(vr_edge_0),
 										.dout(pcnt_out),
 										.dtop(24'hFFFFFF),
 										.out_e_top(pcnt_e_top));
 // Period counter end
 
 // Last three periods
-wire [23:0] pcap0,pcap1,pcap2;
+wire [23:0] HWAPCNT1,pcap1,pcap2;
 period_capture_3 #(24) pcap (	.d(pcnt_out),
 										.clk(clk),
-										.rst(rst | HWAIFR[1]),
+										.rst(rst),
 										.ena(HWAGCSCR0[0] & vr_edge_0),
-										.q0(pcap0),
+										.q0(HWAPCNT1),
 										.q1(pcap1),
 										.q2(pcap2));
 
-buffer_z #(16) pcap0_read_l (	.ena(ssram_row[4] & ssram_column[5]),
-										.d(pcap0[15:0]),
+buffer_z #(16) pcap0_read_l (	.ena(ssram_row[4] & ssram_column[5] & ssram_re),
+										.d(HWAPCNT1[15:0]),
 										.q(ssram_data));
-buffer_z #(16) pcap0_read_h (	.ena(ssram_row[4] & ssram_column[6]),
-										.d({8'b0,pcap0[23:16]}),
+buffer_z #(16) pcap0_read_h (	.ena(ssram_row[4] & ssram_column[6] & ssram_re),
+										.d({8'b0,HWAPCNT1[23:16]}),
 										.q(ssram_data));
 // Last three periods end
 
@@ -148,7 +135,7 @@ assign HWAMAXCPR[31:16] = ssram_out[4];
 wire pcap_l_max,pcap_g_min;
 period_normal #(24) pnormal (	.min(HWAMINCPR[23:0]),
 										.max(HWAMAXCPR[23:0]),
-										.cap0(pcap0),
+										.cap0(HWAPCNT1),
 										.cap1(pcap1),
 										.cap2(pcap2),
 										.less_max(pcap_l_max),
@@ -158,24 +145,42 @@ period_normal #(24) pnormal (	.min(HWAMINCPR[23:0]),
 
 // Gap search
 wire gap_search_gap;
-gap_search #(24) gap_srch (.cap0(pcap0),
+gap_search #(24) gap_srch (.cap0(HWAPCNT1),
 									.cap1(pcap1),
 									.cap2(pcap2),
 									.gap(gap_search_gap));
 // Gap search end
 
 // HWAG start/stop trigger
-wire hwag_start;
+output wire hwag_start;
 d_ff_wide #(1) hwag_start_ff (.d((~hwag_start &
 										pcap_g_min &
 										pcap_l_max &
 										gap_search_gap &
 										vr_edge_0) | hwag_start),
 										.clk(clk),
-										.rst(rst | HWAIFR[1]),
+										.rst(rst),
 										.ena(HWAGCSCR0[0]),
 										.q(hwag_start));
-// HWAG start/stop trigger
+// HWAG start/stop trigger end
+
+// Tooth counter
+wire [7:0] HWATHVL;
+wire [15:0] HWATHNB = ssram_out[5];
+counter_compare #(8) tcnt( .clk(clk),
+                           .ena(hwag_start & vr_edge_0),
+                           .rst(rst),
+                           .srst(tcnt_e_top & vr_edge_0),
+                           .sload(ssram_row[4] & ssram_column[7] & ssram_we),
+                           .dload(ssram_data[7:0]),
+                           .dout(HWATHVL),
+                           .dtop(HWATHNB[7:0]),
+                           .out_e_top(tcnt_e_top));
+
+buffer_z #(16) tcnt_read(	.ena(ssram_row[4] & ssram_column[7] & ssram_re),
+									.d({8'd0,HWATHVL}),
+									.q(ssram_data));
+// Tooth counter end
 
 endmodule
 
