@@ -43,18 +43,26 @@ wire [15:0] HWATHNB		=					 ssram_out[5];
 //
 
 //
+wire [15:0] HWAGCSCR0;
 wire HWAGCSR0_addr	= ssram_row[4] & ssram_column[0];
 wire HWAGCCR0_addr	= ssram_row[4] & ssram_column[1];
+
+wire [15:0] HWAIESCR;
 wire HWAIESR_addr		= ssram_row[4] & ssram_column[2];
 wire HWAIECR_addr		= ssram_row[4] & ssram_column[3];
+
+wire [15:0] HWAIFR;
 wire HWAIFR_addr		= ssram_row[4] & ssram_column[4];
+
+wire [23:0] HWAPCNT1;
 wire HWAPCNT1L_addr	= ssram_row[4] & ssram_column[5];
 wire HWAPCNT1H_addr	= ssram_row[4] & ssram_column[6];
+
+wire [7:0] HWATHVL;
 wire HWATHVL_addr		= ssram_row[4] & ssram_column[7];
 //
 
 // Hwag Global Control Set/Clear Register
-wire [15:0] HWAGCSCR0;
 wire HWAGCSCR0_CAPE = HWAGCSCR0[0];
 wire HWAGCSCR0_EDGES = HWAGCSCR0[1];
 wire HWAGCSCR0_SFLTE = HWAGCSCR0[2];
@@ -68,7 +76,6 @@ ssram_bsrr #(16) HWAGCSCR0_bsrr (.data(ssram_data),
 										.bsr_q(HWAGCSCR0));
 
 // Hwag Interrupt Enable Set/Clear Register
-wire [15:0] HWAIESCR;
 ssram_bsrr #(16) HWAIER_bsrr (.data(ssram_data),
 										.clk(clk),
 										.rst(rst),
@@ -78,7 +85,6 @@ ssram_bsrr #(16) HWAIER_bsrr (.data(ssram_data),
 										.re(ssram_re),
 										.bsr_q(HWAIESCR));
 // Hwag Interrupt Flag Register
-wire [15:0] HWAIFR;
 wire [15:0] HWAIF;
 assign HWAIF[0] = vr_edge_0;
 assign HWAIF[1] = pcnt_e_top;
@@ -128,7 +134,7 @@ counter_compare #(24) pcnt (	.clk(clk),
 // Period counter end
 
 // Last three periods
-wire [23:0] HWAPCNT1,pcap1,pcap2;
+wire [23:0] pcap1,pcap2;
 period_capture_3 #(24) pcap (	.d(pcnt_out),
 										.clk(clk),
 										.rst(rst | ~HWAGCSCR0_CAPE),
@@ -179,7 +185,6 @@ d_ff_wide #(1) hwag_start_ff (.d((~hwag_start &
 // HWAG start/stop trigger end
 
 // Tooth counter
-wire [7:0] HWATHVL;
 counter_compare #(8) tcnt( .clk(clk),
                            .ena(hwag_start & vr_edge_0),
                            .rst(rst),
