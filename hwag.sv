@@ -249,28 +249,41 @@ shift_left #(22,4) acnt_tooth_calc(	.in({14'd0,HWATHVL}),
 
 // SCNT
 wire [21:0] scnt_out;
-and(scnt_ena,hwag_start,tckc_l_top);
-or(scnt_rst,scnt_ge_top,vr_edge_0);
+and(scnt_ena,hwag_start,tckc_ne_top);
+or(scnt_rst,scnt_e_top,vr_edge_0);
 counter_compare #(22) scnt( .clk(clk),
                             .ena(scnt_ena),
                             .rst(rst),
                             .srst(scnt_rst),
                             .dout(scnt_out),
                             .dtop(scnt_top),
-                            .out_ge_top(scnt_ge_top));
+                            .out_e_top(scnt_e_top));
 // SCNT end
 
 // TCKC
 wire [18:0] tckc_out;
-and(tckc_ena,scnt_ena,scnt_ge_top);
+and(tckc_ena,scnt_ena,scnt_e_top);
 counter_compare #(19) tckc (.clk(clk),
                             .ena(tckc_ena),
                             .rst(rst),
                             .srst(vr_edge_0),
                             .dout(tckc_out),
                             .dtop(tckc_actial_top),
-                            .out_l_top(tckc_l_top));
+                            .out_ne_top(tckc_ne_top));
 // TCKC end
+
+// ACNT
+wire [23:0] acnt_out;
+counter_compare #(24) acnt (.clk(clk),
+                            .ena(tckc_ena),
+                            .rst(rst),
+                            .srst(tckc_ena & acnt_e_top),
+                            .sload(~hwag_start | vr_edge_1),
+                            .dload(tooth_angle),
+                            .dout(acnt_out),
+                            .dtop(24'd3839),
+                            .out_e_top(acnt_e_top));
+// ACNT end
 
 endmodule
 
