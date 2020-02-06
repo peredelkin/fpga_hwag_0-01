@@ -1,20 +1,20 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Wed Feb  5 22:12:33 2020
+[*] Thu Feb  6 12:28:18 2020
 [*]
 [dumpfile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.vcd"
-[dumpfile_mtime] "Wed Feb  5 22:11:48 2020"
-[dumpfile_size] 30406421
+[dumpfile_mtime] "Thu Feb  6 12:26:01 2020"
+[dumpfile_size] 31622363
 [savefile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.gtkw"
-[timestart] 33870
+[timestart] 34370
 [size] 1366 703
 [pos] -1 -1
-*-11.000000 38584 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-11.180709 38060 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.hwag0.
 [treeopen] test.hwag0.vr_filter.pin_filter.
-[sst_width] 229
-[signals_width] 198
+[sst_width] 280
+[signals_width] 321
 [sst_expanded] 1
 [sst_vpaned_height] 296
 @28
@@ -29,9 +29,8 @@ test.tcnt[7:0]
 @28
 test.vr
 test.vr_out
-@8024
-test.hwag0.pcnt_out[23:0]
 @24
+test.hwag0.HWAPCNT[23:0]
 test.hwag0.HWAPCNT1[23:0]
 test.hwag0.pcap1[23:0]
 test.hwag0.pcap2[23:0]
@@ -40,7 +39,13 @@ test.hwag0.gap_search_gap
 test.hwag0.vr_edge_0
 test.hwag0.vr_edge_1
 test.hwag0.hwag_start
-@25
+@24
 test.hwag0.HWATHVL[7:0]
+@28
+test.hwag0.gap_run_point
+@29
+test.hwag0.gap_drn_gap_point
+@28
+test.hwag0.gap_drn_normal_tooth
 [pattern_trace] 1
 [pattern_trace] 0

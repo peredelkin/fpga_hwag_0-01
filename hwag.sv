@@ -12,6 +12,9 @@
 
 module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out,hwagif,hwag_start);
 input wire clk,rst;
+output wire vr_out;
+output wire hwag_start;
+output wire hwagif;
 
 // ssram interface
 input wire ssram_we,ssram_re;
@@ -87,7 +90,9 @@ ssram_bsrr #(16) HWAIER_bsrr (.data(ssram_data),
 // Hwag Interrupt Flag Register
 wire [15:0] HWAIF;
 assign HWAIF[0] = vr_edge_0;
-assign HWAIF[1] = pcnt_e_top;
+assign HWAIF[1] = pcnt_ovf;
+assign HWAIF[2] = gap_drn_gap_point_if;
+assign HWAIF[3] = gap_drn_normal_tooth_if;
 ssram_ifr #(16) HWAIFR_ifr (	.flag(HWAIF & HWAIESCR),
 										.data(ssram_data),
 										.clk(clk),
@@ -96,7 +101,7 @@ ssram_ifr #(16) HWAIFR_ifr (	.flag(HWAIF & HWAIESCR),
 										.we(ssram_we),
 										.re(ssram_re),
 										.fsr_q(HWAIFR));
-output wire hwagif;
+										
 assign hwagif = 	HWAIFR[15] | HWAIFR[14] | HWAIFR[13] | HWAIFR[12] |
 						HWAIFR[11] | HWAIFR[10] | HWAIFR[9]  | HWAIFR[8]  |
 						HWAIFR[7]  | HWAIFR[6]  | HWAIFR[5]  | HWAIFR[4]  |
@@ -106,7 +111,6 @@ assign hwagif = 	HWAIFR[15] | HWAIFR[14] | HWAIFR[13] | HWAIFR[12] |
 
 // Variable Reluctance Sensor input
 input wire vr_in;
-output wire vr_out;
 wire vr_edge_0,vr_edge_1;
 capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 															.clk(clk),
@@ -122,23 +126,24 @@ capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 // Variable Reluctance Sensor input end
 
 // Period counter
-wire pcnt_e_top;
-wire [23:0] pcnt_out;
+wire pcnt_ovf;
+wire [23:0] HWAPCNT;
 counter_compare #(24) pcnt (	.clk(clk),
 										.ena(HWAGCSCR0_CAPE),
 										.rst(rst | ~HWAGCSCR0_CAPE),
 										.srst(vr_edge_0),
-										.dout(pcnt_out),
+										.dout(HWAPCNT),
 										.dtop(24'hFFFFFF),
-										.out_e_top(pcnt_e_top));
+										.out_e_top(pcnt_ovf));
 // Period counter end
 
 // Last three periods
 wire [23:0] pcap1,pcap2;
-period_capture_3 #(24) pcap (	.d(pcnt_out),
+wire gap_run_point = tcnt_e_top;
+period_capture_3 #(24) pcap (	.d(HWAPCNT),
 										.clk(clk),
 										.rst(rst | ~HWAGCSCR0_CAPE),
-										.ena(HWAGCSCR0_CAPE & vr_edge_0),
+										.ena(HWAGCSCR0_CAPE & vr_edge_0 & (~hwag_start | ~gap_run_point)),
 										.q0(HWAPCNT1),
 										.q1(pcap1),
 										.q2(pcap2));
@@ -172,7 +177,6 @@ gap_search #(24) gap_srch (.cap0(HWAPCNT1),
 // Gap search end
 
 // HWAG start/stop trigger
-output wire hwag_start;
 d_ff_wide #(1) hwag_start_ff (.d((~hwag_start &
 										pcap_g_min &
 										pcap_l_max &
@@ -199,6 +203,16 @@ buffer_z #(16) tcnt_read(	.ena(HWATHVL_addr & ssram_re),
 									.d({8'd0,HWATHVL}),
 									.q(ssram_data));
 // Tooth counter end
+
+// Gap run check
+wire gap_drn_gap_point = hwag_start & gap_run_found & gap_run_point;
+wire gap_drn_gap_point_if = gap_drn_gap_point & vr_edge_0;
+wire gap_drn_normal_tooth = hwag_start & gap_run_found & ~gap_run_point;
+wire gap_drn_normal_tooth_if = gap_drn_normal_tooth & vr_edge_0;
+gap_run_check #(24) gaprun(	.cap0(HWAPCNT1),
+										.pcnt(HWAPCNT),
+										.gap(gap_run_found));
+// Gap run check end
 
 endmodule
 

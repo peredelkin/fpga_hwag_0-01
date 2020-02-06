@@ -33,7 +33,6 @@ not(aleb,agb);
 	end
 endmodule
 
-//выбросить в релизе
 module period_normal #(parameter WIDTH=1) (min,max,cap0,cap1,cap2,less_max,more_min);
 output wire less_max,more_min;
 input wire [WIDTH-1:0] min;
@@ -51,7 +50,6 @@ or(less_max,cap0_less_max,cap1_less_max); //0 если два захвата п�
 and(more_min,cap0_more_min,cap1_more_min,cap2_more_min); //1 если период захвата больше минимального
 endmodule
 
-//выбросить в релизе
 module gap_search #(parameter WIDTH=1) (cap0,cap1,cap2,gap);
 input wire [WIDTH-1:0] cap0;
 input wire [WIDTH-1:0] cap1;
@@ -61,6 +59,16 @@ output wire gap;
 and(gap,cap0_less_half_cap1,cap2_less_half_cap1);
 compare #(WIDTH) cap0_less_half_cap1_comp (.dataa(cap0),.datab(half_cap1),.alb(cap0_less_half_cap1));
 compare #(WIDTH) cap2_less_half_cap1_comp (.dataa(cap2),.datab(half_cap1),.alb(cap2_less_half_cap1));
+endmodule
+
+module gap_run_check #(parameter WIDTH=1) (cap0,pcnt,gap);
+input wire [WIDTH-1:0] cap0;
+input wire [WIDTH-1:0] pcnt;
+output wire gap;
+wire double_cap0_l_pcnt;
+assign gap = double_cap0_l_pcnt;
+wire [WIDTH-1:0] double_cap0 = {cap0[WIDTH-2:0],1'b0};
+compare #(WIDTH) double_cap0_le_pcnt_comp(.dataa(double_cap0),.datab(pcnt),.alb(double_cap0_l_pcnt));
 endmodule
 
 `endif
