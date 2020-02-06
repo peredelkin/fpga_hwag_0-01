@@ -58,7 +58,7 @@ always @(posedge ram_clk) begin
 end
 
 always @(posedge clk) begin
-    if(scnt == 3) begin
+    if(scnt == 15) begin
         scnt <= 8'd0;
         if(tckc == tckc_top) begin
             tckc <= 8'd0;
@@ -112,7 +112,7 @@ initial begin
     addr <= 8'd0;
     w_data <= 16'd3; // addr 0: значение фильтра
     
-    #100000 $finish();
+    #400000 $finish();
 end
 
 endmodule
