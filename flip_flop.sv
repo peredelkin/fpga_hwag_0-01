@@ -18,4 +18,7 @@ always @(posedge clk,posedge rst) begin
 end
 endmodule
 
+//module d_ff_load_wide #(parameter WIDTH=1) (d,clk,rst,ena,ld,dld,q);
+//endmodule
+
 `endif
