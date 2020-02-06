@@ -10,6 +10,7 @@
 `include "comparsion.sv"
 `include "counting.sv"
 `include "bit_operation.sv"
+`include "math.sv"
 
 module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out,hwagif,hwag_start);
 input wire clk,rst;
@@ -218,14 +219,25 @@ gap_run_check #(24) gaprun(	.cap0(HWAPCNT1),
 
 // SCNT top calc
 wire [21:0] scnt_top;
-shift_right #(22,4) scnt_top_calc(.in(HWAPCNT1[23:2]),.shift(HWASTWD[3:0]),.out(scnt_top));
+shift_right #(22,4) scnt_top_calc(	.in(HWAPCNT1[23:2]),
+												.shift(HWASTWD[3:0]),
+												.out(scnt_top));
 // SCNT top calc end
 
 // TCKC top calc
 wire [17:0] tckc_top;
 assign tckc_top [1:0] = 2'b0; 
-shift_left #(16,4) tckc_top_calc(.in(16'd1),.shift(HWASTWD[3:0]),.out(tckc_top[17:2]));
+shift_left #(16,4) tckc_top_calc(.in(16'd1),
+											.shift(HWASTWD[3:0]),
+											.out(tckc_top[17:2]));
 // TCKC top calc end
+
+// TCKC actual top calc
+wire [18:0] tckc_actial_top;
+hwag_tckc_actual_top #(19) tckc_actial_top_calc(.gap_point(gap_run_point),
+																.tckc_top({1'b0,tckc_top}),
+																.tckc_actial_top(tckc_actial_top));
+// TCKC actual top calc end
 
 endmodule
 
