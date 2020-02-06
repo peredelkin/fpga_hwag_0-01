@@ -128,7 +128,7 @@ capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 
 // Variable Reluctance Sensor input end
 
-// Period counter
+// PCNT
 wire pcnt_ovf;
 wire [23:0] HWAPCNT;
 counter_compare #(24) pcnt (	.clk(clk),
@@ -138,7 +138,7 @@ counter_compare #(24) pcnt (	.clk(clk),
 										.dout(HWAPCNT),
 										.dtop(24'hFFFFFF),
 										.out_e_top(pcnt_ovf));
-// Period counter end
+// PCNT end
 
 // Last three periods
 wire [23:0] pcap1,pcap2;
@@ -171,13 +171,13 @@ period_normal #(24) pnormal (	.min(HWAMINCPR[23:0]),
 
 // Period check end
 
-// Gap search
+// GAP search
 wire gap_search_gap;
 gap_search #(24) gap_srch (.cap0(HWAPCNT1),
 									.cap1(pcap1),
 									.cap2(pcap2),
 									.gap(gap_search_gap));
-// Gap search end
+// GAP search end
 
 // HWAG start/stop trigger
 d_ff_wide #(1) hwag_start_ff (.d((~hwag_start &
@@ -191,7 +191,7 @@ d_ff_wide #(1) hwag_start_ff (.d((~hwag_start &
 										.q(hwag_start));
 // HWAG start/stop trigger end
 
-// Tooth counter
+// TCNT
 counter_compare #(8) tcnt( .clk(clk),
                            .ena(hwag_start & vr_edge_0),
                            .rst(rst),
@@ -205,9 +205,9 @@ counter_compare #(8) tcnt( .clk(clk),
 buffer_z #(16) tcnt_read(	.ena(HWATHVL_addr & ssram_re),
 									.d({8'd0,HWATHVL}),
 									.q(ssram_data));
-// Tooth counter end
+// TCNT end
 
-// Gap run check
+// GAP run check
 wire gap_drn_gap_point = hwag_start & gap_run_found & gap_run_point;
 wire gap_drn_gap_point_if = gap_drn_gap_point & vr_edge_0;
 wire gap_drn_normal_tooth = hwag_start & gap_run_found & ~gap_run_point;
@@ -215,7 +215,7 @@ wire gap_drn_normal_tooth_if = gap_drn_normal_tooth & vr_edge_0;
 gap_run_check #(24) gaprun(	.cap0(HWAPCNT1),
 										.pcnt(HWAPCNT),
 										.gap(gap_run_found));
-// Gap run check end
+// GAP run check end
 
 // SCNT top calc
 wire [21:0] scnt_top;
@@ -238,6 +238,14 @@ hwag_tckc_actual_top #(19) tckc_actial_top_calc(.gap_point(gap_run_point),
 																.tckc_top({1'b0,tckc_top}),
 																.tckc_actial_top(tckc_actial_top));
 // TCKC actual top calc end
+
+// Tooth angle
+wire [23:0] tooth_angle;
+assign tooth_angle [1:0] = 2'b0;
+shift_left #(22,4) acnt_tooth_calc(	.in({14'd0,HWATHVL}),
+												.shift(HWASTWD[3:0]),
+												.out(tooth_angle[23:2]));
+// Tooth angle end
 
 endmodule
 
