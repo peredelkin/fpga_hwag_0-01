@@ -33,6 +33,7 @@ always @(posedge ram_clk) begin
                 2: w_data <= 16'd1024;
                 3: w_data <= 16'd0;
                 4: w_data <= 16'd57; //HWATHNB
+                5: w_data <= 16'd4; //HWASTWD
                 
                 63: w_data <= 16'b111; //addr 64; HWACR0
                 65: w_data <= 16'b10; //pcnt ovf ie

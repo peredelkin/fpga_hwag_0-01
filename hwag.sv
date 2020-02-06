@@ -9,6 +9,7 @@
 `include "mult_demult.sv"
 `include "comparsion.sv"
 `include "counting.sv"
+`include "bit_operation.sv"
 
 module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out,hwagif,hwag_start);
 input wire clk,rst;
@@ -43,6 +44,7 @@ wire [15:0] HWASFCR		=					 ssram_out[0];
 wire [31:0] HWAMINCPR	= {ssram_out[2],ssram_out[1]};
 wire [31:0] HWAMAXCPR	= {ssram_out[4],ssram_out[3]};
 wire [15:0] HWATHNB		=					 ssram_out[5];
+wire [15:0] HWASTWD		=					 ssram_out[6];
 //
 
 //
@@ -213,6 +215,17 @@ gap_run_check #(24) gaprun(	.cap0(HWAPCNT1),
 										.pcnt(HWAPCNT),
 										.gap(gap_run_found));
 // Gap run check end
+
+// SCNT top calc
+wire [21:0] scnt_top;
+shift_right #(22,4) scnt_top_calc(.in(HWAPCNT1[23:2]),.shift(HWASTWD[3:0]),.out(scnt_top));
+// SCNT top calc end
+
+// TCKC top calc
+wire [17:0] tckc_top;
+assign tckc_top [1:0] = 2'b0; 
+shift_left #(16,4) tckc_top_calc(.in(16'd1),.shift(HWASTWD[3:0]),.out(tckc_top[17:2]));
+// TCKC top calc end
 
 endmodule
 
