@@ -220,19 +220,23 @@ gap_run_check #(24) gaprun(	.cap0(HWAPCNT1),
 
 //==========================================================================
 
-// SCNT top calc
+// SCNT top calc (fixed)
 wire [21:0] scnt_top;
+wire [21:0] scnttop;
+d_ff_wide #(22) scnt_top_ff (.d(scnttop),.clk(clk),.rst(rst),.ena(~hwag_start),.q(scnt_top));
 shift_right #(22,4) scnt_top_calc(	.in(HWAPCNT1[23:2]),
 												.shift(HWASTWD[3:0]),
-												.out(scnt_top));
+												.out(scnttop));
 // SCNT top calc end
 
-// TCKC top calc
+// TCKC top calc (fixed)
 wire [17:0] tckc_top;
-assign tckc_top [1:0] = 2'b0; 
+assign tckc_top [1:0] = 2'b0;
+wire [15:0] tckctop;
+d_ff_wide #(16) tckc_top_ff (.d(tckctop),.clk(clk),.rst(rst),.ena(~hwag_start),.q(tckc_top[17:2]));
 shift_left #(16,4) tckc_top_calc(.in(16'd1),
 											.shift(HWASTWD[3:0]),
-											.out(tckc_top[17:2]));
+											.out(tckctop));
 // TCKC top calc end
 
 // TCKC actual top calc
