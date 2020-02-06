@@ -247,6 +247,31 @@ shift_left #(22,4) acnt_tooth_calc(	.in({14'd0,HWATHVL}),
 												.out(tooth_angle[23:2]));
 // Tooth angle end
 
+// SCNT
+wire [21:0] scnt_out;
+and(scnt_ena,hwag_start,tckc_l_top);
+or(scnt_rst,scnt_ge_top,vr_edge_0);
+counter_compare #(22) scnt( .clk(clk),
+                            .ena(scnt_ena),
+                            .rst(rst),
+                            .srst(scnt_rst),
+                            .dout(scnt_out),
+                            .dtop(scnt_top),
+                            .out_ge_top(scnt_ge_top));
+// SCNT end
+
+// TCKC
+wire [18:0] tckc_out;
+and(tckc_ena,scnt_ena,scnt_ge_top);
+counter_compare #(19) tckc (.clk(clk),
+                            .ena(tckc_ena),
+                            .rst(rst),
+                            .srst(vr_edge_0),
+                            .dout(tckc_out),
+                            .dtop(tckc_actial_top),
+                            .out_l_top(tckc_l_top));
+// TCKC end
+
 endmodule
 
 //`endif
