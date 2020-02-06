@@ -12,11 +12,12 @@
 `include "bit_operation.sv"
 `include "math.sv"
 
-module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out,hwagif,hwag_start);
+module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out,hwagif,hwag_start,acnt_e_top);
 input wire clk,rst;
 output wire vr_out;
 output wire hwag_start;
 output wire hwagif;
+output wire acnt_e_top;
 
 // ssram interface
 input wire ssram_we,ssram_re;
@@ -219,33 +220,39 @@ gap_run_check #(24) gaprun(	.cap0(HWAPCNT1),
 
 // SCNT top calc
 wire [21:0] scnt_top;
+wire [21:0] scnttop;
+d_ff_wide #(22) scnt_top_ff (.d(scnttop),.clk(clk),.rst(rst),.ena(~hwag_start),.q(scnt_top));
 shift_right #(22,4) scnt_top_calc(	.in(HWAPCNT1[23:2]),
 												.shift(HWASTWD[3:0]),
-												.out(scnt_top));
+												.out(scnttop));
 // SCNT top calc end
 
 // TCKC top calc
 wire [17:0] tckc_top;
-assign tckc_top [1:0] = 2'b0; 
+wire [15:0] tckctop;
+assign tckc_top [1:0] = 2'b0;
+d_ff_wide #(16) tckc_top_ff (.d(tckctop),.clk(clk),.rst(rst),.ena(~hwag_start),.q(tckc_top[17:2]));
 shift_left #(16,4) tckc_top_calc(.in(16'd1),
 											.shift(HWASTWD[3:0]),
-											.out(tckc_top[17:2]));
+											.out(tckctop));
 // TCKC top calc end
 
 // TCKC actual top calc
 wire [18:0] tckc_actial_top;
+wire [18:0] tckcactialtop;
+d_ff_wide #(19) tckc_actial_top_ff (.d(tckcactialtop),.clk(clk),.rst(rst),.ena(vr_edge_1),.q(tckc_actial_top));
 hwag_tckc_actual_top #(19) tckc_actial_top_calc(.gap_point(gap_run_point),
 																.tckc_top({1'b0,tckc_top}),
-																.tckc_actial_top(tckc_actial_top));
+																.tckc_actial_top(tckcactialtop));
 // TCKC actual top calc end
 
-// Tooth angle
+// Tooth angle calc
 wire [23:0] tooth_angle;
 assign tooth_angle [1:0] = 2'b0;
 shift_left #(22,4) acnt_tooth_calc(	.in({14'd0,HWATHVL}),
 												.shift(HWASTWD[3:0]),
 												.out(tooth_angle[23:2]));
-// Tooth angle end
+// Tooth angle calc end
 
 // SCNT
 wire [21:0] scnt_out;
