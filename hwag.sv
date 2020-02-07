@@ -222,21 +222,17 @@ gap_run_check #(24) gaprun(	.cap0(HWAPCNT1),
 
 // SCNT top calc (fixed)
 wire [21:0] scnt_top;
-wire [21:0] scnttop;
-d_ff_wide #(22) scnt_top_ff (.d(scnttop),.clk(clk),.rst(rst),.ena(~hwag_start),.q(scnt_top));
 shift_right #(22,4) scnt_top_calc(	.in(HWAPCNT1[23:2]),
 												.shift(HWASTWD[3:0]),
-												.out(scnttop));
+												.out(scnt_top));
 // SCNT top calc end
 
-// TCKC top calc (fixed)
+// TCKC top calc
 wire [17:0] tckc_top;
 assign tckc_top [1:0] = 2'b0;
-wire [15:0] tckctop;
-d_ff_wide #(16) tckc_top_ff (.d(tckctop),.clk(clk),.rst(rst),.ena(~hwag_start),.q(tckc_top[17:2]));
 shift_left #(16,4) tckc_top_calc(.in(16'd1),
 											.shift(HWASTWD[3:0]),
-											.out(tckctop));
+											.out(tckc_top[17:2]));
 // TCKC top calc end
 
 // TCKC actual top calc
@@ -254,35 +250,36 @@ shift_left #(22,4) acnt_tooth_calc(	.in({14'd0,HWATHVL}),
 												.out(tooth_angle[23:2]));
 // Tooth angle end
 
-// SCNT (fixed)
+// SCNT
 wire [21:0] scnt_out;
 and(scnt_ena,hwag_start,tckc_ne_top);
-d_ff_wide #(1) scnt_ovr_ff (.d(1'b1),.clk(clk),.rst(~scnt_e_top),.ena(1'b1),.q(scnt_ovf));
 counter_compare #(22) scnt( .clk(clk),
                             .ena(scnt_ena),
-                            .rst(rst | scnt_ovf | vr_edge_0),
+                            .rst(rst),
+									 .srst(scnt_e_top |  vr_edge_0),
                             .dout(scnt_out),
                             .dtop(scnt_top),
                             .out_e_top(scnt_e_top));
 // SCNT end
 
-// TCKC (fixed)
+// TCKC
 wire [18:0] tckc_out;
 and(tckc_ena,scnt_ena,scnt_e_top);
 counter_compare #(19) tckc (.clk(clk),
                             .ena(tckc_ena),
-                            .rst(rst | vr_edge_0),
+                            .rst(rst),
+									 .srst(vr_edge_0),
                             .dout(tckc_out),
                             .dtop(tckc_actial_top),
                             .out_ne_top(tckc_ne_top));
 // TCKC end
 
-// ACNT (fixed)
+// ACNT
 wire [23:0] acnt_out;
-d_ff_wide #(1) acnt_ovf_ff (.d(1'b1),.clk(clk),.rst(~acnt_e_top),.ena(tckc_ena),.q(acnt_ovf));
 counter_compare #(24) acnt (.clk(clk),
                             .ena(tckc_ena),
-                            .rst(rst | acnt_ovf),
+                            .rst(rst),
+									 .srst(tckc_ena & acnt_e_top),
                             .sload(~hwag_start | vr_edge_1),
                             .dload(tooth_angle),
                             .dout(acnt_out),
@@ -303,11 +300,11 @@ d_ff_wide #(1) d_ff_acnt2_count_div2 (	.d(~acnt2_count_div2),
 													.q(acnt2_count_div2));
 // ACNT to ACNT2 interface
 
-// ACNT2 (fixed)
-d_ff_wide #(1) acnt2_ovf_ff (.d(1'b1),.clk(clk),.rst(~acnt2_e_top),.ena(acnt2_count_div2 & acnt2_ne_acnt),.q(acnt2_ovf));
+// ACNT2
 counter_compare #(24) acnt2 (   .clk(clk),
                                 .ena(acnt2_count_div2 & acnt2_ne_acnt),
                                 .rst(rst | acnt2_ovf),
+										  .srst(acnt2_count_div2 & acnt2_ne_acnt & acnt2_e_top),
                                 .sload(~hwag_start),
                                 .dload(acnt_out),
                                 .dout(acnt2_out),
