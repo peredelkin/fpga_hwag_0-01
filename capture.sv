@@ -52,6 +52,7 @@ input wire d,clk,rst,filt_ena,out_ena,sel;
 input wire [WIDTH-1:0] flt_val;
 output wire filtered,edge0,edge1;
 wire rise0,rise1,fall0,fall1;
+wire rise0_q,rise1_q,fall0_q,fall1_q;
 
 pin_cnt_filter #(WIDTH) pin_filter (	.d(d),
 													.clk(clk),
