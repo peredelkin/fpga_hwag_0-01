@@ -181,14 +181,10 @@ gap_search #(24) gap_srch (.cap0(HWAPCNT1),
 // GAP search end
 
 // HWAG start/stop trigger
-d_ff_wide #(1) hwag_start_ff (.d((~hwag_start &
-										pcap_g_min &
-										pcap_l_max &
-										gap_search_gap &
-										vr_edge_0) | hwag_start),
+d_ff_wide #(1) hwag_start_ff (.d(pcap_g_min & pcap_l_max & gap_search_gap & vr_edge_0),
 										.clk(clk),
 										.rst(rst | ~HWAGCSCR0_CAPE),
-										.ena(HWAGCSCR0_CAPE),
+										.ena(~hwag_start),
 										.q(hwag_start));
 // HWAG start/stop trigger end
 
@@ -237,9 +233,14 @@ shift_left #(16,4) tckc_top_calc(.in(16'd1),
 
 // TCKC actual top calc
 wire [18:0] tckc_actial_top;
+wire [18:0] tckc_actial_top_2;
 hwag_tckc_actual_top #(19) tckc_actial_top_calc(.gap_point(gap_run_point),
 																.tckc_top({1'b0,tckc_top}),
-																.tckc_actial_top(tckc_actial_top));
+																.tckc_actial_top(tckc_actial_top_2));
+																
+integer_subtraction #(19) tckc_actial_top_calc_2(	.minuend(tckc_actial_top_2),
+																	.subtrahend(19'd1),
+																	.result(tckc_actial_top));
 // TCKC actual top calc end
 
 // Tooth angle
@@ -279,12 +280,9 @@ wire [23:0] acnt_out;
 counter_compare #(24) acnt (.clk(clk),
                             .ena(tckc_ena),
                             .rst(rst),
-									 .srst(tckc_ena & acnt_e_top),
                             .sload(~hwag_start | vr_edge_1),
                             .dload(tooth_angle),
-                            .dout(acnt_out),
-                            .dtop(24'd3839),
-                            .out_e_top(acnt_e_top));
+                            .dout(acnt_out));
 // ACNT end
 
 // ACNT to ACNT2 interface
