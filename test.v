@@ -3,7 +3,7 @@
 `include "hwag.sv"
 
 module test();
-reg clk,ram_clk,rst,we,re,vr;
+reg clk,ram_clk,rst,we,re,vr,cam,cam_phase;
 reg [7:0] scnt;
 reg [7:0] scnt_top;
 reg [7:0] tckc;
@@ -34,6 +34,7 @@ always @(posedge ram_clk) begin
                 3: w_data <= 16'd0;
                 4: w_data <= 16'd57; //HWATHNB
                 5: w_data <= 16'd4; //HWASTWD
+                6: w_data <= 16'd3839; //HWAATOP
                 
                 63: w_data <= 16'b111; //addr 64; HWACR0
                 65: w_data <= 16'b10; //pcnt ovf ie
@@ -58,6 +59,20 @@ always @(posedge ram_clk) begin
 end
 
 always @(posedge clk) begin
+
+    if(tcnt == 30) begin
+        cam_phase <= ~cam_phase;
+    end
+    
+    if(cam_phase) begin
+        if(tcnt == 54) begin
+            cam <= 1'b0;
+        end
+        if(tcnt == 4) begin
+            cam <= 1'b1;
+        end
+    end
+
     if(scnt == scnt_top) begin
         scnt <= 8'd0;
         if(tckc == tckc_top) begin
@@ -83,10 +98,6 @@ always @(posedge clk) begin
     end
 end
 
-always @(posedge vr) begin
-    scnt_top <= scnt_top - 1'b1;
-end
-
 always #1 clk <= ~clk;
 always #2 ram_clk <= ~ram_clk;
 always #1 rst <= 1'b0;
@@ -102,10 +113,12 @@ initial begin
     end
     
     scnt <= 8'd0;
-    scnt_top <= 8'd127;
+    scnt_top <= 8'd3;
     tckc <= 8'd0;
     tckc_top <= 8'd63;
     tcnt <= 8'd45;
+    cam <= 1'b1;
+    cam_phase <= 1'b0;
     
     clk <= 1'b0;
     ram_clk <= 1'b0;
@@ -117,7 +130,7 @@ initial begin
     addr <= 8'd0;
     w_data <= 16'd3; // addr 0: значение фильтра
     
-    #1000000 $finish();
+    #100000 $finish();
 end
 
 endmodule

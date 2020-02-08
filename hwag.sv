@@ -47,6 +47,8 @@ wire [31:0] HWAMINCPR	= {ssram_out[2],ssram_out[1]};
 wire [31:0] HWAMAXCPR	= {ssram_out[4],ssram_out[3]};
 wire [15:0] HWATHNB		=					 ssram_out[5];
 wire [15:0] HWASTWD		=					 ssram_out[6];
+wire [31:0] HWAATOP		= {ssram_out[8],ssram_out[7]};
+wire [31:0] HWAATOP1		={ssram_out[10],ssram_out[9]};
 //
 
 //
@@ -233,15 +235,10 @@ shift_left #(16,4) tckc_top_calc(.in(16'd1),
 
 // TCKC actual top calc
 wire [18:0] tckc_actial_top;
-wire [18:0] tckc_actial_top_2;
+//wire [18:0] tckc_actial_top_2;
 hwag_tckc_actual_top #(19) tckc_actial_top_calc(.gap_point(gap_run_point),
 																.tckc_top({1'b0,tckc_top}),
-																.tckc_actial_top(tckc_actial_top_2));
-																
-integer_subtraction #(19) tckc_actial_top_calc_2(	.minuend(tckc_actial_top_2),
-																	.subtrahend(19'd1),
-																	.result(tckc_actial_top));
-// TCKC actual top calc end
+																.tckc_actial_top(tckc_actial_top));
 
 // Tooth angle
 wire [23:0] tooth_angle;
@@ -280,9 +277,12 @@ wire [23:0] acnt_out;
 counter_compare #(24) acnt (.clk(clk),
                             .ena(tckc_ena),
                             .rst(rst),
+									 .srst(tckc_ena & acnt_e_top),
                             .sload(~hwag_start | vr_edge_1),
                             .dload(tooth_angle),
-                            .dout(acnt_out));
+                            .dout(acnt_out),
+									 .dtop(HWAATOP[23:0]),
+									 .out_e_top(acnt_e_top));
 // ACNT end
 
 // ACNT to ACNT2 interface
@@ -306,7 +306,7 @@ counter_compare #(24) acnt2 (   .clk(clk),
                                 .sload(~hwag_start),
                                 .dload(acnt_out),
                                 .dout(acnt2_out),
-                                .dtop(24'd3839),
+                                .dtop(HWAATOP[23:0]),
                                 .out_e_top(acnt2_e_top));
 // ACNT2 end
 
