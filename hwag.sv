@@ -48,7 +48,6 @@ wire [31:0] HWAMAXCPR	= {ssram_out[4],ssram_out[3]};
 wire [15:0] HWATHNB		=					 ssram_out[5];
 wire [15:0] HWASTWD		=					 ssram_out[6];
 wire [31:0] HWAATOP		= {ssram_out[8],ssram_out[7]};
-wire [31:0] HWAATOP1		={ssram_out[10],ssram_out[9]};
 //
 
 //

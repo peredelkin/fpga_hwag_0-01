@@ -59,20 +59,6 @@ always @(posedge ram_clk) begin
 end
 
 always @(posedge clk) begin
-
-    if(tcnt == 30) begin
-        cam_phase <= ~cam_phase;
-    end
-    
-    if(cam_phase) begin
-        if(tcnt == 54) begin
-            cam <= 1'b0;
-        end
-        if(tcnt == 4) begin
-            cam <= 1'b1;
-        end
-    end
-
     if(scnt == scnt_top) begin
         scnt <= 8'd0;
         if(tckc == tckc_top) begin
@@ -82,6 +68,20 @@ always @(posedge clk) begin
                 tcnt <= 8'd0;
                 tckc_top <= 8'd63;
             end else begin
+                
+                if(tcnt == 30) begin
+                    cam_phase <= ~cam_phase;
+                end
+    
+                if(cam_phase) begin
+                    if(tcnt == 54) begin
+                        cam <= 1'b0;
+                    end
+                    if(tcnt == 4) begin
+                        cam <= 1'b1;
+                    end
+                end
+                
                 if(tcnt == 56) begin
                     tckc_top <= 8'd191;
                 end
@@ -130,7 +130,7 @@ initial begin
     addr <= 8'd0;
     w_data <= 16'd3; // addr 0: значение фильтра
     
-    #100000 $finish();
+    #200000 $finish();
 end
 
 endmodule
