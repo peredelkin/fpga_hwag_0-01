@@ -130,15 +130,20 @@ capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 
 // Variable Reluctance Sensor input end
 
-// PCNT
+// Start/Stop PCNT
 wire pcnt_ovf;
+d_ff_wide #(1) pcnt_start (.d(vr_edge_0),.clk(clk),.rst(rst | ~HWAGCSCR0_CAPE | pcnt_ovf),.ena(~pcnt_ena),.q(pcnt_ena));
+
+// Start/Stop PCNT end
+
+// PCNT
 wire [23:0] HWAPCNT;
 counter_compare #(24) pcnt (	.clk(clk),
-										.ena(HWAGCSCR0_CAPE),
+										.ena(HWAGCSCR0_CAPE & pcnt_ena),
 										.rst(rst | ~HWAGCSCR0_CAPE),
 										.srst(vr_edge_0),
 										.dout(HWAPCNT),
-										.dtop(24'hFFFFFF),
+										.dtop(24'd260),
 										.out_e_top(pcnt_ovf));
 // PCNT end
 
@@ -147,7 +152,7 @@ wire [23:0] pcap1,pcap2;
 wire gap_run_point = tcnt_e_top;
 period_capture_3 #(24) pcap (	.d(HWAPCNT),
 										.clk(clk),
-										.rst(rst | ~HWAGCSCR0_CAPE),
+										.rst(rst | ~HWAGCSCR0_CAPE | pcnt_ovf),
 										.ena(HWAGCSCR0_CAPE & vr_edge_0 & (~hwag_start | ~gap_run_point)),
 										.q0(HWAPCNT1),
 										.q1(pcap1),
