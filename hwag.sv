@@ -72,6 +72,10 @@ wire HWATHVL_addr		= ssram_row[4] & ssram_column[7];
 wire [23:0] HWAIGNCHRG;
 wire HWAIGNCHRGL_addr= ssram_row[8] & ssram_column[0];
 wire HWAIGNCHRGH_addr= ssram_row[8] & ssram_column[1];
+
+wire [23:0] HWAIGNANG;
+wire HWAIGNANGL_addr = ssram_row[8] & ssram_column[2];
+wire HWAIGNANGH_addr = ssram_row[8] & ssram_column[3];
 //
 
 // Hwag Global Control Set/Clear Register
@@ -321,7 +325,7 @@ counter_compare #(24) acnt2 (   .clk(clk),
 
 // Ssram interface buffer
 wire [15:0] ssram_dataL;
-or(ssram_data_buffer_addr,HWAIGNCHRGL_addr);
+or(ssram_data_buffer_addr,HWAIGNCHRGL_addr,HWAIGNANGL_addr);
 d_ff_wide #(16) ssram_dataL_ff(	.d(ssram_data),
 											.clk(clk),
 											.rst(rst),
@@ -344,6 +348,22 @@ buffer_z #(16) HWAIGNCHRGH_read (.ena(HWAIGNCHRGH_addr & ssram_re),
 											.d({8'd0,HWAIGNCHRG[23:16]}),
 											.q(ssram_data));
 // Ignition Charge Time end
+
+// Ignition Angle
+d_ff_wide #(24) HWAIGNANG_ff (	.d({ssram_data[7:0],ssram_dataL}),
+											.clk(clk),
+											.rst(rst),
+											.ena(HWAIGNANGH_addr & ssram_we),
+											.q(HWAIGNANG));
+
+buffer_z #(16) HWAIGNANGL_read (	.ena(HWAIGNANGL_addr & ssram_re),
+											.d(HWAIGNANG[15:0]),
+											.q(ssram_data));
+
+buffer_z #(16) HWAIGNANGH_read (	.ena(HWAIGNANGH_addr & ssram_re),
+											.d({8'd0,HWAIGNANG[23:16]}),
+											.q(ssram_data));
+// Ignition Angle end
 
 // Delta Angle Calc
 // Scnt Top Correction

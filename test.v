@@ -25,7 +25,7 @@ hwag hwag0 (    .clk(clk),
                 .hwagif(hwagif));
 
 always @(posedge ram_clk) begin
-    if(addr < 129) begin 
+    if(addr < 131) begin 
         if(we) begin
             case(addr)
                 0: w_data <= 16'd128; // MIN CAP L
@@ -41,6 +41,7 @@ always @(posedge ram_clk) begin
                 70: w_data <= 16'd2; //HWATHVL
                 
                 127: w_data <= 16'd1024; //HWAIGNCHRGL
+                129: w_data <= 16'd3830; //HWAIGNANGL
                 default: w_data <= 16'd0;
             endcase
         end
