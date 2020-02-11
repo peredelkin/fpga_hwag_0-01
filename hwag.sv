@@ -324,10 +324,18 @@ d_ff_wide #(1) d_ff_acnt2_count_div2 (	.d(~acnt2_count_div2),
 // ACNT to ACNT2 interface
 
 // ACNT2
+and(acnt2_ena,acnt2_count_div2,acnt2_ne_acnt);
+
+d_ff_wide #(1) acnt2_rst_ff (	.d(acnt2_e_top),
+										.clk(clk),
+										.rst(~acnt2_e_top),
+										.ena(acnt2_ena),
+										.q(acnt2_rst));
+
 counter_compare #(24) acnt2 (   .clk(clk),
-                                .ena(acnt2_count_div2 & acnt2_ne_acnt),
-                                .rst(rst | acnt2_ovf),
-										  .srst(acnt2_count_div2 & acnt2_ne_acnt & acnt2_e_top),
+                                .ena(acnt2_ena),
+                                .rst(rst | acnt2_rst),
+										  /*.srst(acnt2_ena & acnt2_e_top),*/
                                 .sload(~hwag_start),
                                 .dload(acnt_out),
                                 .dout(acnt2_out),
