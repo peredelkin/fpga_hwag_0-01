@@ -1,27 +1,22 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Sat Feb  8 12:47:47 2020
+[*] Tue Feb 11 02:04:16 2020
 [*]
 [dumpfile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.vcd"
-[dumpfile_mtime] "Sat Feb  8 12:11:52 2020"
-[dumpfile_size] 75982859
+[dumpfile_mtime] "Tue Feb 11 01:55:51 2020"
+[dumpfile_size] 77622113
 [savefile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.gtkw"
-[timestart] 32620
+[timestart] 4290
 [size] 1366 703
 [pos] -1 -1
-*-11.781836 199325 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-11.781836 8753 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.hwag0.
 [treeopen] test.hwag0.vr_filter.pin_filter.
-[sst_width] 211
-[signals_width] 215
+[sst_width] 271
+[signals_width] 278
 [sst_expanded] 1
 [sst_vpaned_height] 220
-@28
-test.we
-test.re
-test.clk
-test.ram_clk
 @24
 test.addr[7:0]
 test.data[15:0]
@@ -40,15 +35,6 @@ test.hwag0.vr_edge_1
 test.hwag0.hwag_start
 @24
 test.hwag0.HWATHVL[7:0]
-@28
-test.hwag0.gap_run_point
-test.hwag0.gap_drn_gap_point
-test.hwag0.gap_drn_normal_tooth
-@24
-test.hwag0.scnt_top[21:0]
-@25
-test.hwag0.tckc_actial_top[18:0]
-@24
 test.hwag0.tooth_angle[23:0]
 @8024
 test.hwag0.scnt_out[21:0]
@@ -56,5 +42,8 @@ test.hwag0.tckc_out[18:0]
 @24
 test.hwag0.acnt_out[23:0]
 test.hwag0.acnt2_out[23:0]
+test.hwag0.delta_set_angle[23:0]
+@29
+test.hwag0.delta_set_angle_rdy
 [pattern_trace] 1
 [pattern_trace] 0

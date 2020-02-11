@@ -18,6 +18,26 @@ always @(posedge clk,posedge rst) begin
 end
 endmodule
 
+module d_shift_left_load #(parameter WIDTH=1)
+                    (d,clk,rst,sshift,sload,load_data,q);
+input wire d,clk,rst,sload,sshift;
+input wire [WIDTH-1:0] load_data;
+output reg [WIDTH-1:0] q;
+always @(posedge clk,posedge rst) begin
+    if(rst) begin
+        q <= 0;
+    end else begin
+        if(sload) begin
+            q <= load_data;
+        end else begin
+            if(sshift) begin
+                q <= {q[WIDTH-2:0],d};
+            end
+        end
+    end
+end
+endmodule
+
 //module d_ff_load_wide #(parameter WIDTH=1) (d,clk,rst,ena,ld,dld,q);
 //endmodule
 

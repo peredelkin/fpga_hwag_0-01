@@ -143,7 +143,7 @@ counter_compare #(24) pcnt (	.clk(clk),
 										.rst(rst | ~HWAGCSCR0_CAPE),
 										.srst(vr_edge_0),
 										.dout(HWAPCNT),
-										.dtop(24'd260),
+										.dtop(24'hFFFFFF),
 										.out_e_top(pcnt_ovf));
 // PCNT end
 
@@ -220,9 +220,7 @@ gap_run_check #(24) gaprun(	.cap0(HWAPCNT1),
 										.gap(gap_run_found));
 // GAP run check end
 
-//==========================================================================
-
-// SCNT top calc (fixed)
+// SCNT top calc
 wire [21:0] scnt_top;
 shift_right #(22,4) scnt_top_calc(	.in(HWAPCNT1[23:2]),
 												.shift(HWASTWD[3:0]),
@@ -313,6 +311,29 @@ counter_compare #(24) acnt2 (   .clk(clk),
                                 .dtop(HWAATOP[23:0]),
                                 .out_e_top(acnt2_e_top));
 // ACNT2 end
+
+//==========================================================================
+
+// расчет дельты угла
+wire [23:0] delta_set_angle_remainder;
+wire [23:0] delta_set_angle_result;
+wire [23:0] delta_set_angle;
+wire delta_set_angle_rdy;
+integer_division #(24) delta_set_angle_calc (.clk(clk),
+															.rst(rst),
+															.start(~vr_edge_1),
+															.dividend(24'd1024), /*(!)время накопления*/
+															.divider({2'd0,scnt_top}),
+															.remainder(delta_set_angle_remainder),
+															.result(delta_set_angle_result),
+															.rdy(delta_set_angle_rdy));
+															
+d_ff_wide #(24) delta_set_angle_ff (.d(delta_set_angle_result),
+												.clk(clk),
+												.rst(rst),
+												.ena(vr_edge_0),
+												.q(delta_set_angle));
+// конец расчета дельты угла
 
 endmodule
 
