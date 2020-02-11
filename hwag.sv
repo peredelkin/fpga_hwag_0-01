@@ -389,8 +389,15 @@ buffer_z #(16) HWAIGNANGH_read (	.ena(HWAIGNANGH_addr & ssram_re),
 
 // Delta Angle Calc
 // Scnt Top Correction
+wire [21:0] scnt_top_buffered;
 wire [23:0] scnt_top_corrected;
-integer_addition #(24) scnt_top_correction (	.argumenta({2'd0,scnt_top}),
+d_ff_wide #(22) scnt_top_buffer (.d(scnt_top),
+											.clk(clk),
+											.rst(rst),
+											.ena(delta_ign_angle_rdy & vr_edge_0),
+											.q(scnt_top_buffered));
+											
+integer_addition #(24) scnt_top_correction (	.argumenta({2'd0,scnt_top_buffered}),
 															.argumentb(24'd1),
 															.result(scnt_top_corrected));
 // Scnt Top Correction end
@@ -399,7 +406,6 @@ wire [23:0] delta_ign_angle_remainder;
 wire [23:0] delta_ign_angle_result;
 wire [23:0] delta_ign_angle;
 wire [23:0] HWAIGNCHRG_buffered;
-wire delta_ign_angle_rdy;
 
 d_ff_wide #(24) HWAIGNCHRG_buffer(	.d(HWAIGNCHRG),
 												.clk(clk),
