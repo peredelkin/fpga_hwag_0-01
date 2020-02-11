@@ -12,12 +12,11 @@
 `include "bit_operation.sv"
 `include "math.sv"
 
-module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out,hwagif,hwag_start,acnt2_e_top);
+module hwag(clk,rst,ssram_we,ssram_re,ssram_addr,ssram_data,vr_in,vr_out,hwagif,hwag_start,ign_out);
 input wire clk,rst;
 output wire vr_out;
 output wire hwag_start;
 output wire hwagif;
-output wire acnt2_e_top;
 
 // ssram interface
 input wire ssram_we,ssram_re;
@@ -140,7 +139,11 @@ capture_flt_edge_det_sel #(16) vr_filter (	.d(vr_in),
 
 // Start/Stop PCNT
 wire pcnt_ovf;
-d_ff_wide #(1) pcnt_start (.d(vr_edge_0),.clk(clk),.rst(rst | ~HWAGCSCR0_CAPE | pcnt_ovf),.ena(~pcnt_ena),.q(pcnt_ena));
+d_ff_wide #(1) pcnt_start (.d(vr_edge_0),
+									.clk(clk),
+									.rst(rst | ~HWAGCSCR0_CAPE | pcnt_ovf),
+									.ena(~pcnt_ena),
+									.q(pcnt_ena));
 
 // Start/Stop PCNT end
 
@@ -419,6 +422,26 @@ d_ff_wide #(24) delta_inj_angle_ff (.d(delta_inj_angle_result),
 												.ena(vr_edge_0),
 												.q(delta_inj_angle));
 // Delta Angle Calc end
+
+// Test only ============================================
+output wire ign_out;
+wire [23:0] ign_set_angle;
+wire [23:0] ign_set_angle_result;
+integer_subtraction #(24) ign_set_angle_calc(.minuend(HWAIGNANG),
+															.subtrahend(delta_ign_angle),
+															.result(ign_set_angle_result));
+
+compare #(24) ign_set_comp (	.dataa(acnt2_out),
+										.datab(ign_set_angle),
+										.aeb(ign_set));
+										
+compare #(24) ign_rst_comp (	.dataa(acnt2_out),
+										.datab(HWAIGNANG),
+										.aeb(ign_rst));
+										
+d_ff_wide #(1) ign_ff (.d(1'b1),.clk(clk),.rst(ign_rst),.ena(ign_set),.q(ign_out));
+
+// Test only end ========================================
 
 endmodule
 
