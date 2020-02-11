@@ -385,7 +385,7 @@ wire delta_ign_angle_rdy;
 d_ff_wide #(24) HWAIGNCHRG_buffer(	.d(HWAIGNCHRG),
 												.clk(clk),
 												.rst(rst),
-												.ena(vr_edge_0),
+												.ena(delta_ign_angle_rdy & vr_edge_0),
 												.q(HWAIGNCHRG_buffered));
 
 integer_division #(24) delta_ign_angle_calc (.clk(clk),
@@ -400,7 +400,7 @@ integer_division #(24) delta_ign_angle_calc (.clk(clk),
 d_ff_wide #(24) delta_ign_angle_ff (.d(delta_ign_angle_result),
 												.clk(clk),
 												.rst(rst),
-												.ena(vr_edge_0),
+												.ena(delta_ign_angle_rdy & vr_edge_0),
 												.q(delta_ign_angle));
 //	
 wire [23:0] delta_inj_angle_remainder;
@@ -426,10 +426,9 @@ d_ff_wide #(24) delta_inj_angle_ff (.d(delta_inj_angle_result),
 // Test only ============================================
 output wire ign_out;
 wire [23:0] ign_set_angle;
-wire [23:0] ign_set_angle_result;
 integer_subtraction #(24) ign_set_angle_calc(.minuend(HWAIGNANG),
 															.subtrahend(delta_ign_angle),
-															.result(ign_set_angle_result));
+															.result(ign_set_angle));
 
 compare #(24) ign_set_comp (	.dataa(acnt2_out),
 										.datab(ign_set_angle),

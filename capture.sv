@@ -24,24 +24,16 @@ module pin_edge_gen(d,clk,rst,ena,rise0,rise1,fall0,fall1);
 
 input wire d,clk,rst,ena;
 output wire rise0,rise1,fall0,fall1;
-wire q0,q1;
+wire q0;
 
-and(rise0,d,~q0);
-and(rise1,q0,~q1);
-and(fall0,~d,q0);
-and(fall1,~q0,q1);
+and(rise,d,~q0);
+and(fall,~d,q0);
 
-d_ff_wide #(1) d_ff0(	.d(d),
+d_ff_wide #(5) edge_ff(	.d({d,rise,fall,rise0,fall0}),
 								.clk(clk),
 								.rst(rst),
 								.ena(ena),
-								.q(q0));
-								
-d_ff_wide #(1) d_ff1(	.d(q0),
-								.clk(clk),
-								.rst(rst),
-								.ena(ena),
-								.q(q1));
+								.q({q0,rise0,fall0,rise1,fall1}));
 endmodule
 
 
