@@ -18,6 +18,15 @@ output wire vr_out;
 output wire hwag_start;
 output wire hwagif;
 
+// clock div
+//wire [4:0] clk_div;
+//d_ff_wide #(5) clk_div_ff (	.d({clk_div[3:0],~clk_div[4]}),
+//										.clk(clk),
+//										.rst(rst),
+//										.ena(1'b1),
+//										.q(clk_div));
+// clock div end
+
 // ssram interface
 input wire ssram_we,ssram_re;
 input wire [7:0] ssram_addr;
