@@ -88,6 +88,7 @@ always @(posedge clk) begin
                 if(tcnt == 56) begin
                     tckc_top <= 8'd191;
                 end
+                scnt_top <= scnt_top + 8'd1;
                 tcnt <= tcnt + 8'd1;
             end
         end else begin
