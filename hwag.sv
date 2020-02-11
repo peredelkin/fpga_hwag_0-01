@@ -47,7 +47,7 @@ wire [31:0] HWAMINCPR	= {ssram_out[2],ssram_out[1]};
 wire [31:0] HWAMAXCPR	= {ssram_out[4],ssram_out[3]};
 wire [15:0] HWATHNB		=					 ssram_out[5];
 wire [15:0] HWASTWD		=					 ssram_out[6];
-wire [31:0] HWAATOP		= {ssram_out[8],ssram_out[7]};
+wire [31:0] HWAMAXACR	= {ssram_out[8],ssram_out[7]};
 //
 
 //
@@ -283,7 +283,7 @@ counter_compare #(24) acnt (.clk(clk),
                             .sload(~hwag_start | vr_edge_1),
                             .dload(tooth_angle),
                             .dout(acnt_out),
-									 .dtop(HWAATOP[23:0]),
+									 .dtop(HWAMAXACR[23:0]),
 									 .out_e_top(acnt_e_top));
 // ACNT end
 
@@ -308,7 +308,7 @@ counter_compare #(24) acnt2 (   .clk(clk),
                                 .sload(~hwag_start),
                                 .dload(acnt_out),
                                 .dout(acnt2_out),
-                                .dtop(HWAATOP[23:0]),
+                                .dtop(HWAMAXACR[23:0]),
                                 .out_e_top(acnt2_e_top));
 // ACNT2 end
 
