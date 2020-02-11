@@ -207,10 +207,16 @@ d_ff_wide #(1) hwag_start_ff (.d(pcap_g_min & pcap_l_max & gap_search_gap & vr_e
 // HWAG start/stop trigger end
 
 // TCNT
+d_ff_wide #(1) tcnt_rst_ff (	.d(tcnt_e_top),
+										.clk(clk),
+										.rst(~tcnt_e_top),
+										.ena(vr_edge_0),
+										.q(tcnt_rst));
+
 counter_compare #(8) tcnt( .clk(clk),
                            .ena(hwag_start & vr_edge_0),
-                           .rst(rst),
-                           .srst(tcnt_e_top & vr_edge_0),
+                           .rst(rst | tcnt_rst),
+                           /*.srst(tcnt_e_top & vr_edge_0),*/
                            .sload(HWATHVL_addr & ssram_we),
                            .dload(ssram_data[7:0]),
                            .dout(HWATHVL),
