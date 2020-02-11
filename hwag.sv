@@ -68,6 +68,10 @@ wire HWAPCNT1H_addr	= ssram_row[4] & ssram_column[6];
 
 wire [7:0] HWATHVL;
 wire HWATHVL_addr		= ssram_row[4] & ssram_column[7];
+
+wire [23:0] HWAIGNCHRG;
+wire HWAIGNCHRGL_addr= ssram_row[8] & ssram_column[0];
+wire HWAIGNCHRGH_addr= ssram_row[8] & ssram_column[1];
 //
 
 // Hwag Global Control Set/Clear Register
@@ -161,6 +165,7 @@ period_capture_3 #(24) pcap (	.d(HWAPCNT),
 buffer_z #(16) pcap0_read_l (	.ena(HWAPCNT1L_addr & ssram_re),
 										.d(HWAPCNT1[15:0]),
 										.q(ssram_data));
+
 buffer_z #(16) pcap0_read_h (	.ena(HWAPCNT1H_addr & ssram_re),
 										.d({8'b0,HWAPCNT1[23:16]}),
 										.q(ssram_data));
@@ -314,20 +319,56 @@ counter_compare #(24) acnt2 (   .clk(clk),
 
 //==========================================================================
 
-// расчет дельты угла
+// Ssram interface buffer
+wire [15:0] ssram_dataL;
+or(ssram_data_buffer_addr,HWAIGNCHRGL_addr);
+d_ff_wide #(16) ssram_dataL_ff(	.d(ssram_data),
+											.clk(clk),
+											.rst(rst),
+											.ena(ssram_data_buffer_addr & ssram_we),
+											.q(ssram_dataL));
+// Ssram interface buffer end
+
+// Ignition Charge Time
+d_ff_wide #(24) HWAIGNCHRG_ff (	.d({ssram_data[7:0],ssram_dataL}),
+											.clk(clk),
+											.rst(rst),
+											.ena(HWAIGNCHRGH_addr & ssram_we),
+											.q(HWAIGNCHRG));
+
+buffer_z #(16) HWAIGNCHRGL_read (.ena(HWAIGNCHRGL_addr & ssram_re),
+											.d(HWAIGNCHRG[15:0]),
+											.q(ssram_data));
+
+buffer_z #(16) HWAIGNCHRGH_read (.ena(HWAIGNCHRGH_addr & ssram_re),
+											.d({8'd0,HWAIGNCHRG[23:16]}),
+											.q(ssram_data));
+// Ignition Charge Time end
+
+// Delta Angle Calc
+// Scnt Top Correction
 wire [23:0] scnt_top_corrected;
 integer_addition #(24) scnt_top_correction (	.argumenta({2'd0,scnt_top}),
 															.argumentb(24'd1),
 															.result(scnt_top_corrected));
-
+// Scnt Top Correction end
+															
 wire [23:0] delta_ign_angle_remainder;
 wire [23:0] delta_ign_angle_result;
 wire [23:0] delta_ign_angle;
+wire [23:0] HWAIGNCHRG_buffered;
 wire delta_ign_angle_rdy;
+
+d_ff_wide #(24) HWAIGNCHRG_buffer(	.d(HWAIGNCHRG),
+												.clk(clk),
+												.rst(rst),
+												.ena(vr_edge_0),
+												.q(HWAIGNCHRG_buffered));
+
 integer_division #(24) delta_ign_angle_calc (.clk(clk),
 															.rst(rst),
 															.start(~vr_edge_1),
-															.dividend(24'd255), /*(!)время накопления*/
+															.dividend(HWAIGNCHRG_buffered),
 															.divider(scnt_top_corrected),
 															.remainder(delta_ign_angle_remainder),
 															.result(delta_ign_angle_result),
@@ -338,7 +379,7 @@ d_ff_wide #(24) delta_ign_angle_ff (.d(delta_ign_angle_result),
 												.rst(rst),
 												.ena(vr_edge_0),
 												.q(delta_ign_angle));
-	
+//	
 wire [23:0] delta_inj_angle_remainder;
 wire [23:0] delta_inj_angle_result;
 wire [23:0] delta_inj_angle;
@@ -357,7 +398,7 @@ d_ff_wide #(24) delta_inj_angle_ff (.d(delta_inj_angle_result),
 												.rst(rst),
 												.ena(vr_edge_0),
 												.q(delta_inj_angle));
-// конец расчета дельты угла
+// Delta Angle Calc end
 
 endmodule
 

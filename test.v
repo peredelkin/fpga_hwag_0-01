@@ -25,20 +25,22 @@ hwag hwag0 (    .clk(clk),
                 .hwagif(hwagif));
 
 always @(posedge ram_clk) begin
-    if(addr < 71) begin 
+    if(addr < 129) begin 
         if(we) begin
             case(addr)
-                0: w_data <= 16'd128;
-                1: w_data <= 16'd0;
-                2: w_data <= 16'd65535;
-                3: w_data <= 16'd0;
+                0: w_data <= 16'd128; // MIN CAP L
+                1: w_data <= 16'd0; //MIN CAP H
+                2: w_data <= 16'd65535; // MAX CAP L
+                3: w_data <= 16'd0; //MAX CAP H
                 4: w_data <= 16'd57; //HWATHNB
                 5: w_data <= 16'd4; //HWASTWD
-                6: w_data <= 16'd3839; //HWAATOP
+                6: w_data <= 16'd3839; //HWAATOPL
                 
-                63: w_data <= 16'b111; //addr 64; HWACR0
+                63: w_data <= 16'b111; //HWACR0
                 65: w_data <= 16'b10; //pcnt ovf ie
                 70: w_data <= 16'd2; //HWATHVL
+                
+                127: w_data <= 16'd1024; //HWAIGNCHRGL
                 default: w_data <= 16'd0;
             endcase
         end
