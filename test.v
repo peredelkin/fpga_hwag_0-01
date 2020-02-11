@@ -134,7 +134,7 @@ initial begin
     addr <= 8'd0;
     w_data <= 16'd3; // addr 0: значение фильтра
     
-    #200000 $finish();
+    #400000 $finish();
 end
 
 endmodule

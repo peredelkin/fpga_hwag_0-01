@@ -255,7 +255,6 @@ shift_left #(16,4) tckc_top_calc(.in(16'd1),
 
 // TCKC actual top calc
 wire [18:0] tckc_actial_top;
-//wire [18:0] tckc_actial_top_2;
 hwag_tckc_actual_top #(19) tckc_actial_top_calc(.gap_point(gap_run_point),
 																.tckc_top({1'b0,tckc_top}),
 																.tckc_actial_top(tckc_actial_top));
@@ -293,11 +292,17 @@ counter_compare #(19) tckc (.clk(clk),
 // TCKC end
 
 // ACNT
+d_ff_wide #(1) acnt_rst_ff (	.d(acnt_e_top),
+										.clk(clk),
+										.rst(~acnt_e_top),
+										.ena(tckc_ena),
+										.q(acnt_rst));
+
 wire [23:0] acnt_out;
 counter_compare #(24) acnt (.clk(clk),
                             .ena(tckc_ena),
-                            .rst(rst),
-									 .srst(tckc_ena & acnt_e_top),
+                            .rst(rst | acnt_rst),
+									 /*.srst(tckc_ena & acnt_e_top),*/
                             .sload(~hwag_start | vr_edge_1),
                             .dload(tooth_angle),
                             .dout(acnt_out),
