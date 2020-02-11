@@ -315,24 +315,48 @@ counter_compare #(24) acnt2 (   .clk(clk),
 //==========================================================================
 
 // расчет дельты угла
-wire [23:0] delta_set_angle_remainder;
-wire [23:0] delta_set_angle_result;
-wire [23:0] delta_set_angle;
-wire delta_set_angle_rdy;
-integer_division #(24) delta_set_angle_calc (.clk(clk),
+wire [23:0] scnt_top_corrected;
+integer_addition #(24) scnt_top_correction (	.argumenta({2'd0,scnt_top}),
+															.argumentb(24'd1),
+															.result(scnt_top_corrected));
+
+wire [23:0] delta_ign_angle_remainder;
+wire [23:0] delta_ign_angle_result;
+wire [23:0] delta_ign_angle;
+wire delta_ign_angle_rdy;
+integer_division #(24) delta_ign_angle_calc (.clk(clk),
 															.rst(rst),
 															.start(~vr_edge_1),
-															.dividend(24'd1024), /*(!)время накопления*/
-															.divider({2'd0,scnt_top}),
-															.remainder(delta_set_angle_remainder),
-															.result(delta_set_angle_result),
-															.rdy(delta_set_angle_rdy));
+															.dividend(24'd255), /*(!)время накопления*/
+															.divider(scnt_top_corrected),
+															.remainder(delta_ign_angle_remainder),
+															.result(delta_ign_angle_result),
+															.rdy(delta_ign_angle_rdy));
 															
-d_ff_wide #(24) delta_set_angle_ff (.d(delta_set_angle_result),
+d_ff_wide #(24) delta_ign_angle_ff (.d(delta_ign_angle_result),
 												.clk(clk),
 												.rst(rst),
 												.ena(vr_edge_0),
-												.q(delta_set_angle));
+												.q(delta_ign_angle));
+	
+wire [23:0] delta_inj_angle_remainder;
+wire [23:0] delta_inj_angle_result;
+wire [23:0] delta_inj_angle;
+wire delta_inj_angle_rdy;
+integer_division #(24) delta_inj_angle_calc (.clk(clk),
+															.rst(rst),
+															.start(~vr_edge_1),
+															.dividend(24'd511), /*(!)время впрыска*/
+															.divider(scnt_top_corrected),
+															.remainder(delta_inj_angle_remainder),
+															.result(delta_inj_angle_result),
+															.rdy(delta_inj_angle_rdy));
+															
+d_ff_wide #(24) delta_inj_angle_ff (.d(delta_inj_angle_result),
+												.clk(clk),
+												.rst(rst),
+												.ena(vr_edge_0),
+												.q(delta_inj_angle));
 // конец расчета дельты угла
 
 endmodule
