@@ -396,6 +396,7 @@ buffer_z #(16) HWAIGNANGH_read (	.ena(HWAIGNANGH_addr & ssram_re),
 											.q(ssram_data));
 // Ignition Angle end
 
+// Test only ============================================
 // Delta Angle Calc
 // Scnt Top Correction
 wire [21:0] scnt_top_buffered;
@@ -457,7 +458,7 @@ d_ff_wide #(24) delta_inj_angle_ff (.d(delta_inj_angle_result),
 												.q(delta_inj_angle));
 // Delta Angle Calc end
 
-// Test only ============================================
+//
 output wire ign_out;
 wire [23:0] ign_set_angle;
 integer_subtraction #(24) ign_set_angle_calc(.minuend(HWAIGNANG),
@@ -473,6 +474,7 @@ compare #(24) ign_rst_comp (	.dataa(acnt2_out),
 										.aeb(ign_rst));
 										
 d_ff_wide #(1) ign_ff (.d(1'b1),.clk(clk),.rst(ign_rst),.ena(ign_set),.q(ign_out));
+//
 
 // Test only end ========================================
 
