@@ -397,6 +397,7 @@ buffer_z #(16) HWAIGNANGH_read (	.ena(HWAIGNANGH_addr & ssram_re),
 // Ignition Angle end
 
 // Test only ============================================
+/*
 // Delta Angle Calc
 // Scnt Top Correction
 wire [21:0] scnt_top_buffered;
@@ -445,7 +446,7 @@ wire delta_inj_angle_rdy;
 integer_division #(24) delta_inj_angle_calc (.clk(clk),
 															.rst(rst),
 															.start(~vr_edge_1),
-															.dividend(24'd511), /*(!)время впрыска*/
+															.dividend(24'd511),
 															.divider(scnt_top_corrected),
 															.remainder(delta_inj_angle_remainder),
 															.result(delta_inj_angle_result),
@@ -457,13 +458,13 @@ d_ff_wide #(24) delta_inj_angle_ff (.d(delta_inj_angle_result),
 												.ena(vr_edge_0),
 												.q(delta_inj_angle));
 // Delta Angle Calc end
-
+*/
 //
 output wire ign_out;
-wire [23:0] ign_set_angle;
-integer_subtraction #(24) ign_set_angle_calc(.minuend(HWAIGNANG),
-															.subtrahend(delta_ign_angle),
-															.result(ign_set_angle));
+wire [23:0] ign_set_angle = 24'd1920;
+//integer_subtraction #(24) ign_set_angle_calc(.minuend(HWAIGNANG),
+//															.subtrahend(delta_ign_angle),
+//															.result(ign_set_angle));
 
 compare #(24) ign_set_comp (	.dataa(acnt2_out),
 										.datab(ign_set_angle),
