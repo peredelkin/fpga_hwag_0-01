@@ -365,11 +365,11 @@ d_ff_wide #(16) ssram_dataL_ff(	.d(ssram_data),
 // Ssram interface buffer end
 
 // Ignition Charge Time
-d_ff_wide #(24) HWAIGNCHRG_ff (	.d({ssram_data[7:0],ssram_dataL}),
-											.clk(clk),
-											.rst(rst),
-											.ena(HWAIGNCHRGH_addr & ssram_we),
-											.q(HWAIGNCHRG));
+d_ff_wide #(24) HWAIGNCHRG_register (	.d({ssram_data[7:0],ssram_dataL}),
+													.clk(clk),
+													.rst(rst),
+													.ena(HWAIGNCHRGH_addr & ssram_we),
+													.q(HWAIGNCHRG));
 
 buffer_z #(16) HWAIGNCHRGL_read (.ena(HWAIGNCHRGL_addr & ssram_re),
 											.d(HWAIGNCHRG[15:0]),
@@ -381,11 +381,11 @@ buffer_z #(16) HWAIGNCHRGH_read (.ena(HWAIGNCHRGH_addr & ssram_re),
 // Ignition Charge Time end
 
 // Ignition Angle
-d_ff_wide #(24) HWAIGNANG_ff (	.d({ssram_data[7:0],ssram_dataL}),
-											.clk(clk),
-											.rst(rst),
-											.ena(HWAIGNANGH_addr & ssram_we),
-											.q(HWAIGNANG));
+d_ff_wide #(24) HWAIGNANG_register (	.d({ssram_data[7:0],ssram_dataL}),
+													.clk(clk),
+													.rst(rst),
+													.ena(HWAIGNANGH_addr & ssram_we),
+													.q(HWAIGNANG));
 
 buffer_z #(16) HWAIGNANGL_read (	.ena(HWAIGNANGL_addr & ssram_re),
 											.d(HWAIGNANG[15:0]),
@@ -410,16 +410,34 @@ integer_addition #(24) scnt_top_correction (	.argumenta({2'd0,scnt_top}),
 wire [23:0] delta_ign_angle_result;
 wire [23:0] delta_ign_angle;
 
+wire [23:0] scnt_top_corrected_buffered;
+d_ff_wide #(24) scnt_top_corrected_buffer (	.d(scnt_top_corrected),
+															.clk(clk),
+															.rst(rst),
+															.ena(delta_ign_angle_rdy),
+															.q(scnt_top_corrected_buffered));
+
+wire [23:0] HWAIGNCHRG_buffered;
+d_ff_wide #(24) HWAIGNCHRG_buffer (	.d(HWAIGNCHRG),
+												.clk(clk),
+												.rst(rst),
+												.ena(delta_ign_angle_rdy),
+												.q(HWAIGNCHRG_buffered));
+
 integer_division #(24) delta_ign_angle_calc (.clk(clk),
 															.rst(rst),
 															.start(~vr_edge_1),
-															.dividend(HWAIGNCHRG),
-															.divider(scnt_top_corrected),
+															.dividend(HWAIGNCHRG_buffered),
+															.divider(scnt_top_corrected_buffered),
 															.result(delta_ign_angle_result),
 															.rdy(delta_ign_angle_rdy_d));
 															
 and(delta_ign_angle_rdy,delta_ign_angle_rdy_d,~delta_ign_angle_rdy_q);
-d_ff_wide #(1) edge_det0 (.d(delta_ign_angle_rdy_d),.clk(clk),.rst(rst),.ena(1'b1),.q(delta_ign_angle_rdy_q));
+d_ff_wide #(1) edge_det0 (	.d(delta_ign_angle_rdy_d),
+									.clk(clk),
+									.rst(rst),
+									.ena(1'b1),
+									.q(delta_ign_angle_rdy_q));
 															
 d_ff_wide #(24) delta_ign_angle_ff (.d(delta_ign_angle_result),
 												.clk(clk),
