@@ -397,74 +397,65 @@ buffer_z #(16) HWAIGNANGH_read (	.ena(HWAIGNANGH_addr & ssram_re),
 // Ignition Angle end
 
 // Test only ============================================
-/*
+
 // Delta Angle Calc
 // Scnt Top Correction
-wire [21:0] scnt_top_buffered;
-wire [23:0] scnt_top_corrected;
-d_ff_wide #(22) scnt_top_buffer (.d(scnt_top),
-											.clk(clk),
-											.rst(rst),
-											.ena(delta_ign_angle_rdy & vr_edge_0),
-											.q(scnt_top_buffered));
-											
-integer_addition #(24) scnt_top_correction (	.argumenta({2'd0,scnt_top_buffered}),
+wire [23:0] scnt_top_corrected;	
+integer_addition #(24) scnt_top_correction (	.argumenta({2'd0,scnt_top}),
 															.argumentb(24'd1),
 															.result(scnt_top_corrected));
 // Scnt Top Correction end
-															
-wire [23:0] delta_ign_angle_remainder;
+
+// Delta Ignition Angle Calc
 wire [23:0] delta_ign_angle_result;
 wire [23:0] delta_ign_angle;
-wire [23:0] HWAIGNCHRG_buffered;
-
-d_ff_wide #(24) HWAIGNCHRG_buffer(	.d(HWAIGNCHRG),
-												.clk(clk),
-												.rst(rst),
-												.ena(delta_ign_angle_rdy & vr_edge_0),
-												.q(HWAIGNCHRG_buffered));
 
 integer_division #(24) delta_ign_angle_calc (.clk(clk),
 															.rst(rst),
 															.start(~vr_edge_1),
-															.dividend(HWAIGNCHRG_buffered),
+															.dividend(HWAIGNCHRG),
 															.divider(scnt_top_corrected),
-															.remainder(delta_ign_angle_remainder),
 															.result(delta_ign_angle_result),
-															.rdy(delta_ign_angle_rdy));
+															.rdy(delta_ign_angle_rdy_d));
+															
+and(delta_ign_angle_rdy,delta_ign_angle_rdy_d,~delta_ign_angle_rdy_q);
+d_ff_wide #(1) edge_det0 (.d(delta_ign_angle_rdy_d),.clk(clk),.rst(rst),.ena(1'b1),.q(delta_ign_angle_rdy_q));
 															
 d_ff_wide #(24) delta_ign_angle_ff (.d(delta_ign_angle_result),
 												.clk(clk),
 												.rst(rst),
-												.ena(delta_ign_angle_rdy & vr_edge_0),
+												.ena(delta_ign_angle_rdy),
 												.q(delta_ign_angle));
+// Delta Ignition Angle Calc end
+
 //	
-wire [23:0] delta_inj_angle_remainder;
-wire [23:0] delta_inj_angle_result;
-wire [23:0] delta_inj_angle;
-wire delta_inj_angle_rdy;
-integer_division #(24) delta_inj_angle_calc (.clk(clk),
-															.rst(rst),
-															.start(~vr_edge_1),
-															.dividend(24'd511),
-															.divider(scnt_top_corrected),
-															.remainder(delta_inj_angle_remainder),
-															.result(delta_inj_angle_result),
-															.rdy(delta_inj_angle_rdy));
-															
-d_ff_wide #(24) delta_inj_angle_ff (.d(delta_inj_angle_result),
-												.clk(clk),
-												.rst(rst),
-												.ena(vr_edge_0),
-												.q(delta_inj_angle));
+//wire [23:0] delta_inj_angle_remainder;
+//wire [23:0] delta_inj_angle_result;
+//wire [23:0] delta_inj_angle;
+//wire delta_inj_angle_rdy;
+//integer_division #(24) delta_inj_angle_calc (.clk(clk),
+//															.rst(rst),
+//															.start(~vr_edge_1),
+//															.dividend(24'd511),
+//															.divider(scnt_top_corrected),
+//															.remainder(delta_inj_angle_remainder),
+//															.result(delta_inj_angle_result),
+//															.rdy(delta_inj_angle_rdy));
+//															
+//d_ff_wide #(24) delta_inj_angle_ff (.d(delta_inj_angle_result),
+//												.clk(clk),
+//												.rst(rst),
+//												.ena(vr_edge_0),
+//												.q(delta_inj_angle));
+
 // Delta Angle Calc end
-*/
+
 //
 output wire ign_out;
-wire [23:0] ign_set_angle = 24'd1920;
-//integer_subtraction #(24) ign_set_angle_calc(.minuend(HWAIGNANG),
-//															.subtrahend(delta_ign_angle),
-//															.result(ign_set_angle));
+wire [23:0] ign_set_angle;
+integer_subtraction #(24) ign_set_angle_calc(.minuend(HWAIGNANG),
+															.subtrahend(delta_ign_angle),
+															.result(ign_set_angle));
 
 compare #(24) ign_set_comp (	.dataa(acnt2_out),
 										.datab(ign_set_angle),
