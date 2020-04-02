@@ -16,13 +16,8 @@ reg [15:0] w_data;
 assign data = w_data;
 
 hwag hwag0 (    .clk(clk),
-                .rst(rst),
-                .ssram_we(we),
-                .ssram_re(re),
-                .ssram_addr(addr),
-                .ssram_data(data),
-                .vr_in(vr),
-                .hwagif(hwagif));
+                .cap_in(vr),
+                .cap_out(cap_out));
 
 always @(posedge ram_clk) begin
     if(addr < 131) begin 
@@ -106,15 +101,15 @@ always #1 clk <= ~clk;
 always #2 ram_clk <= ~ram_clk;
 always #1 rst <= 1'b0;
 
-integer ssram_i;
+//integer ssram_i;
 
 initial begin
     $dumpfile("test.vcd");
     $dumpvars(0, test);
 
-    for(ssram_i = 0; ssram_i < 64; ssram_i = ssram_i + 1) begin
-        $dumpvars(1, hwag0.ssram_out[ssram_i]);
-    end
+    //for(ssram_i = 0; ssram_i < 64; ssram_i = ssram_i + 1) begin
+    //    $dumpvars(1, hwag0.ssram_out[ssram_i]);
+    //end
     
     scnt <= 8'd0;
     scnt_top <= 8'd3;

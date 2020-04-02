@@ -2,6 +2,29 @@
 `ifndef FLIP_FLOP_SV
 `define FLIP_FLOP_SV
 
+module rs_ff (set,reset,clk,rst,ena,q);
+input wire set,reset,clk,rst,ena;
+output reg q;
+initial q <= 0;
+always @(posedge clk,posedge rst) begin
+	if(rst) begin
+		q <= 0;
+	end else begin
+		if(ena) begin
+			if(reset) begin
+				q <= 0;
+			end else begin
+				if(set) begin
+					q <= 1;
+				end else begin
+					q <= q;
+				end
+			end
+		end
+	end
+end
+endmodule
+
 module d_ff_wide #(parameter WIDTH=1) (d,clk,rst,ena,q);
 input wire clk,rst,ena;
 input wire [WIDTH-1:0] d;
