@@ -33,7 +33,7 @@ not(aleb,agb);
 	end
 endmodule
 
-module period_normal #(parameter WIDTH=1) (min,max,cap0,cap1,cap2,less_max,more_min);
+module period_normal_comp #(parameter WIDTH=1) (min,max,cap0,cap1,cap2,less_max,more_min);
 output wire less_max,more_min;
 input wire [WIDTH-1:0] min;
 input wire [WIDTH-1:0] max;
