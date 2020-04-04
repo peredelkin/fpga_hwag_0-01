@@ -202,10 +202,47 @@ counter_compare #(24) acnt
 											.out_e_top(acnt_e_top));
 // ACNT end
 
+// ACNT to ACNT2 interface
+wire [23:0] acnt2_out;
+compare #(24) acnt2_ena_comp
+										(	.dataa(acnt2_out),
+											.datab(acnt_out),
+											.aneb(acnt2_ne_acnt));
+                                
+d_ff_wide #(1) d_ff_acnt2_count_div2
+										(	.d(~acnt2_count_div2),
+											.clk(clk),
+											.rst(rst),
+											.ena(acnt2_ne_acnt),
+											.q(acnt2_count_div2));
+// ACNT to ACNT2 interface
+
+// ACNT2
+and(acnt2_ena,acnt2_count_div2,acnt2_ne_acnt);
+
+d_ff_wide #(1) acnt2_rst_ff
+										(	.d(acnt2_e_top),
+											.clk(clk),
+											.rst(~acnt2_e_top),
+											.ena(acnt2_ena),
+											.q(acnt2_rst));
+
+counter_compare #(24) acnt2
+										(	.clk(clk),
+											.ena(acnt2_ena),
+											.rst(rst | acnt2_rst),
+										/*	.srst(acnt2_ena & acnt2_e_top),*/
+											.sload(~hwag_start),
+											.dload(acnt_out),
+											.dout(acnt2_out),
+											.dtop(HWAMAXACR),
+											.out_e_top(acnt2_e_top));
+// ACNT2 end
+
 //компараторы
 output wire comp_set_out;
 compare #(24) comp_set
-										(	.dataa(acnt_out),
+										(	.dataa(acnt2_out),
 											.datab(24'd3776),
 											.ageb(comp_set_out));
 
