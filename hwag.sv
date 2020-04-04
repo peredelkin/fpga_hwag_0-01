@@ -241,15 +241,39 @@ counter_compare #(24) acnt2
 // ACNT2 end
 
 //компараторы
+wire [23:0] set_point_out;
+counter_compare #(24) set_point 
+										(	.clk(clk),
+											.ena(gap_run_point & edge0),
+											.rst(rst),
+											.srst(set_point_e_top & gap_run_point & edge0),
+											.sload(~hwag_start),
+											.dload(24'd32),
+											.dout(set_point_out),
+											.dtop(HWAMAXACR),
+											.out_e_top(set_point_e_top));
+
+wire [23:0] reset_point_out;
+counter_compare #(24) reset_point 
+										(	.clk(clk),
+											.ena(gap_run_point & edge0),
+											.rst(rst),
+											.srst(reset_point_e_top & gap_run_point & edge0),
+											.sload(~hwag_start),
+											.dload(24'd96),
+											.dout(reset_point_out),
+											.dtop(HWAMAXACR),
+											.out_e_top(reset_point_e_top));
+
 output wire coil_out;
 compare #(24) comp_set
 										(	.dataa(acnt2_out),
-											.datab(24'd32),
+											.datab(set_point_out),
 											.aeb(comp_set_out));
 
 compare #(24) comp_reset
 										(	.dataa(acnt2_out),
-											.datab(24'd96),
+											.datab(reset_point_out),
 											.aeb(comp_reset_out));
 
 d_ff_wide #(1) ff_coil
