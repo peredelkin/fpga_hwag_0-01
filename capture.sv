@@ -13,6 +13,8 @@ input wire	[WIDTH_SND-1:0] snd_val;
 wire			[WIDTH_SND-1:0] snd_out;
 output wire q;
 
+localparam [WIDTH_SND-1:0] snd_zero_comp_dataa = 0;
+
 xnor(rst_fst,d,q0);
 counter #(WIDTH_FST) fst_cnt
                 (.clk(clk),
@@ -41,7 +43,7 @@ counter_reversible #(WIDTH_SND) snd_cnt
 					 .data_out(snd_out));
 					 
 compare #(WIDTH_SND) snd_zero_comp
-                (.dataa(0),
+                (.dataa(snd_zero_comp_dataa),
 					 .datab(snd_out),
 					 .aeb(snd_e_zero),
 					 .aneb(snd_ne_zero));

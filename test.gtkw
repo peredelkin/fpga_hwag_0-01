@@ -1,58 +1,45 @@
 [*]
-[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Tue Feb 11 11:58:23 2020
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Sat Apr  4 21:51:27 2020
 [*]
-[dumpfile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.vcd"
-[dumpfile_mtime] "Tue Feb 11 11:57:20 2020"
-[dumpfile_size] 110755239
-[savefile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.gtkw"
-[timestart] 360900
-[size] 1366 703
-[pos] -1 -1
-*-11.677961 369768 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[dumpfile] "/home/ruslan/intelFPGA_lite/fpga_hwag_0-01/test.vcd"
+[dumpfile_mtime] "Sat Apr  4 21:51:25 2020"
+[dumpfile_size] 35606192
+[savefile] "/home/ruslan/intelFPGA_lite/fpga_hwag_0-01/test.gtkw"
+[timestart] 358285
+[size] 3440 1375
+[pos] -1721 -1
+*-10.783350 369768 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.hwag0.
 [treeopen] test.hwag0.vr_filter.
-[treeopen] test.hwag0.vr_filter.pin_filter.
 [sst_width] 271
 [signals_width] 278
 [sst_expanded] 1
-[sst_vpaned_height] 220
-@24
-test.addr[7:0]
-test.data[15:0]
-test.tcnt[7:0]
+[sst_vpaned_height] 504
 @28
-test.cam
-test.hwag0.vr_in
-test.hwag0.vr_out
-@8024
-test.hwag0.vr_filter.pin_filter.cnt_comp.dout[15:0]
-@28
-test.hwag0.vr_edge_0
-test.hwag0.vr_edge_1
-@8024
-test.hwag0.HWAPCNT[23:0]
-@24
-test.hwag0.HWAPCNT1[23:0]
-@28
-test.hwag0.gap_search_gap
-test.hwag0.hwag_start
-@24
-test.hwag0.HWATHVL[7:0]
-test.hwag0.tooth_angle[23:0]
-@8024
-test.hwag0.scnt_out[21:0]
-test.hwag0.tckc_out[18:0]
+test.hwag0.clk
+test.hwag0.cap_in
+test.hwag0.cap_out
+test.hwag0.coil_out
 @24
 test.hwag0.acnt_out[23:0]
 test.hwag0.acnt2_out[23:0]
 @28
-test.hwag0.clk
-@29
-test.hwag0.ign_out
-@28
-test.hwag0.ign_set
-test.hwag0.ign_rst
+test.hwag0.edge0
+test.hwag0.edge1
+@8024
+test.hwag0.scnt_out[21:0]
+@20000
+-
+@20001
+-
+@8024
+test.hwag0.tckc_out[18:0]
+@20000
+-
+-
+@24
+test.hwag0.tcnt_out[7:0]
 [pattern_trace] 1
 [pattern_trace] 0

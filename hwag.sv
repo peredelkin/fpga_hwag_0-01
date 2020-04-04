@@ -12,13 +12,15 @@
 `include "bit_operation.sv"
 `include "math.sv"
 
-module hwag(clk,cap_in,cap_out,led1_out,led2_out,comp_set_out);
+module hwag(clk,cap_in,cap_out,led1_out,led2_out,coil_out);
 input wire clk;
 input wire cap_in;
 output wire cap_out;
 
-output wire led1_out = ~gap_found;
-output wire led2_out = ~tcnt_e_top;
+output wire led1_out;
+output wire led2_out;
+assign led1_out = ~gap_found;
+assign led2_out = ~tcnt_e_top;
 
 localparam PCNT_WIDTH = 24;
 localparam TCNT_WIDTH = 8;
@@ -46,7 +48,7 @@ counter_compare #(PCNT_WIDTH) pcnt
 										(	.clk(clk),
 											.ena(pcnt_ne_top),
 											.rst(rst),
-											.srst(edge1),
+											.srst(edge0),
 											.sload(1'b0),
 											.dload(24'd0),
 											.dout(pcnt_out),
@@ -72,7 +74,6 @@ period_capture_3 #(PCNT_WIDTH) pcnt_cap
 //PCNT_CAP end
 
 //GAP_SEARCH
-wire gap_found;
 gap_search #(PCNT_WIDTH) gap_start_srch
 										(	.cap0(pcnt0_out),
 											.cap1(pcnt1_out),
@@ -240,12 +241,23 @@ counter_compare #(24) acnt2
 // ACNT2 end
 
 //компараторы
-output wire comp_set_out;
+output wire coil_out;
 compare #(24) comp_set
 										(	.dataa(acnt2_out),
-											.datab(24'd3776),
-											.ageb(comp_set_out));
+											.datab(24'd32),
+											.aeb(comp_set_out));
 
+compare #(24) comp_reset
+										(	.dataa(acnt2_out),
+											.datab(24'd96),
+											.aeb(comp_reset_out));
+
+d_ff_wide #(1) ff_coil
+										(	.d(1'b1),
+											.clk(clk),
+											.rst(comp_reset_out),
+											.ena(comp_set_out),
+											.q(coil_out));
 //компараторы
 
 endmodule
