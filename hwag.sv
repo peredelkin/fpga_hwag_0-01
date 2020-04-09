@@ -11,8 +11,9 @@
 `include "counting.sv"
 `include "bit_operation.sv"
 `include "math.sv"
+`include "spi.sv"
 
-module hwag(clk,cap_in,cap_out,led1_out,led2_out,coil_out);
+module hwag(clk,cap_in,cap_out,led1_out,led2_out,coil_out,spi_din,spi_dout,spi_clk,spi_ss);
 input wire clk;
 input wire cap_in;
 output wire cap_out;
@@ -283,6 +284,26 @@ d_ff_wide #(1) ff_coil
 											.ena(comp_set_out),
 											.q(coil_out));
 //компараторы
+
+//spi
+input wire spi_din;
+output wire spi_dout;
+input wire spi_clk;
+input wire spi_ss;
+wire [7:0] spi_data_out;
+spi_slave spi_slave0
+                                        (   .din(spi_din),
+                                            .dout(spi_dout),
+                                            .clkin(spi_clk),
+                                            .ss(spi_ss),
+                                            .clk(clk),
+                                            .rst(rst),
+                                            .ena(1'b1),
+                                            .data_in(8'd0),
+                                            .data_out(spi_data_out),
+                                            .req_r(spi_r),
+                                            .req_w(spi_w));
+//spi end
 
 endmodule
 //`endif
