@@ -29,7 +29,7 @@ d_ff_wide #(1) dout_shift
                                         .q(dout));
 
 counter_compare #(3) data_counter
-                                    (   .clk(clk),
+                                    (   .clk(~clk),
                                         .ena(ena),
                                         .rst(rst | ss),
                                         .dtop(3'd7),
