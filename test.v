@@ -23,7 +23,7 @@ hwag hwag0  (   .clk(clk),
                 .coil_out(coil),
                 .spi_din(spi_din),
                 .spi_dout(spi_dout),
-                .spi_clk(spi_clk),
+                .spi_clk(~spi_clk),
                 .spi_ss(rst));
 
 always @(posedge ram_clk) begin
@@ -128,7 +128,7 @@ initial begin
     cam <= 1'b1;
     cam_phase <= 1'b0;
     
-    spi_clk <= 1'b0;
+    spi_clk <= 1'b1;
     spi_din <= 1'b0;
     
     clk <= 1'b0;
