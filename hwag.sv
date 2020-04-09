@@ -244,9 +244,9 @@ counter_compare #(24) acnt2
 wire [23:0] set_point_out;
 counter_compare #(24) set_point 
 										(	.clk(clk),
-											.ena(gap_run_point & edge0),
+											.ena(edge0),
 											.rst(rst),
-											.srst(set_point_e_top & gap_run_point & edge0),
+											.srst(set_point_e_top & edge0),
 											.sload(~hwag_start),
 											.dload(24'd32),
 											.dout(set_point_out),
@@ -256,9 +256,9 @@ counter_compare #(24) set_point
 wire [23:0] reset_point_out;
 counter_compare #(24) reset_point 
 										(	.clk(clk),
-											.ena(gap_run_point & edge0),
+											.ena(edge0),
 											.rst(rst),
-											.srst(reset_point_e_top & gap_run_point & edge0),
+											.srst(reset_point_e_top & edge0),
 											.sload(~hwag_start),
 											.dload(24'd96),
 											.dout(reset_point_out),
