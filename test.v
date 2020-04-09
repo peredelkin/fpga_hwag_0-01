@@ -3,7 +3,7 @@
 `include "hwag.sv"
 
 module test();
-reg clk,ram_clk,rst,we,re,vr,cam,cam_phase,spi_clk;
+reg clk,ram_clk,rst,we,re,vr,cam,cam_phase,spi_clk,spi_din;
 reg [7:0] scnt;
 reg [7:0] scnt_top;
 reg [7:0] tckc;
@@ -21,7 +21,7 @@ hwag hwag0  (   .clk(clk),
                 .led1_out(led1),
                 .led2_out(led2),
                 .coil_out(coil),
-                .spi_din(1'b1),
+                .spi_din(spi_din),
                 .spi_dout(spi_dout),
                 .spi_clk(spi_clk),
                 .spi_ss(rst));
@@ -106,6 +106,7 @@ end
 
 always #1 clk <= ~clk;
 always #10 spi_clk <= ~spi_clk;
+always #80 spi_din <= ~spi_din;
 always #2 ram_clk <= ~ram_clk;
 always #2 rst <= 1'b0;
 
@@ -128,6 +129,7 @@ initial begin
     cam_phase <= 1'b0;
     
     spi_clk <= 1'b0;
+    spi_din <= 1'b0;
     
     clk <= 1'b0;
     ram_clk <= 1'b0;

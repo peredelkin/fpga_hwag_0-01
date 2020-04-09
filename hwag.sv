@@ -291,6 +291,14 @@ output wire spi_dout;
 input wire spi_clk;
 input wire spi_ss;
 wire [7:0] spi_data_out;
+wire [7:0] spi_data0_out;
+d_ff_wide #(8) spi_data0
+                                        (   .d(spi_data_out),
+                                            .clk(clk),
+                                            .rst(rst),
+                                            .ena(spi_r),
+                                            .q(spi_data0_out));
+
 spi_slave spi_slave0
                                         (   .din(spi_din),
                                             .dout(spi_dout),
@@ -299,10 +307,10 @@ spi_slave spi_slave0
                                             .clk(clk),
                                             .rst(rst),
                                             .ena(1'b1),
-                                            .data_in(8'd0),
+                                            .data_in(8'd2),
                                             .data_out(spi_data_out),
                                             .req_r(spi_r),
-                                            .req_w(spi_w));
+                                            .req_f(spi_f));
 //spi end
 
 endmodule
