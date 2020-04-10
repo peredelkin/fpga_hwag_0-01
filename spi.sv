@@ -21,13 +21,11 @@ assign data_out = {buffer_out[6:0],din};
 
 output wire req;
 
-d_ff_wide #(1) dout_shift
+latch #(1) dout_latch
                                     (   .d(buffer_out[7]),
-                                        .clk(~clk),
-                                        .rst(rst | ss),
-                                        .ena(ena),
+                                        .l(clk),
                                         .q(dout));
-
+                                        
 counter_compare #(3) data_counter
                                     (   .clk(~clk),
                                         .ena(ena),

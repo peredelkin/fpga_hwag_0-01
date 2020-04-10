@@ -61,6 +61,23 @@ always @(posedge clk,posedge rst) begin
 end
 endmodule
 
+module latch #(parameter WIDTH=1)
+                    (d,l,q);
+
+input wire [WIDTH-1:0] d;
+input wire l;
+output reg [WIDTH-1:0] q;
+
+always @(*) begin
+    if(l) begin
+        q <= q;
+    end else begin
+        q <= d;
+    end
+end
+
+endmodule
+
 //module d_ff_load_wide #(parameter WIDTH=1) (d,clk,rst,ena,ld,dld,q);
 //endmodule
 
