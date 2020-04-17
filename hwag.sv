@@ -241,6 +241,46 @@ counter_compare #(24) acnt2
 											.out_e_top(acnt2_e_top));
 // ACNT2 end
 
+// Slave ACNT
+wire [23:0] acnt3_out;
+d_ff_wide #(1) acnt3_rst_ff
+										(	.d(acnt3_e_top),
+											.clk(clk),
+											.rst(~acnt3_e_top),
+											.ena(acnt2_ena),
+											.q(acnt3_rst));
+
+counter_compare #(24) acnt3
+										(	.clk(clk),
+											.ena(acnt2_ena),
+											.rst(rst | acnt3_rst),
+										/*	.srst(acnt2_ena & acnt3_e_top),*/
+											.sload(~hwag_start),
+											.dload(24'd2752),
+											.dout(acnt3_out),
+											.dtop(HWAMAXACR),
+											.out_e_top(acnt3_e_top));
+
+wire [23:0] acnt4_out;
+d_ff_wide #(1) acnt4_rst_ff
+										(	.d(acnt4_e_top),
+											.clk(clk),
+											.rst(~acnt4_e_top),
+											.ena(acnt2_ena),
+											.q(acnt4_rst));
+
+counter_compare #(24) acnt4
+										(	.clk(clk),
+											.ena(acnt2_ena),
+											.rst(rst | acnt4_rst),
+										/*	.srst(acnt2_ena & acnt4_e_top),*/
+											.sload(~hwag_start),
+											.dload(24'd832),
+											.dout(acnt4_out),
+											.dtop(HWAMAXACR),
+											.out_e_top(acnt4_e_top));
+// Slave ACNT
+
 //компараторы
 wire [23:0] set_point_out;
 counter_compare #(24) set_point 
