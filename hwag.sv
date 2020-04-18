@@ -281,11 +281,43 @@ counter_compare #(24) acnt4
 											.out_e_top(acnt4_e_top));
 // Slave ACNT
 
+// Dwell angle calc
+wire [23:0] dwell_angle_remainder;
+wire [23:0] dwell_angle_result;
+wire dwell_angle_rdy;
+integer_division #(24) dwell_angle
+										(	.clk(clk),
+											.rst(rst),
+											.start(~edge1),
+											.dividend(24'd50000),
+											.divider({2'd0,scnt_top}),
+											.remainder(dwell_angle_remainder),
+											.result(dwell_angle_result),
+											.rdy(dwell_angle_rdy));
+											
+wire [23:0] dwell_angle_out;
+d_ff_wide #(24) d_ff_dwell_time
+										(	.d(dwell_angle_result),
+											.clk(clk),
+											.rst(rst),
+											.ena(edge0 & dwell_angle_rdy),
+											.q(dwell_angle_out));
+// Dwell angle calc end
+
+// Coil set point calc
+wire [23:0] coil_set_point_out;
+integer_subtraction #(24) coil_set_point 
+										(	.minuend(24'd3839),
+											.subtrahend(dwell_angle_out),
+											.result(coil_set_point_out));
+
+// Coil set point calc end
+
 //компараторы
 output wire coil_out;
 compare #(24) comp_set
 										(	.dataa(acnt3_out),
-											.datab(24'd3739),
+											.datab(coil_set_point_out),
 											.aeb(comp_set_out));
 
 compare #(24) comp_reset
