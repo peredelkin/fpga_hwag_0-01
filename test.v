@@ -20,11 +20,7 @@ hwag hwag0  (   .clk(clk),
                 .cap_out(vr_out),
                 .led1_out(led1),
                 .led2_out(led2),
-                .coil_out(coil),
-                .spi_din(spi_din),
-                .spi_dout(spi_dout),
-                .spi_clk(spi_clk),
-                .spi_ss(rst));
+                .coil_out(coil));
 
 always @(posedge ram_clk) begin
     if(addr < 131) begin 

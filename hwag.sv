@@ -13,7 +13,7 @@
 `include "math.sv"
 `include "spi.sv"
 
-module hwag(clk,cap_in,cap_out,led1_out,led2_out,coil_out,spi_din,spi_dout,spi_clk,spi_ss);
+module hwag(clk,cap_in,cap_out,led1_out,led2_out,coil_out);
 input wire clk;
 input wire cap_in;
 output wire cap_out;
@@ -282,39 +282,15 @@ counter_compare #(24) acnt4
 // Slave ACNT
 
 //компараторы
-wire [23:0] set_point_out;
-counter_compare #(24) set_point 
-										(	.clk(clk),
-											.ena(edge0),
-											.rst(rst),
-											.srst(set_point_e_top & edge0),
-											.sload(~hwag_start),
-											.dload(24'd32),
-											.dout(set_point_out),
-											.dtop(HWAMAXACR),
-											.out_e_top(set_point_e_top));
-
-wire [23:0] reset_point_out;
-counter_compare #(24) reset_point 
-										(	.clk(clk),
-											.ena(edge0),
-											.rst(rst),
-											.srst(reset_point_e_top & edge0),
-											.sload(~hwag_start),
-											.dload(24'd96),
-											.dout(reset_point_out),
-											.dtop(HWAMAXACR),
-											.out_e_top(reset_point_e_top));
-
 output wire coil_out;
 compare #(24) comp_set
-										(	.dataa(acnt2_out),
-											.datab(set_point_out),
+										(	.dataa(acnt3_out),
+											.datab(24'd3739),
 											.aeb(comp_set_out));
 
 compare #(24) comp_reset
-										(	.dataa(acnt2_out),
-											.datab(reset_point_out),
+										(	.dataa(acnt3_out),
+											.datab(24'd3839),
 											.aeb(comp_reset_out));
 
 d_ff_wide #(1) ff_coil
@@ -324,32 +300,6 @@ d_ff_wide #(1) ff_coil
 											.ena(comp_set_out),
 											.q(coil_out));
 //компараторы
-
-//spi
-input wire spi_din;
-output wire spi_dout;
-input wire spi_clk;
-input wire spi_ss;
-wire [7:0] spi_data_out;
-wire [7:0] spi_data0_out;
-d_ff_wide #(8) spi_data0
-                                        (   .d(spi_data_out),
-                                            .clk(spi_clk),
-                                            .rst(rst),
-                                            .ena(spi_req),
-                                            .q(spi_data0_out));
-
-spi_slave spi_slave0
-                                        (   .din(spi_din),
-                                            .dout(spi_dout),
-                                            .ss(spi_ss),
-                                            .clk(spi_clk),
-                                            .rst(rst),
-                                            .ena(1'b1),
-                                            .data_in(8'd2),
-                                            .data_out(spi_data_out),
-                                            .req(spi_req));
-//spi end
 
 endmodule
 //`endif

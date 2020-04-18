@@ -61,7 +61,7 @@ always @(posedge clk,posedge rst) begin
 end
 endmodule
 
-module latch #(parameter WIDTH=1)
+module latch_user #(parameter WIDTH=1)
                     (d,l,q);
 
 input wire [WIDTH-1:0] d;

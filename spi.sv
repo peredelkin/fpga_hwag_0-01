@@ -21,7 +21,7 @@ assign data_out = {buffer_out[6:0],din};
 
 output wire req;
 
-latch #(1) dout_latch
+latch_user #(1) dout_latch
                                     (   .d(buffer_out[7]),
                                         .l(clk),
                                         .q(dout));
