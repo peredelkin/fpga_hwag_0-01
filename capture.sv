@@ -32,7 +32,7 @@ d_ff_wide #(1) d_ff0
 					(.d(d),
 					.clk(clk),
 					.rst(rst),
-					.ena(out_ena & fst_e_val),
+					.ena(fst_ena & fst_e_val),
 					.q(q0));
 
 counter_reversible #(WIDTH_SND) snd_cnt

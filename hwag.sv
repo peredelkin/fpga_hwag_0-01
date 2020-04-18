@@ -28,13 +28,14 @@ localparam TCNT_WIDTH = 8;
 localparam HWASTWD = 4'd4;
 localparam HWAMAXACR = 24'd3839;
 
+wire hwag_start;
 wire edge0,edge1;
 capture_flt_edge_det_sel #(4,10) vr_filter 
 										(	.d(cap_in),
 											.clk(clk),
 											.rst(rst),
 											.fst_ena(1'b1),
-											.snd_ena(1'b1),
+											.snd_ena(~hwag_start | window_filter_out),
 											.out_ena(1'b1),
 											.fst_val(4'd7),
 											.snd_val(10'd127),
@@ -60,7 +61,6 @@ counter_compare #(PCNT_WIDTH) pcnt
 //PCNT end
 
 //PCNT_CAP
-wire hwag_start;
 wire gap_run_point = tcnt_e_top;
 wire [PCNT_WIDTH-1:0] pcnt0_out,pcnt1_out,pcnt2_out;
 period_capture_3 #(PCNT_WIDTH) pcnt_cap
@@ -182,6 +182,22 @@ counter_compare #(19) tckc
 											.dtop(tckc_actial_top),
 											.out_ne_top(tckc_ne_top));
 // TCKC end
+
+// Window filter
+wire [18:0] no_gap_filt_val = 19'd45;
+wire [18:0] gap_filt_val = 19'd134;
+wire [18:0] current_filt_val;
+simple_multiplexer #(19) window_filter_sel 
+                                        (   .dataa(no_gap_filt_val),
+                                            .datab(gap_filt_val),
+                                            .sel(gap_run_point),
+                                            .out(current_filt_val));
+
+compare #(19) window_filter_comp
+                                        (   .dataa(tckc_out),
+                                            .datab(current_filt_val),
+                                            .ageb(window_filter_out));
+// Window filter end
 
 // ACNT
 d_ff_wide #(1) acnt_rst_ff
