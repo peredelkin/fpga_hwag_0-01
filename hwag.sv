@@ -339,7 +339,7 @@ d_ff_wide #(24) set14_shadow_register
 										(	.d(coil_set_point_out),
 											.clk(clk),
 											.rst(rst),
-											.ena((edge1 & set14_point_shadow_comp_out) | ~hwag_start),
+											.ena(edge1 & set14_point_shadow_comp_out),
 											.q(set14_shadow_register_out));
 
 wire [23:0] set23_shadow_register_out;
@@ -351,7 +351,7 @@ d_ff_wide #(24) set23_shadow_register
 										(	.d(coil_set_point_out),
 											.clk(clk),
 											.rst(rst),
-											.ena((edge1 & set23_point_shadow_comp_out) | ~hwag_start),
+											.ena(edge1 & set23_point_shadow_comp_out),
 											.q(set23_shadow_register_out));
 //compare #(24) reset_point_shadow_comp
 //                (dataa,datab,aeb,agb,alb,aneb,ageb,aleb);
