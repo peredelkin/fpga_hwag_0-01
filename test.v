@@ -20,7 +20,7 @@ hwag hwag0  (   .clk(clk),
                 .cap_out(vr_out),
                 .led1_out(led1),
                 .led2_out(led2),
-                .coil_out(coil));
+                .coil14_out(coil));
 
 always @(posedge ram_clk) begin
     if(addr < 131) begin 
@@ -137,7 +137,7 @@ initial begin
     addr <= 8'd0;
     w_data <= 16'd3; // addr 0: значение фильтра
     
-    #800000 $finish();
+    #1600000 $finish();
 end
 
 endmodule

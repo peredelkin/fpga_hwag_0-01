@@ -13,7 +13,7 @@
 `include "math.sv"
 `include "spi.sv"
 
-module hwag(clk,cap_in,cap_out,led1_out,led2_out,coil_out);
+module hwag(clk,cap_in,cap_out,led1_out,led2_out,coil14_out,coil23_out);
 input wire clk;
 input wire cap_in;
 output wire cap_out;
@@ -330,41 +330,70 @@ integer_subtraction #(24) coil_set_point
 // Coil set point calc end
 
 // shadow registers
-wire [23:0] set_shadow_register_out;
-compare #(24) set_point_shadow_comp
+wire [23:0] set14_shadow_register_out;
+compare #(24) set14_point_shadow_comp
 										(	.dataa(acnt3_out),
 											.datab(coil_set_point_out),
-											.alb(set_point_shadow_comp_out));
-d_ff_wide #(24) set_shadow_register
+											.alb(set14_point_shadow_comp_out));
+d_ff_wide #(24) set14_shadow_register
 										(	.d(coil_set_point_out),
 											.clk(clk),
 											.rst(rst),
-											.ena(edge1 & set_point_shadow_comp_out),
-											.q(set_shadow_register_out));
+											.ena((edge1 & set14_point_shadow_comp_out) | ~hwag_start),
+											.q(set14_shadow_register_out));
 
+wire [23:0] set23_shadow_register_out;
+compare #(24) set23_point_shadow_comp
+										(	.dataa(acnt4_out),
+											.datab(coil_set_point_out),
+											.alb(set23_point_shadow_comp_out));
+d_ff_wide #(24) set23_shadow_register
+										(	.d(coil_set_point_out),
+											.clk(clk),
+											.rst(rst),
+											.ena((edge1 & set23_point_shadow_comp_out) | ~hwag_start),
+											.q(set23_shadow_register_out));
 //compare #(24) reset_point_shadow_comp
 //                (dataa,datab,aeb,agb,alb,aneb,ageb,aleb);
 //d_ff_wide #(parameter WIDTH=1) (d,clk,rst,ena,q);
 // shadow registers end
 
 //компараторы
-output wire coil_out;
-compare #(24) comp_set
+output wire coil14_out;
+compare #(24) comp14_set
 										(	.dataa(acnt3_out),
-											.datab(set_shadow_register_out),
-											.aeb(comp_set_out));
+											.datab(set14_shadow_register_out),
+											.aeb(comp14_set_out));
 
-compare #(24) comp_reset
+compare #(24) comp14_reset
 										(	.dataa(acnt3_out),
 											.datab(24'd3839),
-											.aeb(comp_reset_out));
+											.aeb(comp14_reset_out));
 
-d_ff_wide #(1) ff_coil
+d_ff_wide #(1) ff_coil14
 										(	.d(1'b1),
 											.clk(clk),
-											.rst(comp_reset_out | ~hwag_start),
-											.ena(comp_set_out),
-											.q(coil_out));
+											.rst(comp14_reset_out | ~hwag_start),
+											.ena(comp14_set_out),
+											.q(coil14_out));
+											
+output wire coil23_out;
+compare #(24) comp23_set
+										(	.dataa(acnt4_out),
+											.datab(set23_shadow_register_out),
+											.aeb(comp23_set_out));
+
+compare #(24) comp23_reset
+										(	.dataa(acnt4_out),
+											.datab(24'd3839),
+											.aeb(comp23_reset_out));
+
+d_ff_wide #(1) ff_coil23
+										(	.d(1'b1),
+											.clk(clk),
+											.rst(comp23_reset_out | ~hwag_start),
+											.ena(comp23_set_out),
+											.q(coil23_out));
 //компараторы
 
 endmodule
