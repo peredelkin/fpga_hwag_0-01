@@ -55,7 +55,8 @@ initial data_out <= 0;
 	end
 endmodule
 
-module counter_compare #(parameter WIDTH=1) (clk,ena,rst,srst,sload,dload,dout,dtop,out_e_top,out_g_top,out_l_top,out_ne_top,out_ge_top,out_le_top);
+module counter_compare #(parameter WIDTH=1) 
+					(clk,ena,rst,srst,sload,dload,dout,dtop,out_e_top,out_g_top,out_l_top,out_ne_top,out_ge_top,out_le_top);
 input wire clk,ena,rst,srst,sload;
 output wire out_e_top,out_g_top,out_l_top,out_ne_top,out_ge_top,out_le_top;
 input wire [WIDTH-1:0] dload;

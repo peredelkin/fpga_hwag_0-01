@@ -26,8 +26,8 @@ and(spi_clk_fall,~spi_clk0,spi_clk1);
 d_ff_wide #(2) spi_clk_cap
 										(	.d({spi_clk0,spi_clk_selected_polarity}),
 											.clk(clk),
-											.rst(rst),
-											.ena(ena & ~spi_ss),
+											.rst(rst | spi_ss),
+											.ena(ena),
 											.q({spi_clk1,spi_clk0}));
 
 simple_multiplexer #(2) spi_clk_phase_sel
@@ -35,6 +35,20 @@ simple_multiplexer #(2) spi_clk_phase_sel
 											.datab({spi_clk_rise,spi_clk_fall}),
 											.sel(spi_clk_phase),
 											.out({spi_rx,spi_tx}));
+
+counter_compare #(3) rx_counter
+										(	.clk(clk),
+											.ena(ena & spi_rx),
+											.rst(rst | spi_ss),
+											.dtop(3'd7),
+											.out_e_top(rx_counter_top));
+
+counter_compare #(3) tx_counter
+										(	.clk(clk),
+											.ena(ena & spi_tx),
+											.rst(rst | spi_ss),
+											.dtop(3'd0),
+											.out_e_top(tx_counter_top));
 											
 endmodule
 
