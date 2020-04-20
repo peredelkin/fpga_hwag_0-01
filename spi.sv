@@ -15,26 +15,28 @@ input wire ena;
 input wire [7:0] bus_in;
 output wire [7:0] bus_out;
 
-simple_multiplexer #(1) spi_clk_polarity_sel
+/*simple_multiplexer #(1) spi_clk_polarity_sel
 										(	.dataa(spi_clk),
 											.datab(~spi_clk),
 											.sel(spi_clk_polarity),
-											.out(spi_clk_selected_polarity));
+											.out(spi_clk_selected_polarity));*/
 
 and(spi_clk_rise,spi_clk0,~spi_clk1);
 and(spi_clk_fall,~spi_clk0,spi_clk1);
 d_ff_wide #(2) spi_clk_cap
-										(	.d({spi_clk0,spi_clk_selected_polarity}),
+										(	.d({spi_clk0,spi_clk}),
 											.clk(clk),
 											.rst(rst | spi_ss),
 											.ena(ena),
 											.q({spi_clk1,spi_clk0}));
 
-simple_multiplexer #(2) spi_clk_phase_sel
+/*simple_multiplexer #(2) spi_clk_phase_sel
 										(	.dataa({spi_clk_fall,spi_clk_rise}),
 											.datab({spi_clk_rise,spi_clk_fall}),
 											.sel(spi_clk_phase),
-											.out({spi_rx,spi_tx}));
+											.out({spi_rx,spi_tx}));*/
+wire spi_rx = spi_clk_fall;
+wire spi_tx = spi_clk_rise;
 
 counter_compare #(3) rx_counter
 										(	.clk(clk),
@@ -58,20 +60,12 @@ counter_compare #(3) tx_counter
 											.dtop(3'd0),
 											.out_e_top(tx_top));
 
-and(tx_req,tx_top,~tx_top0);
-d_ff_wide #(1) ff_tx_top
-										(	.d(tx_top),
-											.clk(clk),
-											.rst(rst | spi_ss),
-											.ena(ena),
-											.q(tx_top0));
-
 wire [7:0] tx_shift_buffer_out;
 assign spi_out = tx_shift_buffer_out[7];
 wire [7:0] tx_shift_load_out;
 
 simple_multiplexer #(8) tx_shift_load_sel
-										(	.dataa({tx_shift_buffer_out[6:0],spi_in}),
+										(	.dataa({tx_shift_buffer_out[6:0],1'b0}),
 											.datab(bus_in),
 											.sel(tx_top),
 											.out(tx_shift_load_out));
