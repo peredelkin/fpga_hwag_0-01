@@ -17,7 +17,7 @@ assign data = w_data;
 
 wire [7:0] spi_bus_out;
 spi_slave spi_slave0
-            (   .spi_in(1'b0),
+            (   .spi_in(spi_out),
                 .spi_out(spi_out),
                 .spi_clk(spi_clk),
                 .spi_ss(1'b0),
