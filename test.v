@@ -16,6 +16,9 @@ reg [15:0] w_data;
 assign data = w_data;
 
 wire [7:0] spi_bus_out;
+wire [7:0] spi_bus_out_buffer_out;
+d_ff_wide #(8) spi_bus_out_buffer (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out));
+
 spi_slave spi_slave0
             (   .spi_in(spi_out),
                 .spi_out(spi_out),
@@ -27,7 +30,9 @@ spi_slave spi_slave0
                 .rst(rst),
                 .ena(1'b1),
                 .bus_in(8'd129),
-                .bus_out(spi_bus_out));
+                .bus_out(spi_bus_out),
+                .tx(spi_slave_tx),
+                .rx(spi_slave_rx));
 
 hwag hwag0  (   .clk(clk),
                 .cap_in(vr),
