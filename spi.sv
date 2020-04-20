@@ -1,7 +1,7 @@
 `ifndef SPI_SV
 `define SPI_SV
 
-module spi_slave (spi_in,spi_out,spi_clk,spi_ss,spi_clk_polarity,spi_clk_phase,clk,rst,ena,bus_in,bus_out);
+module spi_slave (spi_in,spi_out,spi_clk,spi_ss,spi_clk_polarity,spi_clk_phase,clk,rst,ena,bus_in,bus_out,tx,rx);
 
 input wire spi_in;
 output wire spi_out;
@@ -14,6 +14,8 @@ input wire rst;
 input wire ena;
 input wire [7:0] bus_in;
 output wire [7:0] bus_out;
+output wire tx;
+output wire rx;
 
 and(spi_clk_rise,spi_clk0,~spi_clk1);
 and(spi_clk_fall,~spi_clk0,spi_clk1);
@@ -67,7 +69,8 @@ d_ff_wide #(8) tx_shift_buffer
 											.ena(spi_tx),
 											.q(tx_shift_buffer_out));
 
-
+and(tx,tx_req,spi_tx);
+and(rx,rx_req,spi_rx);
 endmodule
 
 `endif

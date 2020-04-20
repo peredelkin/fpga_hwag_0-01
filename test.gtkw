@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Mon Apr 20 14:21:55 2020
+[*] Mon Apr 20 23:35:30 2020
 [*]
 [dumpfile] "/home/ruslan/intelFPGA_lite/fpga_hwag_0-01/test.vcd"
-[dumpfile_mtime] "Mon Apr 20 14:21:12 2020"
-[dumpfile_size] 852939
+[dumpfile_mtime] "Mon Apr 20 23:29:24 2020"
+[dumpfile_size] 898202
 [savefile] "/home/ruslan/intelFPGA_lite/fpga_hwag_0-01/test.gtkw"
 [timestart] 0
 [size] 3440 1375
 [pos] -1 -1
-*-3.434360 29969 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-4.434360 171 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.spi_slave0.
 [sst_width] 308
@@ -60,7 +60,15 @@ test.hwag0.window_filter_out
 @28
 test.spi_slave0.clk
 test.spi_slave0.spi_clk
-test.spi_slave0.spi_rx
+@24
+test.spi_slave0.bus_in[7:0]
+@28
 test.spi_slave0.spi_tx
+test.spi_slave0.tx
+@25
+test.spi_slave0.bus_out[7:0]
+@28
+test.spi_slave0.spi_rx
+test.spi_slave0.rx
 [pattern_trace] 1
 [pattern_trace] 0
