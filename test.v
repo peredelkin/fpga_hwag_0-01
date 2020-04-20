@@ -22,11 +22,11 @@ spi_slave spi_slave0
                 .spi_clk(spi_clk),
                 .spi_ss(1'b0),
                 .spi_clk_polarity(1'b0),
-                .spi_clk_phase(1'b0),
+                .spi_clk_phase(1'b1),
                 .clk(clk),
                 .rst(rst),
                 .ena(1'b1),
-                .bus_in(8'd0),
+                .bus_in(8'd129),
                 .bus_out(spi_bus_out));
 
 hwag hwag0  (   .clk(clk),
