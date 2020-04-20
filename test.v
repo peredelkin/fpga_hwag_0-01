@@ -15,6 +15,20 @@ inout [15:0] data;
 reg [15:0] w_data;
 assign data = w_data;
 
+wire [7:0] spi_bus_out;
+spi_slave spi_slave0
+            (   .spi_in(1'b0),
+                .spi_out(spi_out),
+                .spi_clk(spi_clk),
+                .spi_ss(1'b0),
+                .spi_clk_polarity(1'b0),
+                .spi_clk_phase(1'b0),
+                .clk(clk),
+                .rst(rst),
+                .ena(1'b1),
+                .bus_in(8'd0),
+                .bus_out(spi_bus_out));
+
 hwag hwag0  (   .clk(clk),
                 .cap_in(vr),
                 .cap_out(vr_out),
@@ -137,7 +151,7 @@ initial begin
     addr <= 8'd0;
     w_data <= 16'd3; // addr 0: значение фильтра
     
-    #1600000 $finish();
+    #10000 $finish();
 end
 
 endmodule
