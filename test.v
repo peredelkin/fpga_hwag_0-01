@@ -19,6 +19,13 @@ wire [7:0] spi_bus_out;
 wire [7:0] spi_bus_out_buffer_out;
 d_ff_wide #(8) spi_bus_out_buffer (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out));
 
+wire [7:0] spi_bus_in;
+counter #(8) spi_data_gen
+            (   .clk(clk),
+                .rst(rst),
+                .ena(spi_slave_tx),
+                .data_out(spi_bus_in));
+
 spi_slave spi_slave0
             (   .spi_in(spi_out),
                 .spi_out(spi_out),
@@ -29,7 +36,7 @@ spi_slave spi_slave0
                 .clk(clk),
                 .rst(rst),
                 .ena(1'b1),
-                .bus_in(8'd129),
+                .bus_in(spi_bus_in),
                 .bus_out(spi_bus_out),
                 .tx(spi_slave_tx),
                 .rx(spi_slave_rx));
