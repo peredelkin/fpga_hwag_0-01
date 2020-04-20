@@ -73,14 +73,14 @@ wire [7:0] tx_shift_load_out;
 simple_multiplexer #(8) tx_shift_load_sel
 										(	.dataa({tx_shift_buffer_out[6:0],spi_in}),
 											.datab(bus_in),
-											.sel(tx_req),
+											.sel(tx_top),
 											.out(tx_shift_load_out));
 
 d_ff_wide #(8) tx_shift_buffer
 										(	.d(tx_shift_load_out),
 											.clk(clk),
 											.rst(rst | spi_ss),
-											.ena(spi_tx | tx_req),
+											.ena(spi_tx),
 											.q(tx_shift_buffer_out));
 
 
