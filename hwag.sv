@@ -225,18 +225,18 @@ wire [23:0] acnt2_out;
 compare #(24) acnt2_ena_comp
 										(	.dataa(acnt2_out),
 											.datab(acnt_out),
-											.aneb(acnt2_ne_acnt));
+											.aeb(acnt2_e_acnt));
                                 
 d_ff_wide #(1) d_ff_acnt2_count_div2
-										(	.d(~acnt2_count_div2),
+										(	.d(~acnt2_ena),
 											.clk(clk),
-											.rst(rst),
-											.ena(acnt2_ne_acnt),
-											.q(acnt2_count_div2));
+											.rst(rst | acnt2_e_acnt),
+											.ena(hwag_start),
+											.q(acnt2_ena));
 // ACNT to ACNT2 interface
 
 // ACNT2
-and(acnt2_ena,acnt2_count_div2,acnt2_ne_acnt);
+//and(acnt2_ena,acnt2_count_div2,acnt2_ne_acnt);
 
 d_ff_wide #(1) acnt2_rst_ff
 										(	.d(acnt2_e_top),

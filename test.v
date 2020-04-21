@@ -143,7 +143,7 @@ initial begin
     //end
     
     scnt <= 8'd0;
-    scnt_top <= 8'd250;
+    scnt_top <= 8'd128;
     tckc <= 8'd0;
     tckc_top <= 8'd63;
     tcnt <= 8'd45;
@@ -163,7 +163,7 @@ initial begin
     addr <= 8'd0;
     w_data <= 16'd3; // addr 0: значение фильтра
     
-    #100000 $finish();
+    #1000000 $finish();
 end
 
 endmodule
