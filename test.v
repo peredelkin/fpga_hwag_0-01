@@ -112,7 +112,7 @@ always @(posedge clk) begin
                 if(tcnt == 56) begin
                     tckc_top <= 8'd191;
                 end
-                scnt_top <= scnt_top + 8'd1;
+                scnt_top <= scnt_top - 8'd1;
                 tcnt <= tcnt + 8'd1;
             end
         end else begin
@@ -143,7 +143,7 @@ initial begin
     //end
     
     scnt <= 8'd0;
-    scnt_top <= 8'd3;
+    scnt_top <= 8'd250;
     tckc <= 8'd0;
     tckc_top <= 8'd63;
     tcnt <= 8'd45;
@@ -163,7 +163,7 @@ initial begin
     addr <= 8'd0;
     w_data <= 16'd3; // addr 0: значение фильтра
     
-    #10000 $finish();
+    #100000 $finish();
 end
 
 endmodule
