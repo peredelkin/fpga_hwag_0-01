@@ -16,8 +16,11 @@ reg [15:0] w_data;
 assign data = w_data;
 
 wire [7:0] spi_bus_out;
-wire [7:0] spi_bus_out_buffer_out;
-d_ff_wide #(8) spi_bus_out_buffer (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out));
+wire [7:0] spi_bus_out_buffer_out0,spi_bus_out_buffer_out1,spi_bus_out_buffer_out2;
+
+d_ff_wide #(8) spi_bus_out_buffer2 (.d(spi_bus_out_buffer_out1),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out2));
+d_ff_wide #(8) spi_bus_out_buffer1 (.d(spi_bus_out_buffer_out),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out1));
+d_ff_wide #(8) spi_bus_out_buffer0 (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out));
 
 wire [7:0] spi_bus_in;
 counter #(8) spi_data_gen
