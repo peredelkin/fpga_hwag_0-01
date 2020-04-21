@@ -236,8 +236,6 @@ d_ff_wide #(1) d_ff_acnt2_count_div2
 // ACNT to ACNT2 interface
 
 // ACNT2
-//and(acnt2_ena,acnt2_count_div2,acnt2_ne_acnt);
-
 d_ff_wide #(1) acnt2_rst_ff
 										(	.d(acnt2_e_top),
 											.clk(clk),
