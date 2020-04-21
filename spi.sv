@@ -23,6 +23,8 @@ and(spi_clk_fall,~spi_clk0,spi_clk1);
 wire spi_rx = spi_clk_fall;
 wire spi_tx = spi_clk_rise;
 
+assign bus_out[0] = spi_in;
+
 wire [7:0] tx_shift_buffer_out;
 assign spi_out = tx_shift_buffer_out[7];
 wire [7:0] tx_shift_load_out;
@@ -42,19 +44,14 @@ counter_compare #(3) rx_counter
 											.dtop(3'd7),
 											.out_e_top(rx_req));
 
-d_ff_wide #(8) rx_shift_buffer
-										(	.d({bus_out[6:0],spi_in}),
+d_ff_wide #(7) rx_shift_buffer
+										(	.d(bus_out[6:0]),
 											.clk(clk),
 											.rst(rst | spi_ss),
 											.ena(spi_rx),
-											.q(bus_out[7:0]));
+											.q(bus_out[7:1]));
 											
-d_ff_wide #(1) rx_req_ff
-										(	.d(rx_req & spi_rx),
-											.clk(clk),
-											.rst(rst | spi_ss),
-											.ena(ena),
-											.q(rx));
+and(rx,rx_req,spi_rx);
 											
 //TX
 counter_compare #(3) tx_counter
