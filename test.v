@@ -31,8 +31,6 @@ spi_slave spi_slave0
                 .spi_out(spi_out),
                 .spi_clk(spi_clk),
                 .spi_ss(spi_ss),
-                .spi_clk_polarity(1'b0),
-                .spi_clk_phase(1'b0),
                 .clk(clk),
                 .rst(rst),
                 .ena(1'b1),

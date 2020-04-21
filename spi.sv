@@ -1,14 +1,12 @@
 `ifndef SPI_SV
 `define SPI_SV
 
-module spi_slave (spi_in,spi_out,spi_clk,spi_ss,spi_clk_polarity,spi_clk_phase,clk,rst,ena,bus_in,bus_out,tx,rx);
+module spi_slave (spi_in,spi_out,spi_clk,spi_ss,clk,rst,ena,bus_in,bus_out,tx,rx);
 
 input wire spi_in;
 output wire spi_out;
 input wire spi_clk;
 input wire spi_ss;
-input wire spi_clk_polarity;
-input wire spi_clk_phase;
 input wire clk;
 input wire rst;
 input wire ena;
