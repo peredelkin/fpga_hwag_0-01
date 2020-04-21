@@ -1,19 +1,20 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Mon Apr 20 23:43:26 2020
+[*] Tue Apr 21 13:44:45 2020
 [*]
 [dumpfile] "/home/ruslan/intelFPGA_lite/fpga_hwag_0-01/test.vcd"
-[dumpfile_mtime] "Mon Apr 20 23:42:12 2020"
-[dumpfile_size] 904769
+[dumpfile_mtime] "Tue Apr 21 13:44:40 2020"
+[dumpfile_size] 909716
 [savefile] "/home/ruslan/intelFPGA_lite/fpga_hwag_0-01/test.gtkw"
 [timestart] 0
 [size] 3440 1375
 [pos] -1 -1
-*-4.434360 162 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-7.434360 420 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
-[sst_width] 308
-[signals_width] 255
-[sst_expanded] 1
+[treeopen] test.spi_slave0.
+[sst_width] 40
+[signals_width] 318
+[sst_expanded] 0
 [sst_vpaned_height] 472
 @28
 test.hwag0.clk
@@ -58,16 +59,22 @@ test.hwag0.window_filter_out
 -
 @28
 test.spi_slave0.clk
+test.spi_slave0.spi_ss
 test.spi_slave0.spi_clk
 @24
 test.spi_slave0.bus_in[7:0]
 @28
 test.spi_slave0.tx
 @24
-test.spi_slave0.bus_out[7:0]
+test.spi_slave0.tx_shift_buffer_out[7:0]
 @28
+test.spi_slave0.spi_out
+test.spi_slave0.spi_in
+@24
+test.spi_slave0.bus_out[7:0]
+@29
 test.spi_slave0.rx
-@25
+@24
 test.spi_bus_out_buffer.q[7:0]
 [pattern_trace] 1
 [pattern_trace] 0

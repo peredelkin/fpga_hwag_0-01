@@ -3,7 +3,7 @@
 `include "hwag.sv"
 
 module test();
-reg clk,ram_clk,rst,we,re,vr,cam,cam_phase,spi_clk,spi_din;
+reg clk,ram_clk,rst,we,re,vr,cam,cam_phase,spi_clk,spi_ss;
 reg [7:0] scnt;
 reg [7:0] scnt_top;
 reg [7:0] tckc;
@@ -30,7 +30,7 @@ spi_slave spi_slave0
             (   .spi_in(spi_out),
                 .spi_out(spi_out),
                 .spi_clk(spi_clk),
-                .spi_ss(1'b0),
+                .spi_ss(spi_ss),
                 .spi_clk_polarity(1'b0),
                 .spi_clk_phase(1'b0),
                 .clk(clk),
@@ -128,7 +128,7 @@ end
 
 always #1 clk <= ~clk;
 always #10 spi_clk <= ~spi_clk;
-always #80 spi_din <= ~spi_din;
+always #80 spi_ss <= 1'b0;
 always #2 ram_clk <= ~ram_clk;
 always #2 rst <= 1'b0;
 
@@ -151,7 +151,7 @@ initial begin
     cam_phase <= 1'b0;
     
     spi_clk <= 1'b0;
-    spi_din <= 1'b0;
+    spi_ss <= 1'b1;
     
     clk <= 1'b0;
     ram_clk <= 1'b0;

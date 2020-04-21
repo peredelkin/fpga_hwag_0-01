@@ -23,6 +23,10 @@ and(spi_clk_fall,~spi_clk0,spi_clk1);
 wire spi_rx = spi_clk_fall;
 wire spi_tx = spi_clk_rise;
 
+wire [7:0] tx_shift_buffer_out;
+assign spi_out = tx_shift_buffer_out[7];
+wire [7:0] tx_shift_load_out;
+
 d_ff_wide #(2) spi_clk_cap
 										(	.d({spi_clk0,spi_clk}),
 											.clk(clk),
@@ -30,6 +34,7 @@ d_ff_wide #(2) spi_clk_cap
 											.ena(ena),
 											.q({spi_clk1,spi_clk0}));
 
+//RX
 counter_compare #(3) rx_counter
 										(	.clk(clk),
 											.ena(ena & spi_rx),
@@ -37,24 +42,27 @@ counter_compare #(3) rx_counter
 											.dtop(3'd7),
 											.out_e_top(rx_req));
 
-assign bus_out[0] = spi_in;
-d_ff_wide #(7) rx_shift_buffer
-										(	.d(bus_out[6:0]),
+d_ff_wide #(8) rx_shift_buffer
+										(	.d({bus_out[6:0],spi_in}),
 											.clk(clk),
 											.rst(rst | spi_ss),
 											.ena(spi_rx),
-											.q(bus_out[7:1]));
-
+											.q(bus_out[7:0]));
+											
+d_ff_wide #(1) rx_req_ff
+										(	.d(rx_req & spi_rx),
+											.clk(clk),
+											.rst(rst | spi_ss),
+											.ena(ena),
+											.q(rx));
+											
+//TX
 counter_compare #(3) tx_counter
 										(	.clk(clk),
 											.ena(ena & spi_tx),
 											.rst(rst | spi_ss),
 											.dtop(3'd0),
 											.out_e_top(tx_req));
-
-wire [7:0] tx_shift_buffer_out;
-assign spi_out = tx_shift_buffer_out[7];
-wire [7:0] tx_shift_load_out;
 
 simple_multiplexer #(8) tx_shift_load_sel
 										(	.dataa({tx_shift_buffer_out[6:0],1'b0}),
@@ -70,7 +78,7 @@ d_ff_wide #(8) tx_shift_buffer
 											.q(tx_shift_buffer_out));
 
 and(tx,tx_req,spi_tx);
-and(rx,rx_req,spi_rx);
+
 endmodule
 
 `endif
