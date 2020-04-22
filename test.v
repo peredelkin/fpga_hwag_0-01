@@ -38,7 +38,7 @@ spi_slave spi_slave0
                 .clk(clk),
                 .rst(rst),
                 .ena(1'b1),
-                .bus_in(8'h01),
+                .bus_in(spi_bus_in),
                 .bus_out(spi_bus_out),
                 .tx(spi_slave_tx),
                 .rx(spi_slave_rx));

@@ -1,7 +1,7 @@
 `ifndef SPI_SV
 `define SPI_SV
 
-module spi_slave (spi_in,spi_out,spi_clk,spi_ss,clk,rst,ena,bus_in,bus_out,tx,rx);
+module spi_slave (spi_in,spi_out,spi_clk,spi_ss,clk,rst,ena,bus_in,bus_out,crc_rx_out,tx,rx);
 
 input wire spi_in;
 output wire spi_out;
@@ -21,7 +21,7 @@ and(spi_clk_fall,~spi_clk0,spi_clk1);
 wire spi_rx = spi_clk_fall;
 wire spi_tx = spi_clk_rise;
 
-assign bus_out[0] = spi_in;
+//assign bus_out[0] = spi_in;
 
 wire [7:0] tx_shift_buffer_out;
 assign spi_out = tx_shift_buffer_out[7];
@@ -49,29 +49,34 @@ counter_compare #(3) rx_counter
 											.dtop(3'd7),
 											.out_e_top(rx_req));
 
-d_ff_wide #(7) rx_shift_buffer
-										(	.d(bus_out[6:0]),
+d_ff_wide #(8) rx_shift_buffer
+										(	.d({bus_out[6:0],spi_in}),
 											.clk(clk),
 											.rst(rst | spi_ss),
 											.ena(spi_rx),
-											.q(bus_out[7:1]));
+											.q(bus_out[7:0]));
 											
-and(rx,rx_req,spi_rx);
+//and(rx,rx_req,spi_rx);
+d_ff_wide #(1) crc_req_ff		(	.d(rx_req & spi_rx),
+											.clk(clk),
+											.rst(rst | spi_ss),
+											.ena(ena),
+											.q(rx));
 
 //CRC RX
-wire [7:0] crc_rx_out;
+wire [7:0] crc_rx;
 crc8b spi_crc_rx 					(	.serial_in(spi_in),
 											.clk(clk),
 											.ena(ena & spi_rx),
 											.rst(rst | spi_ss),
 											.crc_conf(8'b00000111),
-											.crc_out(crc_rx_out));
-wire [7:0] crc_rx_buffer_out;
-d_ff_wide #(8) crc_rx_buffer	(	.d(crc_rx_out),
+											.crc_out(crc_rx));
+output wire [7:0] crc_rx_out;
+d_ff_wide #(8) crc_rx_buffer	(	.d(crc_rx),
 											.clk(clk),
-											.rst(rst | spi_ss),
-											.ena(ena & tx),
-											.q(crc_rx_buffer_out));
+											.rst(rst),
+											.ena(ena & rx),
+											.q(crc_rx_out));
 //CRC RX end
 											
 //TX
