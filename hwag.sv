@@ -12,6 +12,7 @@
 `include "bit_operation.sv"
 `include "math.sv"
 `include "spi.sv"
+`include "crc8.sv"
 
 module hwag(clk,cap_in,cap_out,led1_out,led2_out,coil14_out,coil23_out);
 input wire clk;

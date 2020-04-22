@@ -17,10 +17,11 @@ assign data = w_data;
 
 wire [7:0] spi_bus_out;
 wire [7:0] spi_bus_out_buffer_out0,spi_bus_out_buffer_out1,spi_bus_out_buffer_out2;
+wire [23:0] spi_rx_data = {spi_bus_out_buffer_out0,spi_bus_out_buffer_out1,spi_bus_out_buffer_out2};
 
 d_ff_wide #(8) spi_bus_out_buffer2 (.d(spi_bus_out_buffer_out1),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out2));
-d_ff_wide #(8) spi_bus_out_buffer1 (.d(spi_bus_out_buffer_out),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out1));
-d_ff_wide #(8) spi_bus_out_buffer0 (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out));
+d_ff_wide #(8) spi_bus_out_buffer1 (.d(spi_bus_out_buffer_out0),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out1));
+d_ff_wide #(8) spi_bus_out_buffer0 (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out0));
 
 wire [7:0] spi_bus_in;
 counter #(8) spi_data_gen
@@ -37,7 +38,7 @@ spi_slave spi_slave0
                 .clk(clk),
                 .rst(rst),
                 .ena(1'b1),
-                .bus_in(spi_bus_in),
+                .bus_in(8'h01),
                 .bus_out(spi_bus_out),
                 .tx(spi_slave_tx),
                 .rx(spi_slave_rx));
@@ -128,7 +129,7 @@ always @(posedge clk) begin
 end
 
 always #1 clk <= ~clk;
-always #10 spi_clk <= ~spi_clk;
+always #5 spi_clk <= ~spi_clk;
 always #80 spi_ss <= 1'b0;
 always #2 ram_clk <= ~ram_clk;
 always #2 rst <= 1'b0;
@@ -154,7 +155,7 @@ initial begin
     spi_clk <= 1'b0;
     spi_ss <= 1'b1;
     
-    clk <= 1'b0;
+    clk <= 1'b1;
     ram_clk <= 1'b0;
     vr <= 1'b0;
     rst <= 1'b1;

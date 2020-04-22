@@ -27,12 +27,19 @@ wire [7:0] tx_shift_buffer_out;
 assign spi_out = tx_shift_buffer_out[7];
 wire [7:0] tx_shift_load_out;
 
-d_ff_wide #(2) spi_clk_cap
-										(	.d({spi_clk0,spi_clk}),
+d_ff_wide #(1) ff_spi_clk0
+										(	.d(spi_clk),
 											.clk(clk),
 											.rst(rst | spi_ss),
 											.ena(ena),
-											.q({spi_clk1,spi_clk0}));
+											.q(spi_clk0));
+											
+d_ff_wide #(1) ff_spi_clk1
+										(	.d(spi_clk0),
+											.clk(clk),
+											.rst(rst | spi_ss),
+											.ena(ena),
+											.q(spi_clk1));
 
 //RX
 counter_compare #(3) rx_counter
@@ -50,6 +57,22 @@ d_ff_wide #(7) rx_shift_buffer
 											.q(bus_out[7:1]));
 											
 and(rx,rx_req,spi_rx);
+
+//CRC RX
+wire [7:0] crc_rx_out;
+crc8b spi_crc_rx 					(	.serial_in(spi_in),
+											.clk(clk),
+											.ena(ena & spi_rx),
+											.rst(rst | spi_ss),
+											.crc_conf(8'b00000111),
+											.crc_out(crc_rx_out));
+wire [7:0] crc_rx_buffer_out;
+d_ff_wide #(8) crc_rx_buffer	(	.d(crc_rx_out),
+											.clk(clk),
+											.rst(rst | spi_ss),
+											.ena(ena & tx),
+											.q(crc_rx_buffer_out));
+//CRC RX end
 											
 //TX
 counter_compare #(3) tx_counter
