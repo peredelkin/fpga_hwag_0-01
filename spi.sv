@@ -65,7 +65,7 @@ d_ff_wide #(1) crc_req_ff		(	.d(rx_req & spi_rx),
 
 //CRC RX
 wire [7:0] crc_rx;
-crc8b spi_crc_rx 					(	.serial_in(spi_in),
+crc8b spi_crc_rx 					(	.serial_in(bus_out[7]),
 											.clk(clk),
 											.ena(ena & spi_rx),
 											.rst(rst | spi_ss),
