@@ -69,7 +69,7 @@ crc8b spi_crc_rx 					(	.serial_in(bus_out[7]),
 											.clk(clk),
 											.ena(ena & spi_rx),
 											.rst(rst | spi_ss),
-											.crc_conf(8'b00000111),
+											.crc_conf(8'd7),
 											.crc_out(crc_rx));
 output wire [7:0] crc_rx_out;
 d_ff_wide #(8) crc_rx_buffer	(	.d(crc_rx),
