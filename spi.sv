@@ -12,6 +12,7 @@ input wire rst;
 input wire ena;
 input wire [7:0] bus_in;
 output wire [7:0] bus_out;
+output wire [7:0] crc_rx_out;
 output wire tx;
 output wire rx;
 
@@ -64,19 +65,12 @@ d_ff_wide #(1) crc_req_ff		(	.d(rx_req & spi_rx),
 											.q(rx));
 
 //CRC RX
-wire [7:0] crc_rx;
 crc8b spi_crc_rx 					(	.serial_in(bus_out[7]),
 											.clk(clk),
 											.ena(ena & spi_rx),
 											.rst(rst | spi_ss),
 											.crc_conf(8'd7),
-											.crc_out(crc_rx));
-output wire [7:0] crc_rx_out;
-d_ff_wide #(8) crc_rx_buffer	(	.d(crc_rx),
-											.clk(clk),
-											.rst(rst),
-											.ena(ena & rx),
-											.q(crc_rx_out));
+											.crc_out(crc_rx_out));
 //CRC RX end
 											
 //TX

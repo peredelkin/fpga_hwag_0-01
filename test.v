@@ -15,34 +15,6 @@ inout [15:0] data;
 reg [15:0] w_data;
 assign data = w_data;
 
-wire [7:0] spi_bus_out;
-wire [7:0] spi_bus_out_buffer_out0,spi_bus_out_buffer_out1,spi_bus_out_buffer_out2;
-wire [23:0] spi_rx_data = {spi_bus_out_buffer_out0,spi_bus_out_buffer_out1,spi_bus_out_buffer_out2};
-
-d_ff_wide #(8) spi_bus_out_buffer2 (.d(spi_bus_out_buffer_out1),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out2));
-d_ff_wide #(8) spi_bus_out_buffer1 (.d(spi_bus_out_buffer_out0),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out1));
-d_ff_wide #(8) spi_bus_out_buffer0 (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_slave_rx),.q(spi_bus_out_buffer_out0));
-
-wire [7:0] spi_bus_in;
-counter #(8) spi_data_gen
-            (   .clk(clk),
-                .rst(rst),
-                .ena(spi_slave_tx),
-                .data_out(spi_bus_in));
-
-spi_slave spi_slave0
-            (   .spi_in(spi_out),
-                .spi_out(spi_out),
-                .spi_clk(spi_clk),
-                .spi_ss(spi_ss),
-                .clk(clk),
-                .rst(rst),
-                .ena(1'b1),
-                .bus_in(spi_bus_in),
-                .bus_out(spi_bus_out),
-                .tx(spi_slave_tx),
-                .rx(spi_slave_rx));
-
 hwag hwag0  (   .clk(clk),
                 .cap_in(vr),
                 .cap_out(vr_out),

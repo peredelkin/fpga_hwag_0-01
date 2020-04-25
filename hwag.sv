@@ -14,20 +14,64 @@
 `include "spi.sv"
 `include "crc8.sv"
 
-module hwag(clk,cap_in,cap_out,led1_out,led2_out,coil14_out,coil23_out);
+module hwag(clk,cap_in,cap_out,led1_out,led2_out,coil14_out,coil23_out,spi_si,spi_so,spi_sck,spi_ss);
 input wire clk;
 input wire cap_in;
 output wire cap_out;
 
 output wire led1_out;
 output wire led2_out;
-assign led1_out = ~gap_found;
+assign led1_out = spi_crc_rx_equal;
 assign led2_out = ~tcnt_e_top;
 
 localparam PCNT_WIDTH = 24;
 localparam TCNT_WIDTH = 8;
 localparam HWASTWD = 4'd4;
 localparam HWAMAXACR = 24'd3839;
+
+input wire spi_si;
+output wire spi_so;
+input wire spi_sck;
+input wire spi_ss;
+
+//SPI
+wire [7:0] spi_bus_out;
+wire [7:0] spi_crc_rx_out;
+
+wire [7:0] spi_bus_out_buffer_out;
+d_ff_wide #(8) spi_bus_out_buffer
+										(	.d(spi_bus_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(spi_rx),
+											.q(spi_bus_out_buffer_out));
+
+wire [7:0] spi_crc_rx_out_buffer_out;
+d_ff_wide #(8) spi_crc_rx_out_buffer 
+										(	.d(spi_crc_rx_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(spi_rx),
+											.q(spi_crc_rx_out_buffer_out));
+											
+compare #(8) spi_crc_rx_comp	(	.dataa(spi_bus_out_buffer_out),
+											.datab(spi_crc_rx_out_buffer_out),
+											.aeb(spi_crc_rx_equal));
+
+spi_slave spi_slave0
+										(	.spi_in(spi_si),
+											.spi_out(spi_so),
+											.spi_clk(spi_sck),
+											.spi_ss(spi_ss),
+											.clk(clk),
+											.rst(rst),
+											.ena(1'b1),
+											.bus_in(8'd0),
+											.bus_out(spi_bus_out),
+											.crc_rx_out(spi_crc_rx_out),
+											.tx(spi_tx),
+											.rx(spi_rx));
+//SPI end
 
 wire hwag_start;
 wire edge0,edge1;
