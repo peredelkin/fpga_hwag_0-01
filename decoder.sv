@@ -27,6 +27,23 @@ always @(*) begin
 end
 endmodule
 
+module decoder_3_8 (in,out);
+input wire [2:0] in;
+output reg [7:0] out;
+always @(*) begin
+	case(in)
+		4'h0 : out = 8'h01;
+      4'h1 : out = 8'h02;
+      4'h2 : out = 8'h04;
+      4'h3 : out = 8'h08;
+      4'h4 : out = 8'h10;
+      4'h5 : out = 8'h20;
+      4'h6 : out = 8'h40;
+      4'h7 : out = 8'h80;
+	endcase
+end
+endmodule
+
 module decoder_8_row_column (in,row,column);
 input wire [7:0] in;
 output wire [15:0] row;
