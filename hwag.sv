@@ -147,15 +147,13 @@ decoder_4_16 spi_addr_lsb_decoder
 
 wire hwag_start;
 wire edge0,edge1;
-capture_flt_edge_det_sel #(4,10) vr_filter 
-										(	.d(cap_in),
+hwag_vr_capture #(8,8) vr_cap (	.d(cap_in),
 											.clk(clk),
 											.rst(rst),
-											.fst_ena(1'b1),
-											.snd_ena(~hwag_start | window_filter_out),
-											.out_ena(1'b1),
-											.fst_val(4'd7),
-											.snd_val(10'd127),
+											.ena(1'b1),
+											.out_ena(~hwag_start | window_filter_out),
+											.fst_val(8'd7),
+											.snd_val(8'd7),
 											.filtered(cap_out),
 											.sel(1'b1),
 											.edge0(edge0),
