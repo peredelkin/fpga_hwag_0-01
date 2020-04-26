@@ -14,7 +14,7 @@ input wire sel;
 output wire edge0,edge1;
 
 wire fst_counter_rst = ~(d ^ fst_flt_out);
-wire cap_ena = (ena & ((~filtered & (sel | out_ena)) | (filtered & (~sel | out_ena))));
+wire cap_ena = (ena & ((~filtered & snd_counter_e_hi & (sel | out_ena)) | (filtered & snd_counter_e_lo & (~sel | out_ena))));
 wire rise0 = (filtered & ~filtered0);
 wire rise1 = (filtered0 & ~filtered1);
 wire fall0 = (~filtered & filtered0);
