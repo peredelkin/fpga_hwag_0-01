@@ -16,11 +16,13 @@ reg [15:0] w_data;
 assign data = w_data;
 
 hwag hwag0  (   .clk(clk),
+                .rst(rst),
                 .cap_in(vr),
                 .cap_out(vr_out),
                 .led1_out(led1),
                 .led2_out(led2),
-                .coil14_out(coil));
+                .coil14_out(coil14_out),
+                .coil23_out(coil23_out));
 
 always @(posedge ram_clk) begin
     if(addr < 131) begin 
