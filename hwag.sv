@@ -24,7 +24,7 @@ output wire cap_out;
 output wire led1_out;
 output wire led2_out;
 assign led1_out = spi_crc_rx_equal;
-assign led2_out = 1'b0;
+assign led2_out = ~gap_run_point;
 
 localparam PCNT_WIDTH = 24;
 localparam TCNT_WIDTH = 8;
