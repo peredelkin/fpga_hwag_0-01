@@ -13,9 +13,55 @@ output wire filtered;
 input wire sel;
 output wire edge0,edge1;
 
-wire cap_ena = (~filtered & (sel | out_ena) & ena) | (filtered & (~sel | out_ena) & ena);
+wire fst_counter_rst = ~(d ^ fst_flt_out);
+wire cap_ena = (ena & ((~filtered & (sel | out_ena)) | (filtered & (~sel | out_ena))));
+wire rise0 = (filtered & ~filtered0);
+wire rise1 = (filtered0 & ~filtered1);
+wire fall0 = (~filtered & filtered0);
+wire fall1 = (~filtered0 & filtered1);
 
-d_ff_wide #(1) vr_cap	(	.d(d),
+//1st stage
+counter_compare #(WIDTH_FST) fst_counter
+								(	.clk(clk),
+									.ena(ena & fst_counter_ne_top),
+									.rst(rst | fst_counter_rst),
+									.dtop(fst_val),
+									.out_e_top(fst_counter_e_top),
+									.out_ne_top(fst_counter_ne_top));
+									
+d_ff_wide #(1) fst_flt
+								(	.d(d),
+									.clk(clk),
+									.rst(rst),
+									.ena(fst_counter_e_top),
+									.q(fst_flt_out));
+//1st stage end
+
+//2nd stage
+wire [WIDTH_SND-1:0] snd_counter_out;
+wire snd_counter_ena = (ena & ((fst_flt_out & snd_counter_ne_hi) | (~fst_flt_out & snd_counter_ne_lo)));
+localparam [WIDTH_SND-1:0] snd_lo = 0;
+counter_reversible #(WIDTH_SND) snd_counter
+								(	.clk(clk),
+									.rst(rst),
+									.ena(snd_counter_ena),
+									.rev(~fst_flt_out),
+									.data_out(snd_counter_out));
+
+compare #(WIDTH_SND) snd_counter_hi
+								(	.dataa(snd_counter_out),
+									.datab(snd_val),
+									.aeb(snd_counter_e_hi),
+									.aneb(snd_counter_ne_hi));
+									
+compare #(WIDTH_SND) snd_counter_lo
+								(	.dataa(snd_counter_out),
+									.datab(snd_lo),
+									.aeb(snd_counter_e_lo),
+									.aneb(snd_counter_ne_lo));
+//2nd stage end
+
+d_ff_wide #(1) vr_cap	(	.d(fst_flt_out),
 									.clk(clk),
 									.rst(rst),
 									.ena(cap_ena),
@@ -26,13 +72,7 @@ d_ff_wide #(2) edge_gen	(	.d({filtered0,filtered}),
 									.rst(rst),
 									.ena(ena),
 									.q({filtered1,filtered0}));
-									
-and(rise0,filtered,~filtered0);
-and(rise1,filtered0,~filtered1);
 
-and(fall0,~filtered,filtered0);
-and(fall1,~filtered0,filtered1);
-									
 simple_multiplexer #(2) edge_sel	(	.dataa({rise1,rise0}),
 												.datab({fall1,fall0}),
 												.sel(sel),
