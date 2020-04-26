@@ -14,9 +14,10 @@
 `include "spi.sv"
 `include "crc8.sv"
 
-module hwag(clk,rst,cap_in,cap_out,led1_out,led2_out,coil14_out,coil23_out,spi_si,spi_so,spi_sck,spi_ss);
+module hwag(clk,nrst,cap_in,cap_out,led1_out,led2_out,coil14_out,coil23_out,spi_si,spi_so,spi_sck,spi_ss);
 input wire clk;
-input wire rst;
+input wire nrst;
+wire rst = ~nrst;
 input wire cap_in;
 output wire cap_out;
 

@@ -16,7 +16,7 @@ reg [15:0] w_data;
 assign data = w_data;
 
 hwag hwag0  (   .clk(clk),
-                .rst(rst),
+                .nrst(~rst),
                 .cap_in(vr),
                 .cap_out(vr_out),
                 .led1_out(led1),
