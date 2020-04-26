@@ -111,7 +111,7 @@ d_ff_wide #(8) spi_crc_rx_out_buffer
 										(	.d(spi_crc_rx_out),
 											.clk(clk),
 											.rst(rst),
-											.ena(spi_rx),
+											.ena(spi_rx & spi_rx_data_select[6]),
 											.q(spi_crc_rx_out_buffer_out));
 											
 compare #(8) spi_crc_rx_comp	(	.dataa(spi_hwag_crc),
