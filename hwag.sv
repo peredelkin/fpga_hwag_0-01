@@ -37,29 +37,73 @@ input wire spi_ss;
 //SPI
 wire [7:0] spi_bus_out;
 wire [7:0] spi_crc_rx_out;
+wire [7:0] spi_crc_rx_out_buffer_out;
 
 wire [7:0] spi_bus_rx_buffer_out [6:0];
 
+// [CMD8]:[ADDR8]:[DATA32]:[CRC8]
 wire [7:0] spi_hwag_cmd = spi_bus_rx_buffer_out[0];
 wire [7:0] spi_hwag_addr = spi_bus_rx_buffer_out[1];
 wire [31:0] spi_hwag_data = {spi_bus_rx_buffer_out[5],spi_bus_rx_buffer_out[4],spi_bus_rx_buffer_out[3],spi_bus_rx_buffer_out[2]};
 wire [7:0] spi_hwag_crc = spi_bus_rx_buffer_out[6];
 
+
 wire [2:0] spi_rx_data_counter_out;
 counter #(3) spi_rx_data_counter (.clk(clk),.rst(rst | spi_ss),.ena(spi_rx),.data_out(spi_rx_data_counter_out));
+
 
 wire [7:0] spi_rx_data_select;
 decoder_3_8 spi_rx_data_decoder (.in(spi_rx_data_counter_out),.out(spi_rx_data_select));
 
-d_ff_wide #(8) spi_bus_rx_buffer_0 (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_rx & spi_rx_data_select[0]),.q(spi_bus_rx_buffer_out[0]));
-d_ff_wide #(8) spi_bus_rx_buffer_1 (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_rx & spi_rx_data_select[1]),.q(spi_bus_rx_buffer_out[1]));
-d_ff_wide #(8) spi_bus_rx_buffer_2 (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_rx & spi_rx_data_select[2]),.q(spi_bus_rx_buffer_out[2]));
-d_ff_wide #(8) spi_bus_rx_buffer_3 (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_rx & spi_rx_data_select[3]),.q(spi_bus_rx_buffer_out[3]));
-d_ff_wide #(8) spi_bus_rx_buffer_4 (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_rx & spi_rx_data_select[4]),.q(spi_bus_rx_buffer_out[4]));
-d_ff_wide #(8) spi_bus_rx_buffer_5 (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_rx & spi_rx_data_select[5]),.q(spi_bus_rx_buffer_out[5]));
-d_ff_wide #(8) spi_bus_rx_buffer_6 (.d(spi_bus_out),.clk(clk),.rst(rst),.ena(spi_rx & spi_rx_data_select[6]),.q(spi_bus_rx_buffer_out[6]));
 
-wire [7:0] spi_crc_rx_out_buffer_out;
+d_ff_wide #(8) spi_bus_rx_buffer_0
+										(	.d(spi_bus_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(spi_rx & spi_rx_data_select[0]),
+											.q(spi_bus_rx_buffer_out[0]));
+											
+d_ff_wide #(8) spi_bus_rx_buffer_1
+										(	.d(spi_bus_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(spi_rx & spi_rx_data_select[1]),
+											.q(spi_bus_rx_buffer_out[1]));
+											
+d_ff_wide #(8) spi_bus_rx_buffer_2
+										(	.d(spi_bus_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(spi_rx & spi_rx_data_select[2]),
+											.q(spi_bus_rx_buffer_out[2]));
+											
+d_ff_wide #(8) spi_bus_rx_buffer_3
+										(	.d(spi_bus_out),
+										.clk(clk),
+										.rst(rst),
+										.ena(spi_rx & spi_rx_data_select[3]),
+										.q(spi_bus_rx_buffer_out[3]));
+										
+d_ff_wide #(8) spi_bus_rx_buffer_4
+										(	.d(spi_bus_out),
+											.clk(clk),.rst(rst),
+											.ena(spi_rx & spi_rx_data_select[4]),
+											.q(spi_bus_rx_buffer_out[4]));
+											
+d_ff_wide #(8) spi_bus_rx_buffer_5
+										(	.d(spi_bus_out),
+										.clk(clk),
+										.rst(rst),
+										.ena(spi_rx & spi_rx_data_select[5]),
+										.q(spi_bus_rx_buffer_out[5]));
+										
+d_ff_wide #(8) spi_bus_rx_buffer_6
+										(.d(spi_bus_out),
+										.clk(clk),
+										.rst(rst),
+										.ena(spi_rx & spi_rx_data_select[6]),
+										.q(spi_bus_rx_buffer_out[6]));
+
 d_ff_wide #(8) spi_crc_rx_out_buffer 
 										(	.d(spi_crc_rx_out),
 											.clk(clk),
@@ -85,6 +129,19 @@ spi_slave spi_slave0
 											.tx(spi_tx),
 											.rx(spi_rx));
 //SPI end
+
+//Settings
+wire [15:0] spi_addr_msb_decoder_out;
+wire [15:0] spi_addr_lsb_decoder_out;
+decoder_4_16 spi_addr_msb_decoder
+										(	.in(spi_hwag_addr[7:4]),
+											.out(spi_addr_msb_decoder_out));
+											
+decoder_4_16 spi_addr_lsb_decoder
+										(	.in(spi_hwag_addr[3:0]),
+											.out(spi_addr_lsb_decoder_out));
+
+//Settings end
 
 wire hwag_start;
 wire edge0,edge1;

@@ -2,7 +2,7 @@
 `ifndef CAPTURE_SV
 `define CAPTURE_SV
 
-
+//TODO: переписать захват под фильтрацию выбранного фронта
 
 module two_stage_filter #(parameter WIDTH_FST=1,WIDTH_SND=1)
 						(d,clk,rst,fst_ena,snd_ena,out_ena,fst_val,snd_val,q);
