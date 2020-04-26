@@ -43,12 +43,13 @@ wire [7:0] spi_crc_rx_out_buffer_out;
 
 wire [7:0] spi_bus_rx_buffer_out [6:0];
 
+//Spi data frame
 // [CMD8]:[ADDR8]:[DATA32]:[CRC8]
 wire [7:0] spi_hwag_cmd = spi_bus_rx_buffer_out[0];
 wire [7:0] spi_hwag_addr = spi_bus_rx_buffer_out[1];
 wire [31:0] spi_hwag_data = {spi_bus_rx_buffer_out[5],spi_bus_rx_buffer_out[4],spi_bus_rx_buffer_out[3],spi_bus_rx_buffer_out[2]};
 wire [7:0] spi_hwag_crc = spi_bus_rx_buffer_out[6];
-
+//Spi data frame end
 
 wire [2:0] spi_rx_data_counter_out;
 counter #(3) spi_rx_data_counter (.clk(clk),.rst(rst | spi_ss),.ena(spi_rx),.data_out(spi_rx_data_counter_out));
@@ -132,7 +133,16 @@ spi_slave spi_slave0
 											.rx(spi_rx));
 //SPI end
 
-//Settings
+//Spi write signal
+d_ff_wide #(1) spi_ss_cap		(	.d(spi_ss),
+											.clk(clk),
+											.rst(rst),
+											.ena(1'b1),
+											.q(spi_ss0));
+wire spi_ss_rise = spi_ss & ~spi_ss0;
+//Spi write signal end
+
+//Spi addr decoder
 wire [15:0] spi_addr_msb_decoder_out;
 wire [15:0] spi_addr_lsb_decoder_out;
 decoder_4_16 spi_addr_msb_decoder
@@ -143,7 +153,18 @@ decoder_4_16 spi_addr_lsb_decoder
 										(	.in(spi_hwag_addr[3:0]),
 											.out(spi_addr_lsb_decoder_out));
 
-//Settings end
+//Spi addr decoder end
+
+//Data registers
+wire ignition_angle_0_ena = spi_ss_rise & spi_addr_msb_decoder_out[0] & spi_addr_lsb_decoder_out[1];
+wire [23:0] ignition_angle_0_out;
+d_ff_wide #(24) ignition_angle_0
+										(	.d(spi_hwag_data[23:0]),
+											.clk(clk),
+											.rst(rst),
+											.ena(ignition_angle_0_ena),
+											.q(ignition_angle_0_out));
+//Data registers end
 
 wire hwag_start;
 wire edge0,edge1;
@@ -436,7 +457,7 @@ d_ff_wide #(24) d_ff_dwell_time
 // Coil set point calc
 wire [23:0] coil_set_point_out;
 integer_subtraction #(24) coil_set_point 
-										(	.minuend(24'd3839),
+										(	.minuend(ignition_angle_0_out),
 											.subtrahend(dwell_angle_out),
 											.result(coil_set_point_out));
 
@@ -480,8 +501,8 @@ compare #(24) comp14_set
 
 compare #(24) comp14_reset
 										(	.dataa(acnt3_out),
-											.datab(24'd3839),
-											.aeb(comp14_reset_out));
+											.datab(ignition_angle_0_out),
+											.ageb(comp14_reset_out));
 
 d_ff_wide #(1) ff_coil14
 										(	.d(1'b1),
@@ -498,8 +519,8 @@ compare #(24) comp23_set
 
 compare #(24) comp23_reset
 										(	.dataa(acnt4_out),
-											.datab(24'd3839),
-											.aeb(comp23_reset_out));
+											.datab(ignition_angle_0_out),
+											.ageb(comp23_reset_out));
 
 d_ff_wide #(1) ff_coil23
 										(	.d(1'b1),
