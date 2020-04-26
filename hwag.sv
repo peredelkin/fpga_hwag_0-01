@@ -156,7 +156,7 @@ decoder_4_16 spi_addr_lsb_decoder
 //Spi addr decoder end
 
 //Data registers
-wire ignition_angle_0_ena = spi_ss_rise & spi_addr_msb_decoder_out[0] & spi_addr_lsb_decoder_out[1];
+wire ignition_angle_0_ena = spi_addr_msb_decoder_out[0] & spi_addr_lsb_decoder_out[1] & spi_crc_rx_equal & spi_ss_rise;
 wire [23:0] ignition_angle_0_out;
 d_ff_wide #(24) ignition_angle_0
 										(	.d(spi_hwag_data[23:0]),
@@ -336,19 +336,12 @@ compare #(19) window_filter_comp
 // Window filter end
 
 // ACNT
-d_ff_wide #(1) acnt_rst_ff
-										(	.d(acnt_e_top),
-											.clk(clk),
-											.rst(~acnt_e_top),
-											.ena(tckc_ena),
-											.q(acnt_rst));
-
 wire [23:0] acnt_out;
 counter_compare #(24) acnt
 										(	.clk(clk),
 											.ena(tckc_ena),
-											.rst(rst | acnt_rst),
-										/*	.srst(tckc_ena & acnt_e_top),*/
+											.rst(rst),
+											.srst(tckc_ena & acnt_e_top),
 											.sload(~hwag_start | edge1),
 											.dload(tooth_angle),
 											.dout(acnt_out),
@@ -372,18 +365,11 @@ d_ff_wide #(1) d_ff_acnt2_count_div2
 // ACNT to ACNT2 interface
 
 // ACNT2
-d_ff_wide #(1) acnt2_rst_ff
-										(	.d(acnt2_e_top),
-											.clk(clk),
-											.rst(~acnt2_e_top),
-											.ena(acnt2_ena),
-											.q(acnt2_rst));
-
 counter_compare #(24) acnt2
 										(	.clk(clk),
 											.ena(acnt2_ena),
-											.rst(rst | acnt2_rst),
-										/*	.srst(acnt2_ena & acnt2_e_top),*/
+											.rst(rst),
+											.srst(acnt2_ena & acnt2_e_top),
 											.sload(~hwag_start),
 											.dload(acnt_out),
 											.dout(acnt2_out),
@@ -393,18 +379,11 @@ counter_compare #(24) acnt2
 
 // Slave ACNT
 wire [23:0] acnt3_out;
-d_ff_wide #(1) acnt3_rst_ff
-										(	.d(acnt3_e_top),
-											.clk(clk),
-											.rst(~acnt3_e_top),
-											.ena(acnt2_ena),
-											.q(acnt3_rst));
-
 counter_compare #(24) acnt3
 										(	.clk(clk),
 											.ena(acnt2_ena),
-											.rst(rst | acnt3_rst),
-										/*	.srst(acnt2_ena & acnt3_e_top),*/
+											.rst(rst),
+											.srst(acnt2_ena & acnt3_e_top),
 											.sload(~hwag_start),
 											.dload(24'd2752),
 											.dout(acnt3_out),
@@ -412,18 +391,11 @@ counter_compare #(24) acnt3
 											.out_e_top(acnt3_e_top));
 
 wire [23:0] acnt4_out;
-d_ff_wide #(1) acnt4_rst_ff
-										(	.d(acnt4_e_top),
-											.clk(clk),
-											.rst(~acnt4_e_top),
-											.ena(acnt2_ena),
-											.q(acnt4_rst));
-
 counter_compare #(24) acnt4
 										(	.clk(clk),
 											.ena(acnt2_ena),
-											.rst(rst | acnt4_rst),
-										/*	.srst(acnt2_ena & acnt4_e_top),*/
+											.rst(rst),
+											.srst(acnt2_ena & acnt4_e_top),
 											.sload(~hwag_start),
 											.dload(24'd832),
 											.dout(acnt4_out),
@@ -502,7 +474,7 @@ compare #(24) comp14_set
 compare #(24) comp14_reset
 										(	.dataa(acnt3_out),
 											.datab(ignition_angle_0_out),
-											.ageb(comp14_reset_out));
+											.aeb(comp14_reset_out));
 
 d_ff_wide #(1) ff_coil14
 										(	.d(1'b1),
@@ -520,7 +492,7 @@ compare #(24) comp23_set
 compare #(24) comp23_reset
 										(	.dataa(acnt4_out),
 											.datab(ignition_angle_0_out),
-											.ageb(comp23_reset_out));
+											.aeb(comp23_reset_out));
 
 d_ff_wide #(1) ff_coil23
 										(	.d(1'b1),
