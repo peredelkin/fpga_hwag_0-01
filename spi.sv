@@ -22,8 +22,6 @@ and(spi_clk_fall,~spi_clk0,spi_clk1);
 wire spi_rx = spi_clk_fall;
 wire spi_tx = spi_clk_rise;
 
-//assign bus_out[0] = spi_in;
-
 wire [7:0] tx_shift_buffer_out;
 assign spi_out = tx_shift_buffer_out[7];
 wire [7:0] tx_shift_load_out;
@@ -58,7 +56,7 @@ d_ff_wide #(8) rx_shift_buffer
 											.q(bus_out[7:0]));
 											
 //and(rx,rx_req,spi_rx);
-d_ff_wide #(1) crc_req_ff		(	.d(rx_req & spi_rx),
+d_ff_wide #(1) rx_req_delay	(	.d(rx_req & spi_rx),
 											.clk(clk),
 											.rst(rst | spi_ss),
 											.ena(ena),
