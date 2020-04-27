@@ -32,14 +32,14 @@ d_ff_wide #(1) ff_spi_clk0
 										(	.d(spi_clk),
 											.clk(clk),
 											.rst(rst | spi_ss),
-											.ena(ena),
+											.ena(ena & ~spi_ss),
 											.q(spi_clk0));
 											
 d_ff_wide #(1) ff_spi_clk1
 										(	.d(spi_clk0),
 											.clk(clk),
 											.rst(rst | spi_ss),
-											.ena(ena),
+											.ena(ena & ~spi_ss),
 											.q(spi_clk1));
 
 //RX
