@@ -119,7 +119,7 @@ initial begin
     //end
     
     scnt <= 8'd0;
-    scnt_top <= 8'd2;
+    scnt_top <= 8'd32;
     tckc <= 8'd0;
     tckc_top <= 8'd63;
     tcnt <= 8'd55;
