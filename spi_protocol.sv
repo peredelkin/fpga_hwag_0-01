@@ -40,55 +40,7 @@ generate
 											.q(spi_bus_rx_buffer_out[i]));
 end
 endgenerate
-
-/*d_ff_wide #(8) spi_bus_rx_buffer_0
-										(	.d(spi_bus_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(spi_rx & spi_rx_data_select[0]),
-											.q(spi_bus_rx_buffer_out[0]));
-											
-d_ff_wide #(8) spi_bus_rx_buffer_1
-										(	.d(spi_bus_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(spi_rx & spi_rx_data_select[1]),
-											.q(spi_bus_rx_buffer_out[1]));
-											
-d_ff_wide #(8) spi_bus_rx_buffer_2
-										(	.d(spi_bus_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(spi_rx & spi_rx_data_select[2]),
-											.q(spi_bus_rx_buffer_out[2]));
-											
-d_ff_wide #(8) spi_bus_rx_buffer_3
-										(	.d(spi_bus_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(spi_rx & spi_rx_data_select[3]),
-											.q(spi_bus_rx_buffer_out[3]));
-										
-d_ff_wide #(8) spi_bus_rx_buffer_4
-										(	.d(spi_bus_out),
-											.clk(clk),.rst(rst),
-											.ena(spi_rx & spi_rx_data_select[4]),
-											.q(spi_bus_rx_buffer_out[4]));
-											
-d_ff_wide #(8) spi_bus_rx_buffer_5
-										(	.d(spi_bus_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(spi_rx & spi_rx_data_select[5]),
-											.q(spi_bus_rx_buffer_out[5]));
-										
-d_ff_wide #(8) spi_bus_rx_buffer_6
-										(	.d(spi_bus_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(spi_rx & spi_rx_data_select[6]),
-											.q(spi_bus_rx_buffer_out[6]));*/
-
+//
 d_ff_wide #(8) spi_crc_rx_out_buffer 
 										(	.d(spi_crc_rx_out),
 											.clk(clk),
