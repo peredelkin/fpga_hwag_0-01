@@ -6,6 +6,9 @@ module hwag_spi_rx_data_frame
 input wire clk,rst,spi_ss,spi_rx;
 input wire [7:0] spi_bus_out;
 input wire [7:0] spi_crc_rx_out;
+output wire [7:0] spi_hwag_cmd;
+output wire [7:0] spi_hwag_addr;
+output wire [31:0] spi_hwag_data;
 output wire spi_crc_rx_equal;
 output wire spi_ss_rise;
 
@@ -20,9 +23,9 @@ decoder_3_8 spi_rx_data_decoder (.in(spi_rx_data_counter_out),.out(spi_rx_data_s
 
 //Spi data frame
 // [CMD8]:[ADDR8]:[DATA32]:[CRC8]
-output wire [7:0] spi_hwag_cmd = spi_bus_rx_buffer_out[0];
-output wire [7:0] spi_hwag_addr = spi_bus_rx_buffer_out[1];
-output wire [31:0] spi_hwag_data = {spi_bus_rx_buffer_out[5],spi_bus_rx_buffer_out[4],spi_bus_rx_buffer_out[3],spi_bus_rx_buffer_out[2]};
+assign spi_hwag_cmd = spi_bus_rx_buffer_out[0];
+assign spi_hwag_addr = spi_bus_rx_buffer_out[1];
+assign spi_hwag_data = {spi_bus_rx_buffer_out[5],spi_bus_rx_buffer_out[4],spi_bus_rx_buffer_out[3],spi_bus_rx_buffer_out[2]};
 wire [7:0] spi_hwag_crc = spi_bus_rx_buffer_out[6];
 //Spi data frame end
 

@@ -1,24 +1,25 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Sun Apr 26 13:17:50 2020
+[*] Tue Apr 28 01:00:06 2020
 [*]
-[dumpfile] "/home/ruslan/intelFPGA_lite/fpga_hwag_0-01/test.vcd"
-[dumpfile_mtime] "Sun Apr 26 13:17:35 2020"
-[dumpfile_size] 16377626
-[savefile] "/home/ruslan/intelFPGA_lite/fpga_hwag_0-01/test.gtkw"
-[timestart] 0
-[size] 1716 1375
-[pos] -1331 -1
+[dumpfile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.vcd"
+[dumpfile_mtime] "Tue Apr 28 00:58:37 2020"
+[dumpfile_size] 16486931
+[savefile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.gtkw"
+[timestart] 82100
+[size] 1366 703
+[pos] -1 -1
 *-14.799719 170 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [sst_width] 263
 [signals_width] 318
 [sst_expanded] 1
-[sst_vpaned_height] 475
+[sst_vpaned_height] 404
 @28
 test.hwag0.clk
 test.hwag0.cap_in
 test.hwag0.cap_out
+test.hwag0.window_filter_out
 @24
 test.hwag0.acnt_out[23:0]
 @28
@@ -44,16 +45,8 @@ test.hwag0.tckc_out[18:0]
 -
 @24
 test.hwag0.tcnt_out[7:0]
-@200
+@201
 -
-@28
-test.hwag0.gap_run_point
-@24
-test.hwag0.vr_filter.cnt_filter.fst_cnt.data_out[3:0]
-@8024
-test.hwag0.vr_filter.cnt_filter.snd_cnt.data_out[9:0]
-@28
-test.hwag0.window_filter_out
 @200
 -
 -
