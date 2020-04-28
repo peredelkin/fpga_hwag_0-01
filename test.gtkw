@@ -1,31 +1,27 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Tue Apr 28 01:00:06 2020
+[*] Tue Apr 28 17:33:00 2020
 [*]
-[dumpfile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.vcd"
-[dumpfile_mtime] "Tue Apr 28 00:58:37 2020"
-[dumpfile_size] 16486931
-[savefile] "/home/ruslan/ECU/FPGA/fpga_hwag_0-01/test.gtkw"
-[timestart] 82100
-[size] 1366 703
+[dumpfile] "/home/ruslan/intelFPGA_lite/fpga_hwag_0-01/test.vcd"
+[dumpfile_mtime] "Tue Apr 28 17:30:38 2020"
+[dumpfile_size] 187613955
+[savefile] "/home/ruslan/intelFPGA_lite/fpga_hwag_0-01/test.gtkw"
+[timestart] 0
+[size] 3440 1375
 [pos] -1 -1
-*-14.799719 170 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-16.799719 191900 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
+[treeopen] test.hwag0.
 [sst_width] 263
-[signals_width] 318
+[signals_width] 246
 [sst_expanded] 1
-[sst_vpaned_height] 404
+[sst_vpaned_height] 652
 @28
 test.hwag0.clk
 test.hwag0.cap_in
 test.hwag0.cap_out
-test.hwag0.window_filter_out
-@24
-test.hwag0.acnt_out[23:0]
-@28
 test.hwag0.acnt2_ena
 @24
-test.hwag0.acnt2_out[23:0]
 test.hwag0.acnt3_out[23:0]
 test.hwag0.acnt4_out[23:0]
 @28
@@ -33,21 +29,17 @@ test.hwag0.coil14_out
 test.hwag0.coil23_out
 test.hwag0.edge0
 test.hwag0.edge1
-@8024
-test.hwag0.scnt_out[21:0]
 @20000
 -
 -
-@8024
-test.hwag0.tckc_out[18:0]
-@20000
 -
 -
 @24
 test.hwag0.tcnt_out[7:0]
-@201
--
+@25
+test.hwag0.instant_rpm_result[23:0]
 @200
+-
 -
 -
 -

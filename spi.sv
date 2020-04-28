@@ -26,20 +26,12 @@ wire [7:0] tx_shift_buffer_out;
 assign spi_out = tx_shift_buffer_out[7];
 wire [7:0] tx_shift_load_out;
 
-d_ff_wide #(1) ff_spi_clk0
-										(	.d(spi_clk),
+d_ff_wide #(2) ff_spi_clk0
+										(	.d({spi_clk0,spi_clk}),
 											.clk(clk),
 											.rst(rst | spi_ss),
 											.ena(ena & ~spi_ss),
-											.q(spi_clk0));
-											
-d_ff_wide #(1) ff_spi_clk1
-										(	.d(spi_clk0),
-											.clk(clk),
-											.rst(rst | spi_ss),
-											.ena(ena & ~spi_ss),
-											.q(spi_clk1));
-
+											.q({spi_clk1,spi_clk0}));
 //RX
 counter_compare #(3) rx_counter
 										(	.clk(clk),
