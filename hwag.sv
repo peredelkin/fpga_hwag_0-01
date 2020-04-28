@@ -147,18 +147,18 @@ counter_compare #(24) acnt4
 // Slave ACNT
 
 //Instant rpm calc
-wire [23:0] instant_rpm_remainder;
-wire [23:0] instant_rpm_result;
-wire instant_rpm_rdy;
-integer_division #(24) instant_rpm
+wire [31:0] instant_rpm_remainder0;
+wire [31:0] instant_rpm_result0;
+wire instant_rpm_rdy0;
+integer_division #(32) instant_rpm0
                                         (   .clk(clk),
                                             .rst(rst),
                                             .start(~edge1),
-                                            .dividend(24'h2FAF08),
-                                            .divider({4'd0,pcnt0_out[23:4]}),
-                                            .remainder(instant_rpm_remainder),
-                                            .result(instant_rpm_result),
-                                            .rdy(instant_rpm_rdy));
+                                            .dividend(32'h2FAF080),
+                                            .divider({8'd0,pcnt0_out[23:0]}),
+                                            .remainder(instant_rpm_remainder0),
+                                            .result(instant_rpm_result0),
+                                            .rdy(instant_rpm_rdy0));
 //Instant rpm calc end
 
 // Dwell angle calc
