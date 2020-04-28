@@ -29,7 +29,19 @@ assign spi_hwag_data = {spi_bus_rx_buffer_out[5],spi_bus_rx_buffer_out[4],spi_bu
 wire [7:0] spi_hwag_crc = spi_bus_rx_buffer_out[6];
 //Spi data frame end
 
-d_ff_wide #(8) spi_bus_rx_buffer_0
+genvar i;
+generate
+	for (i=0; i<=6; i=i+1) begin : gen_spi_bus_rx_buffer
+	d_ff_wide #(8) spi_bus_rx_buffer
+										(	.d(spi_bus_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(spi_rx & spi_rx_data_select[i]),
+											.q(spi_bus_rx_buffer_out[i]));
+end
+endgenerate
+
+/*d_ff_wide #(8) spi_bus_rx_buffer_0
 										(	.d(spi_bus_out),
 											.clk(clk),
 											.rst(rst),
@@ -75,7 +87,7 @@ d_ff_wide #(8) spi_bus_rx_buffer_6
 											.clk(clk),
 											.rst(rst),
 											.ena(spi_rx & spi_rx_data_select[6]),
-											.q(spi_bus_rx_buffer_out[6]));
+											.q(spi_bus_rx_buffer_out[6]));*/
 
 d_ff_wide #(8) spi_crc_rx_out_buffer 
 										(	.d(spi_crc_rx_out),

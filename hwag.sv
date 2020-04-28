@@ -115,14 +115,12 @@ hwag_vr_capture #(8,8) vr_cap (	.d(cap_in),
 											.edge1(edge1));
 
 //PCNT
-wire [PCNT_WIDTH-1:0] pcnt_out;									
+wire [PCNT_WIDTH-1:0] pcnt_out;
 counter_compare #(PCNT_WIDTH) pcnt
 										(	.clk(clk),
 											.ena(pcnt_ne_top),
 											.rst(rst),
 											.srst(edge0),
-											.sload(1'b0),
-											.dload(24'd0),
 											.dout(pcnt_out),
 											.dtop(24'hFFFFFF),
 											.out_e_top(pcnt_e_top),
@@ -174,19 +172,12 @@ d_ff_wide #(1) d_ff_hwag_start
 //HWAG_START end
 
 //TCNT
-d_ff_wide #(1) tcnt_rst_ff
-										(	.d(tcnt_e_top),
-											.clk(clk),
-											.rst(~tcnt_e_top),
-											.ena(edge0),
-											.q(tcnt_rst));
-
 wire [TCNT_WIDTH-1:0] tcnt_out;
 counter_compare #(TCNT_WIDTH) tcnt
 										(	.clk(clk),
 											.ena(hwag_start & edge0),
 											.rst(rst | tcnt_rst),
-										/*	.srst(tcnt_e_top & edge0),*/
+											.srst(tcnt_e_top & edge0),
 											.sload(~hwag_start),
 											.dload(8'd2),
 											.dout(tcnt_out),
