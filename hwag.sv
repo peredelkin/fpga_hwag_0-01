@@ -193,39 +193,10 @@ integer_subtraction #(24) coil_set_point
 
 // Coil set point calc end
 
-// shadow registers
-wire [23:0] set14_shadow_register_out;
-compare #(24) set14_point_shadow_comp
-										(	.dataa(acnt3_out),
-											.datab(coil_set_point_out),
-											.alb(set14_point_shadow_comp_out));
-d_ff_wide #(24) set14_shadow_register
-										(	.d(coil_set_point_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(edge1 & set14_point_shadow_comp_out),
-											.q(set14_shadow_register_out));
-
-wire [23:0] set23_shadow_register_out;
-compare #(24) set23_point_shadow_comp
-										(	.dataa(acnt4_out),
-											.datab(coil_set_point_out),
-											.alb(set23_point_shadow_comp_out));
-d_ff_wide #(24) set23_shadow_register
-										(	.d(coil_set_point_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(edge1 & set23_point_shadow_comp_out),
-											.q(set23_shadow_register_out));
-//compare #(24) reset_point_shadow_comp
-//                (dataa,datab,aeb,agb,alb,aneb,ageb,aleb);
-//d_ff_wide #(parameter WIDTH=1) (d,clk,rst,ena,q);
-// shadow registers end
-
 //компараторы
 compare #(24) comp14_set
 										(	.dataa(acnt3_out),
-											.datab(set14_shadow_register_out),
+											.datab(coil_set_point_out),
 											.ageb(comp14_set_out));
 
 compare #(24) comp14_reset
@@ -237,7 +208,7 @@ assign coil14_out = comp14_set_out & ~comp14_reset_out;
 
 compare #(24) comp23_set
 										(	.dataa(acnt4_out),
-											.datab(set23_shadow_register_out),
+											.datab(coil_set_point_out),
 											.ageb(comp23_set_out));
 
 compare #(24) comp23_reset
