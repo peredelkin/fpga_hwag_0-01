@@ -223,41 +223,30 @@ d_ff_wide #(24) set23_shadow_register
 // shadow registers end
 
 //компараторы
-output wire coil14_out;
 compare #(24) comp14_set
 										(	.dataa(acnt3_out),
 											.datab(set14_shadow_register_out),
-											.aeb(comp14_set_out));
+											.ageb(comp14_set_out));
 
 compare #(24) comp14_reset
 										(	.dataa(acnt3_out),
 											.datab(ignition_angle_0_out),
-											.aeb(comp14_reset_out));
+											.ageb(comp14_reset_out));
+output wire coil14_out;
+assign coil14_out = comp14_set_out & ~comp14_reset_out;
 
-d_ff_wide #(1) ff_coil14
-										(	.d(1'b1),
-											.clk(clk),
-											.rst(comp14_reset_out | ~hwag_start),
-											.ena(comp14_set_out),
-											.q(coil14_out));
-											
-output wire coil23_out;
 compare #(24) comp23_set
 										(	.dataa(acnt4_out),
 											.datab(set23_shadow_register_out),
-											.aeb(comp23_set_out));
+											.ageb(comp23_set_out));
 
 compare #(24) comp23_reset
 										(	.dataa(acnt4_out),
 											.datab(ignition_angle_0_out),
-											.aeb(comp23_reset_out));
+											.ageb(comp23_reset_out));
+output wire coil23_out;
+assign coil23_out = comp23_set_out & ~comp23_reset_out;
 
-d_ff_wide #(1) ff_coil23
-										(	.d(1'b1),
-											.clk(clk),
-											.rst(comp23_reset_out | ~hwag_start),
-											.ena(comp23_set_out),
-											.q(coil23_out));
 //компараторы
 
 endmodule
