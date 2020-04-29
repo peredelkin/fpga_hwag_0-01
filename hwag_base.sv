@@ -3,10 +3,20 @@
 
 module hwag_core (clk,rst,ena,cap_in,cap_out,edge0,edge1,pcnt_e_top,period_normal,hwag_start,acnt2_ena,gap_run_point,pcnt0_out,tcnt_out,scnt_top);
 
-localparam PCNT_WIDTH = 24;
-localparam TCNT_WIDTH = 8;
-localparam HWASTWD = 4'd4;
-localparam HWAMAXACR = 24'd3839;
+localparam vr_cap_fst_val = 8'd7;
+localparam vr_cap_snd_val = 8'd7;
+localparam vr_cap_edge_sel = 1'b1;
+localparam pcnt_dtop = 24'hFFFFFF;
+localparam cap_comp_min = 24'd512;
+localparam cap_comp_max = 24'd5592405;
+
+localparam tcnt_dload = 8'd2;
+localparam tcnt_dtop = 8'd57;
+localparam step_width = 4'd4;
+localparam no_gap_filt_val = 19'd45;
+localparam gap_filt_val = 19'd134;
+localparam acnt_top = 24'd3839;
+
 
 input wire clk;
 input wire rst;
@@ -20,46 +30,50 @@ output wire period_normal;
 output wire hwag_start;
 output wire acnt2_ena;
 output wire gap_run_point;
-output wire [PCNT_WIDTH-1:0] pcnt0_out;
-output wire [TCNT_WIDTH-1:0] tcnt_out;
+output wire [23:0] pcnt0_out;
+output wire [7:0] tcnt_out;
 output wire [21:0] scnt_top;
 
 assign gap_run_point = tcnt_e_top;
 assign period_normal = (cap_less_max & cap_more_min);
-wire [PCNT_WIDTH-1:0] pcnt_out;
-wire [PCNT_WIDTH-1:0] pcnt1_out,pcnt2_out;
+
+wire [23:0] pcnt_out;
+wire [23:0] pcnt1_out,pcnt2_out;
+
+wire vr_cap_out_ena = ~hwag_start | window_filter_out;
 
 hwag_vr_capture #(8,8) vr_cap (	.d(cap_in),
 											.clk(clk),
 											.rst(rst),
 											.ena(ena),
-											.out_ena(~hwag_start | window_filter_out),
-											.fst_val(8'd7),
-											.snd_val(8'd7),
+											.out_ena(vr_cap_out_ena),
+											.fst_val(vr_cap_fst_val),
+											.snd_val(vr_cap_snd_val),
 											.filtered(cap_out),
-											.sel(1'b1),
+											.sel(vr_cap_edge_sel),
 											.edge0(edge0),
 											.edge1(edge1));
 
 //PCNT
-counter_compare #(PCNT_WIDTH) pcnt
+counter_compare #(24) pcnt
 										(	.clk(clk),
 											.ena(ena & pcnt_ne_top),
 											.rst(rst),
 											.srst(edge0),
 											.dout(pcnt_out),
-											.dtop(24'hFFFFFF),
+											.dtop(pcnt_dtop),
 											.out_e_top(pcnt_e_top),
 											.out_ne_top(pcnt_ne_top));
 
 //PCNT end
 
 //PCNT_CAP
-period_capture_3 #(PCNT_WIDTH) pcnt_cap
+wire pcnt_cap_ena = (ena & edge0 & (~hwag_start | ~gap_run_point));
+period_capture_3 #(24) pcnt_cap
 										(	.d(pcnt_out),
 											.clk(clk),
 											.rst(rst | pcnt_e_top),
-											.ena(ena & edge0 & (~hwag_start | ~gap_run_point)),
+											.ena(pcnt_cap_ena),
 											.q0(pcnt0_out),
 											.q1(pcnt1_out),
 											.q2(pcnt2_out));
@@ -67,7 +81,7 @@ period_capture_3 #(PCNT_WIDTH) pcnt_cap
 //PCNT_CAP end
 
 //GAP_SEARCH
-gap_search #(PCNT_WIDTH) gap_start_srch
+gap_search #(24) gap_start_srch
 										(	.cap0(pcnt0_out),
 											.cap1(pcnt1_out),
 											.cap2(pcnt2_out),
@@ -75,9 +89,9 @@ gap_search #(PCNT_WIDTH) gap_start_srch
 //GAP_SEARCH end
 
 //PERIOD_CHECK
-period_normal_comp #(PCNT_WIDTH) cap_comp
-										(	.min(24'd512),
-											.max(24'd5592405),
+period_normal_comp #(24) cap_comp
+										(	.min(cap_comp_min),
+											.max(cap_comp_max),
 											.cap0(pcnt0_out),
 											.cap1(pcnt1_out),
 											.cap2(pcnt2_out),
@@ -86,31 +100,33 @@ period_normal_comp #(PCNT_WIDTH) cap_comp
 //PERIOD_CHECK end
 
 //HWAG_START
-d_ff_wide #(1) d_ff_hwag_start
-										(	.d(gap_found & period_normal & edge0),
+wire hwag_start_trigger_ena = ena & ~hwag_start & gap_found & period_normal & edge0;
+d_ff_wide #(1) hwag_start_trigger
+										(	.d(1'b1),
 											.clk(clk),
 											.rst(rst | pcnt_e_top),
-											.ena(ena & ~hwag_start),
+											.ena(hwag_start_trigger_ena),
 											.q(hwag_start));
 //HWAG_START end
 
 //TCNT
-counter_compare #(TCNT_WIDTH) tcnt
+wire tcnt_ena = ena & hwag_start & edge0;
+counter_compare #(8) tcnt
 										(	.clk(clk),
-											.ena(ena & hwag_start & edge0),
+											.ena(tcnt_ena),
 											.rst(rst),
 											.srst(tcnt_e_top & edge0),
 											.sload(~hwag_start),
-											.dload(8'd2),
+											.dload(tcnt_dload),
 											.dout(tcnt_out),
-											.dtop(8'd57),
+											.dtop(tcnt_dtop),
 											.out_e_top(tcnt_e_top));
 //TCNT end
 
 // SCNT_TOP calc
 shift_right #(22,4) scnt_top_calc
 										(	.in(pcnt0_out[23:2]),
-											.shift(HWASTWD),
+											.shift(step_width),
 											.out(scnt_top));
 // SCNT_TOP calc end
 
@@ -119,7 +135,7 @@ wire [17:0] tckc_top;
 assign tckc_top [1:0] = 2'b0;
 shift_left #(16,4) tckc_top_calc
 										(	.in(16'd1),
-											.shift(HWASTWD),
+											.shift(step_width),
 											.out(tckc_top[17:2]));
 // TCKC_TOP calc end
 
@@ -136,18 +152,18 @@ wire [23:0] tooth_angle;
 assign tooth_angle [1:0] = 2'b0;
 shift_left #(22,4) acnt_tooth_calc
 										(	.in({14'd0,tcnt_out}),
-											.shift(HWASTWD),
+											.shift(step_width),
 											.out(tooth_angle[23:2]));
 // Tooth angle end
 
 // SCNT
 wire [21:0] scnt_out;
-and(scnt_ena,hwag_start,tckc_ne_top);
+wire scnt_ena = ena & hwag_start & tckc_ne_top; 
 counter_compare #(22) scnt
 										(	.clk(clk),
-											.ena(ena & scnt_ena),
+											.ena(scnt_ena),
 											.rst(rst),
-											.srst(scnt_e_top |  edge0),
+											.srst(scnt_e_top | edge0),
 											.dout(scnt_out),
 											.dtop(scnt_top),
 											.out_e_top(scnt_e_top));
@@ -155,10 +171,10 @@ counter_compare #(22) scnt
 
 // TCKC
 wire [18:0] tckc_out;
-and(tckc_ena,scnt_ena,scnt_e_top);
+wire tckc_ena = scnt_ena & scnt_e_top;
 counter_compare #(19) tckc
 										(	.clk(clk),
-											.ena(ena & tckc_ena),
+											.ena(tckc_ena),
 											.rst(rst),
 											.srst(edge0),
 											.dout(tckc_out),
@@ -167,8 +183,6 @@ counter_compare #(19) tckc
 // TCKC end
 
 // Window filter
-wire [18:0] no_gap_filt_val = 19'd45;
-wire [18:0] gap_filt_val = 19'd134;
 wire [18:0] current_filt_val;
 simple_multiplexer #(19) window_filter_sel 
                                         (   .dataa(no_gap_filt_val),
@@ -186,13 +200,13 @@ compare #(19) window_filter_comp
 wire [23:0] acnt_out;
 counter_compare #(24) acnt
 										(	.clk(clk),
-											.ena(ena & tckc_ena),
+											.ena(tckc_ena),
 											.rst(rst),
 											.srst(tckc_ena & acnt_e_top),
 											.sload(~hwag_start | edge1),
 											.dload(tooth_angle),
 											.dout(acnt_out),
-											.dtop(HWAMAXACR),
+											.dtop(acnt_top),
 											.out_e_top(acnt_e_top));
 // ACNT end
 
@@ -220,7 +234,7 @@ counter_compare #(24) acnt2
 											.sload(~hwag_start),
 											.dload(acnt_out),
 											.dout(acnt2_out),
-											.dtop(HWAMAXACR),
+											.dtop(acnt_top),
 											.out_e_top(acnt2_e_top));
 // ACNT2 end
 endmodule
