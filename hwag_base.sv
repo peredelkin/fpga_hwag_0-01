@@ -68,7 +68,7 @@ counter_compare #(24) pcnt
 //PCNT end
 
 //PCNT_CAP
-wire pcnt_cap_ena = (ena & edge0 & (~hwag_start | ~gap_run_point));
+wire pcnt_cap_ena = ena & edge0 & (~hwag_start | ~gap_run_point);
 period_capture_3 #(24) pcnt_cap
 										(	.d(pcnt_out),
 											.clk(clk),
