@@ -122,11 +122,12 @@ hwag_core hwag_core0				(	.clk(clk),
 
 // Slave ACNT
 wire [23:0] acnt3_out;
+wire acnt3_srst = acnt2_ena & acnt3_e_top;
 counter_compare #(24) acnt3
 										(	.clk(clk),
 											.ena(acnt2_ena),
 											.rst(rst),
-											.srst(acnt2_ena & acnt3_e_top),
+											.srst(acnt3_srst),
 											.sload(~hwag_start),
 											.dload(24'd2752),
 											.dout(acnt3_out),
@@ -134,11 +135,12 @@ counter_compare #(24) acnt3
 											.out_e_top(acnt3_e_top));
 
 wire [23:0] acnt4_out;
+wire acnt4_srst = acnt2_ena & acnt4_e_top;
 counter_compare #(24) acnt4
 										(	.clk(clk),
 											.ena(acnt2_ena),
 											.rst(rst),
-											.srst(acnt2_ena & acnt4_e_top),
+											.srst(acnt4_srst),
 											.sload(~hwag_start),
 											.dload(24'd832),
 											.dout(acnt4_out),
@@ -194,26 +196,55 @@ integer_subtraction #(24) coil_set_point
 // Coil set point calc end
 
 //компараторы
+wire [23:0] coil14_set_buffer_out;
+d_ff_wide #(24) coil14_set_buffer
+										(	.d(coil_set_point_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(acnt3_srst | ~hwag_start),
+											.q(coil14_set_buffer_out));
+wire [23:0] coil14_reset_buffer_out;
+d_ff_wide #(24) coil14_reset_buffer
+										(	.d(ignition_angle_0_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(acnt3_srst | ~hwag_start),
+											.q(coil14_reset_buffer_out));
 compare #(24) comp14_set
 										(	.dataa(acnt3_out),
-											.datab(coil_set_point_out),
+											.datab(coil14_set_buffer_out),
 											.ageb(comp14_set_out));
 
 compare #(24) comp14_reset
 										(	.dataa(acnt3_out),
-											.datab(ignition_angle_0_out),
+											.datab(coil14_reset_buffer_out),
 											.ageb(comp14_reset_out));
 output wire coil14_out;
 assign coil14_out = comp14_set_out & ~comp14_reset_out;
 
+
+wire [23:0] coil23_set_buffer_out;
+d_ff_wide #(24) coil23_set_buffer
+										(	.d(coil_set_point_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(acnt4_srst | ~hwag_start),
+											.q(coil23_set_buffer_out));
+wire [23:0] coil23_reset_buffer_out;
+d_ff_wide #(24) coil23_reset_buffer
+										(	.d(ignition_angle_0_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(acnt4_srst | ~hwag_start),
+											.q(coil23_reset_buffer_out));
 compare #(24) comp23_set
 										(	.dataa(acnt4_out),
-											.datab(coil_set_point_out),
+											.datab(coil23_set_buffer_out),
 											.ageb(comp23_set_out));
 
 compare #(24) comp23_reset
 										(	.dataa(acnt4_out),
-											.datab(ignition_angle_0_out),
+											.datab(coil23_reset_buffer_out),
 											.ageb(comp23_reset_out));
 output wire coil23_out;
 assign coil23_out = comp23_set_out & ~comp23_reset_out;
