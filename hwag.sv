@@ -25,6 +25,10 @@ output wire cap_out;
 
 output wire led1_out;
 output wire led2_out;
+
+output wire coil14_out;
+output wire coil23_out;
+
 assign led1_out = spi_crc_rx_equal;
 assign led2_out = ~gap_run_point;
 
@@ -149,18 +153,18 @@ counter_compare #(24) acnt4
 // Slave ACNT
 
 //Instant rpm calc
-wire [31:0] instant_rpm_remainder0;
-wire [31:0] instant_rpm_result0;
-wire instant_rpm_rdy0;
-integer_division #(32) instant_rpm0
+wire [31:0] instant_rpm_remainder;
+wire [31:0] instant_rpm_result;
+wire instant_rpm_rdy;
+integer_division #(32) instant_rpm
                                         (   .clk(clk),
                                             .rst(rst),
                                             .start(~edge1),
                                             .dividend(32'h2FAF080),
                                             .divider({8'd0,pcnt0_out[23:0]}),
-                                            .remainder(instant_rpm_remainder0),
-                                            .result(instant_rpm_result0),
-                                            .rdy(instant_rpm_rdy0));
+                                            .remainder(instant_rpm_remainder),
+                                            .result(instant_rpm_result),
+                                            .rdy(instant_rpm_rdy));
 //Instant rpm calc end
 
 // Dwell angle calc
@@ -176,79 +180,83 @@ integer_division #(24) dwell_angle
 											.remainder(dwell_angle_remainder),
 											.result(dwell_angle_result),
 											.rdy(dwell_angle_rdy));
-											
-wire [23:0] dwell_angle_out;
-d_ff_wide #(24) d_ff_dwell_time
-										(	.d(dwell_angle_result),
+// Dwell angle calc end
+
+//Буфер
+wire [23:0] ignition_angle_0_buffer_out;
+d_ff_wide #(24) ignition_angle_0_buffer
+										(	.d(ignition_angle_0_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(~dwell_angle_rdy),
+											.q(ignition_angle_0_buffer_out));
+//Конец буфера
+
+// Coil set point calc
+wire [23:0] charge_angle_out;
+integer_subtraction #(24) coil_set_point 
+										(	.minuend(ignition_angle_0_buffer_out),
+											.subtrahend(dwell_angle_result),
+											.result(charge_angle_out));
+// Coil set point calc end
+
+//Буфер
+wire [23:0] charge_angle_buffer_out;
+d_ff_wide #(24) charge_angle_buffer
+										(	.d(charge_angle_out),
 											.clk(clk),
 											.rst(rst),
 											.ena(edge0 & dwell_angle_rdy),
-											.q(dwell_angle_out));
-// Dwell angle calc end
+											.q(charge_angle_buffer_out));
 
-// Coil set point calc
-wire [23:0] coil_set_point_out;
-integer_subtraction #(24) coil_set_point 
-										(	.minuend(ignition_angle_0_out),
-											.subtrahend(dwell_angle_out),
-											.result(coil_set_point_out));
-
-// Coil set point calc end
+wire [23:0] ignition_angle_buffer_out;
+d_ff_wide #(24) ignition_angle_buffer
+										(	.d(ignition_angle_0_buffer_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(edge0 & dwell_angle_rdy),
+											.q(ignition_angle_buffer_out));
+//конец буфера
 
 //компараторы
-wire [23:0] coil14_set_buffer_out;
-d_ff_wide #(24) coil14_set_buffer
-										(	.d(coil_set_point_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(acnt3_srst | ~hwag_start),
-											.q(coil14_set_buffer_out));
-wire [23:0] coil14_reset_buffer_out;
-d_ff_wide #(24) coil14_reset_buffer
-										(	.d(ignition_angle_0_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(acnt3_srst | ~hwag_start),
-											.q(coil14_reset_buffer_out));
-compare #(24) comp14_set
+compare #(24) coil14_update_comp
 										(	.dataa(acnt3_out),
-											.datab(coil14_set_buffer_out),
-											.ageb(comp14_set_out));
-
-compare #(24) comp14_reset
+											.datab(charge_angle_buffer_out),
+											.alb(coil14_update_out));
+											
+wire coil14_update = edge0 & coil14_update_out;									
+wire [23:0] coil14_charge_out;
+d_ff_wide #(24) coil14_charge_buffer
+										(	.d(charge_angle_buffer_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(coil14_update),
+											.q(coil14_charge_out));
+											
+wire [23:0] coil14_ignition_out;
+d_ff_wide #(24) coil14_ignition_buffer
+										(	.d(ignition_angle_buffer_out),
+											.clk(clk),
+											.rst(rst),
+											.ena(coil14_update),
+											.q(coil14_ignition_out));
+											
+compare #(24) coil14_set_comp
 										(	.dataa(acnt3_out),
-											.datab(coil14_reset_buffer_out),
-											.ageb(comp14_reset_out));
-output wire coil14_out;
-assign coil14_out = comp14_set_out & ~comp14_reset_out;
+											.datab(coil14_charge_out),
+											.aeb(coil14_set_out));
+											
+compare #(24) coil14_reset_comp
+										(	.dataa(acnt3_out),
+											.datab(coil14_ignition_out),
+											.aeb(coil14_reset_out));
 
-
-wire [23:0] coil23_set_buffer_out;
-d_ff_wide #(24) coil23_set_buffer
-										(	.d(coil_set_point_out),
+wire coil14_trigger_rst = rst | ~hwag_start | coil14_reset_out;
+d_ff_wide #(1) coil14_trigger (	.d(1'b1),
 											.clk(clk),
-											.rst(rst),
-											.ena(acnt4_srst | ~hwag_start),
-											.q(coil23_set_buffer_out));
-wire [23:0] coil23_reset_buffer_out;
-d_ff_wide #(24) coil23_reset_buffer
-										(	.d(ignition_angle_0_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(acnt4_srst | ~hwag_start),
-											.q(coil23_reset_buffer_out));
-compare #(24) comp23_set
-										(	.dataa(acnt4_out),
-											.datab(coil23_set_buffer_out),
-											.ageb(comp23_set_out));
-
-compare #(24) comp23_reset
-										(	.dataa(acnt4_out),
-											.datab(coil23_reset_buffer_out),
-											.ageb(comp23_reset_out));
-output wire coil23_out;
-assign coil23_out = comp23_set_out & ~comp23_reset_out;
-
+											.rst(coil14_trigger_rst),
+											.ena(coil14_set_out),
+											.q(coil14_out));
 //компараторы
 
 endmodule
