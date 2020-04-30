@@ -219,46 +219,17 @@ d_ff_wide #(24) ignition_angle_buffer
 //конец буфера
 
 //компараторы
-compare #(24) coil14_update_comp
-										(	.dataa(acnt3_out),
-											.datab(charge_angle_buffer_out),
-											.alb(coil14_update_out));
-											
-wire coil14_update = acnt2_ena & coil14_update_out;									
-wire [23:0] coil14_charge_out;
-d_ff_wide #(24) coil14_charge_buffer
-										(	.d(charge_angle_buffer_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(coil14_update),
-											.q(coil14_charge_out));
-											
-wire [23:0] coil14_ignition_out;
-d_ff_wide #(24) coil14_ignition_buffer
-										(	.d(ignition_angle_buffer_out),
-											.clk(clk),
-											.rst(rst),
-											.ena(coil14_update),
-											.q(coil14_ignition_out));
-											
-compare #(24) coil14_set_comp
-										(	.dataa(acnt3_out),
-											.datab(coil14_charge_out),
-											.ageb(coil14_set_out));
-											
-compare #(24) coil14_reset_comp
-										(	.dataa(acnt3_out),
-											.datab(coil14_ignition_out),
-											.ageb(coil14_reset_out));
-
-wire coil14_trigger_bit = coil14_set_out & ~coil14_reset_out;
-d_ff_wide #(1) coil14_trigger (	.d(coil14_trigger_bit),
-											.clk(clk),
-											.rst(rst),
-											.ena(acnt2_ena),
-											.q(coil14_out));
+hwag_coil_trigger coil14_trigger
+										(	.clk(clk),
+											.rst(rst | ~hwag_start),
+											.acnt_ena(acnt2_ena),
+											.acnt_data(acnt3_out),
+											.charge_data(charge_angle_buffer_out),
+											.ignition_data(ignition_angle_buffer_out),
+											.coil_out(coil14_out));
 //компараторы
 
 endmodule
+
 //`endif
 
