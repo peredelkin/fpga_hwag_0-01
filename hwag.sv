@@ -227,6 +227,15 @@ hwag_coil_trigger coil14_trigger
 											.charge_data(charge_angle_buffer_out),
 											.ignition_data(ignition_angle_buffer_out),
 											.coil_out(coil14_out));
+											
+hwag_coil_trigger coil23_trigger
+										(	.clk(clk),
+											.rst(rst | ~hwag_start),
+											.acnt_ena(acnt2_ena),
+											.acnt_data(acnt4_out),
+											.charge_data(charge_angle_buffer_out),
+											.ignition_data(ignition_angle_buffer_out),
+											.coil_out(coil23_out));
 //компараторы
 
 endmodule
