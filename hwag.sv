@@ -224,7 +224,7 @@ compare #(24) coil14_update_comp
 											.datab(charge_angle_buffer_out),
 											.alb(coil14_update_out));
 											
-wire coil14_update = edge0 & coil14_update_out;									
+wire coil14_update = edge0 & ~coil14_out & coil14_update_out;									
 wire [23:0] coil14_charge_out;
 d_ff_wide #(24) coil14_charge_buffer
 										(	.d(charge_angle_buffer_out),
