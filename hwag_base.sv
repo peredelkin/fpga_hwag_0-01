@@ -239,9 +239,10 @@ counter_compare #(24) acnt2
 // ACNT2 end
 endmodule
 
-module hwag_coil_trigger(clk,rst,acnt_ena,acnt_data,charge_data,ignition_data,coil_out);
+module hwag_coil_trigger(clk,rst,hwag_start,acnt_ena,acnt_data,charge_data,ignition_data,coil_out);
 input wire clk;
 input wire rst;
+input wire hwag_start;
 input wire acnt_ena;
 input wire [23:0] acnt_data;
 input wire [23:0] charge_data;
@@ -254,7 +255,7 @@ compare #(24) coil_update_comp
 											.datab(charge_data),
 											.alb(acnt_l_charge));
 											
-wire coil_update = acnt_ena & acnt_l_charge;									
+wire coil_update = (acnt_l_charge & ((acnt_ena & acnt_l_current_charge) | ~hwag_start));									
 wire [23:0] coil_charge_data;
 d_ff_wide #(24) coil_charge_buffer
 										(	.d(charge_data),
@@ -274,6 +275,7 @@ d_ff_wide #(24) coil14_ignition_buffer
 compare #(24) coil_charge_comp
 										(	.dataa(acnt_data),
 											.datab(coil_charge_data),
+											.alb(acnt_l_current_charge),
 											.ageb(coil_charge_out));
 											
 compare #(24) coil_ignition_comp
@@ -284,7 +286,7 @@ compare #(24) coil_ignition_comp
 wire coil_trigger_d = coil_charge_out & ~coil_ignition_out;
 d_ff_wide #(1) coil_trigger (	.d(coil_trigger_d),
 											.clk(clk),
-											.rst(rst),
+											.rst(rst | ~hwag_start),
 											.ena(acnt_ena),
 											.q(coil_out));
 endmodule

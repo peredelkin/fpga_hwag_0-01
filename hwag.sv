@@ -221,7 +221,8 @@ d_ff_wide #(24) ignition_angle_buffer
 //компараторы
 hwag_coil_trigger coil14_trigger
 										(	.clk(clk),
-											.rst(rst | ~hwag_start),
+											.rst(rst),
+											.hwag_start(hwag_start),
 											.acnt_ena(acnt2_ena),
 											.acnt_data(acnt3_out),
 											.charge_data(charge_angle_buffer_out),
@@ -230,7 +231,8 @@ hwag_coil_trigger coil14_trigger
 											
 hwag_coil_trigger coil23_trigger
 										(	.clk(clk),
-											.rst(rst | ~hwag_start),
+											.rst(rst),
+											.hwag_start(hwag_start),
 											.acnt_ena(acnt2_ena),
 											.acnt_data(acnt4_out),
 											.charge_data(charge_angle_buffer_out),
